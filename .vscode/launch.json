@@ -27,15 +27,15 @@
       "name": "(gdb) 启动",
       "type": "cppdbg",
       "request": "launch",
-      "program": "${workspaceFolder}/test",
+      "program": "${fileDirname}/${fileBasenameNoExtension}",
       "args": [
-        "../a.input"
       ],
       "stopAtEntry": false,
-      "cwd": "${fileDirname}/test",
+      "cwd": "${workspaceFolder}",
       "environment": [],
       "externalConsole": false,
       "MIMode": "gdb",
+      "miDebuggerPath": "/usr/bin/gdb",
       "setupCommands": [
         {
           "description": "为 gdb 启用整齐打印",
@@ -49,7 +49,6 @@
         }
       ],
     "preLaunchTask": "C/C++: gcc 生成活动文件",
-    "miDebuggerPath": "/usr/bin/gdb"
     }
   ]
 }

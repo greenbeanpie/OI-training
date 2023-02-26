@@ -4,11 +4,11 @@
             "name": "Linux",
             "includePath": [
                 "${workspaceFolder}/**",
-                "/usr/include/c++/9**",
-                "/usr/include/x86_64-linux-gnu/c++/9"
+                "/usr/include/c++/9/**",
+                "/usr/include/c++/12/**"
             ],
             "defines": [],
-            "compilerPath": "/usr/bin/gcc",
+            "compilerPath": "/usr/bin/g++",
             "cStandard": "c99",
             "cppStandard": "gnu++98",
             "intelliSenseMode": "linux-gcc-x64"

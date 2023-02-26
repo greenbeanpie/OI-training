@@ -17,7 +17,7 @@ bool check(int x, int y)
             return false;
         }
     }
-    for (int i = max(x + y - n, 0); i <= n && x + y - i <= n; n)
+    for (int i = max(x + y - n, 0); i <= n && x + y - i <= n; i++)
     {
         if (number[i][x + y - i] && i != x)
         {
