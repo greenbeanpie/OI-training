@@ -1,49 +1,47 @@
 #include <bits/stdc++.h>
 int n;
-bool number[14][14];
+int number[14][14];
 int t = 0;
 using namespace std;
 
-bool check(int x, int y)
+void config(int x, int y,bool flag)
 {
     for (int i = 1; i <= n; i++)
     {
-        if (number[x][i] && i != y)
-        {
-            return false;
-        }
-        if (number[i][y] && i != x)
-        {
-            return false;
-        }
+        number[x][i] = flag;
+        number[i][y] = flag;
     }
-    for (int i = max(x + y - n, 0); i <= n && x + y - i <= n; i++)
+    if (x >= y)
     {
-        if (number[i][x + y - i] && i != x)
+        for (int i = x - y + 1; i <= n-x+y; i++)
         {
-            return false;
+            number[i][x - y + i] = flag;
+            number[i][x + y - i] = flag;
         }
     }
-    for (int i = max(1, y - x); i <= n && y - x + i <= 0; i++)
-    {
-        if (number[i][y - x + i] && i != x)
-        {
-            return false;
+    else{
+        for(int i=y-x+1;i<=n-y+x;i++){
+            number[y-x+i][i]=flag;
+            number[x+y-i][i]=flag;
         }
     }
-    return true;
+    if(flag){
+        number[x][y]=2;
+    }
+    else{
+        number[x][y]=0;
+    }
 }
-
 void dfs(int x)
 { // x表示横向行数
-    if (x == n - 1)
+    if (x == n)
     {
         if (t < 3)
         {
-            for (int i = 0; i < n; i++)
+            for (int i = 1; i < n; i++)
             {
                 int j = 0;
-                while (!j)
+                while (j!=2)
                 {
                     j++;
                 }
@@ -57,11 +55,11 @@ void dfs(int x)
     {
         for (int i = 1; i <= n; i++)
         {
-            if (check(x, i))
+            if (!number[x][i])
             {
-                number[x][i] = 1;
+                config(x,i,1);
                 dfs(x + 1);
-                number[x][i] = 0;
+                config(x,i,0);
             }
         }
     }
