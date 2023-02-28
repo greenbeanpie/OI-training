@@ -13,34 +13,16 @@ void config(int x, int y,int flag)
         number[x][i] += flag;
         number[i][y] += flag;
     }
-    
-    if (x >= y)
-    {
-        for (int i =1; i <= x+y-1; i++)
-        {
+    for(int i=1;i<=max(n,x+y);i++){
+        if(y+x-i>=1&&y+x-i<=n&&i<=n){
             number[i][x+y-i]+=flag;
         }
-        for(int i=x-y+1;i<=n;i++){
-            number[i][i-x+y]+=flag;
+        if(y-x+i>=1&&y-x+i<=n&&i<=n){
+            number[i][y-x+i]+=flag;
         }
-    }
-    else{
-        for(int i=1;i<=n-y+x;i++){
-            number[i][i+y-x]+=flag;
-        }
-        for(int i=x+y-n;i<=n;i++){
-            number[i][x+y-i]+=flag;
-        }
-    }
-    if(flag==1){
-    number[x][y]-=3;
-    }
-    if(flag==-1){
-        number[x][y]+=3;
     }
     if(flag==1){
         result[x][y]=1;
-
     }
     else{
         result[x][y]=0;
