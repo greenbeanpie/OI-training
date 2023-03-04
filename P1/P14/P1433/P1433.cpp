@@ -56,11 +56,17 @@ double distance(double x1, double y1, double x2, double y2)
 
 int main()
 {
-    freopen("P1433.in","r",stdin);
+    //freopen("P1433.in","r",stdin);
     int n;
     cin >> n;
-    pair<double, double> point[n];
-    for (int i = 0; i < n; i++)
+    if(n==0){
+        cout << 0;
+        return 0;
+    }
+    pair<double, double> point[n+1];
+    point[0].first=0;
+    point[0].second=0;
+    for (int i = 1; i <= n; i++)
     {
         cin >> point[i].first >> point[i].second;
     }
@@ -70,33 +76,43 @@ int main()
     memset(a, 127, sizeof(a));
     for (int i = 1; i <= n; i++)
     {
-        for (int j = 1; j <= n; j++)
+        for (int j = 0; j <= n; j++)
         {
-            dis[i][j] = distance(point[i - 1].first, point[i - 1].second, point[j - 1].first, point[j - 1].second);
-            dis[j][i]=dis[i][j];
+            dis[i][j] = distance(point[i].first, point[i].second, point[j].first, point[j].second);
+            dis[j][i] = dis[i][j];
         }
-        a[i][1 << i] = dis[i][0];
+        dis[i][0] = distance(point[i].first, point[i].second, 0, 0);
+        dis[0][i] = dis[i][0];
+        a[i][1 << (i - 1)] = dis[0][i];
     }
     for (int k = 1; k < (1 << n); k++)
     {
-        for (int i = 0; i < n; i++)
+        for (int i = 1; i <= n; i++)
         {
-            for (int j = 0; j < n; j++)
+            if ((k & (1 << (i - 1))) == 0)
+            {
+                continue;
+            }
+            for(int j=1;j<=n;j++)
             {
                 if (i == j)
                 {
                     continue;
                 }
-                a[i][k] = min(a[i][k], a[j][k - (1 << i)] + dis[i][j]);
+                if ((k & (1 << (j - 1))) == 0)
+                {
+                    continue;
+                }
+                a[i][k] = min(a[i][k], a[j][k - (1 << (i - 1))] + dis[i][j]);
             }
         }
     }
     double mininum = DBL_MAX;
-    for (int i = 0; i < n; i++)
+    for (int i = 0; i <= n; i++)
     {
-        if (a[i][1 << n] < mininum)
+        if (a[i][(1 << n)-1] < mininum)
         {
-            mininum = a[i][1 << n];
+            mininum = a[i][(1 << n)-1];
         }
     }
     cout << fixed << setprecision(2) << mininum;
