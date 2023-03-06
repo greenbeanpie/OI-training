@@ -15,64 +15,24 @@ int main()
 	{
 		cin >> list2[i];
 	}
-	int list1n[n], list2n[m];
-	for (int i = 0; i < n; i++)
-	{
-		list1n[i] = 1;
-		for (int j = 0; j < i; j++)
-		{
-			if (list1[i] > list1[j])
-			{
-				list1n[i] = list1n[j] + 1;
+	int list2r[m]={0},list2n[m]={0},lastmax;
+	for(int i=0;i<m;i++){
+		list2r[i]=-1;
+		list2n[i]=-1;
+	}
+	for(int i=0;i<n;i++){
+
+		lastmax=-1;
+		for(int j=0;j<m;j++){
+			list2n[j]=max(list2n[j],-1);
+			if(list1[i]>list2[j]){// 如果list1[i]的数大于list2[j]，那么就暂时认为list2[j]是序列中上一个连续公共最大的数
+				lastmax=max(lastmax,list2r[j]);
+			}
+			if(list1[i]==list2[j]){
+				list2n[j]=max(list2n[j],list2n[lastmax]+1);
+				list2r[j]=lastmax;
 			}
 		}
 	}
-	for (int i = 0; i < m; i++)
-	{
-		list2n[i] = 1;
-		for (int j = 0; j < i; j++)
-		{
-			if (list2[i] > list2[j])
-			{
-				list2n[i] = list2n[j] + 1;
-			}
-		}
-	}
-	int public1n[n], public2n[m],n1,m1;
-	memset(public1n,0,sizeof(public1n));
-	memset(public2n,0,sizeof(public2n));
-	int t = 0;
-	for (int i = 0; i < n; i++)
-	{
-		for (int j = 0; j < m; j++)
-		{
-			if (list1[i] == list2[j])
-			{
-				public1n[i] = 1;
-				public2n[j] = 1;
-				
-				
-				for (int a = i-1; a >=n1; a--)
-				{
-					for (int b = j-1; b >=m1; b--)
-					{
-						if (list1[a] == list2[b])
-						{
-							t = public1n[a];
-							break;
-						}
-					}
-				}
-				public1n[i] = t + 1;
-				public2n[j] = t + 1;
-				n1=i;
-				m1=j;
-				break;
-			}
-			
-		}
-	}
-	cout << t << endl;
-	
 	return 0;
 }
