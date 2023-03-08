@@ -1,4 +1,4 @@
-#include <iostream>
+#include <bits/stdc++.h>
 #define reg register
 using namespace std;
 

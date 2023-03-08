@@ -1,6 +1,4 @@
-#include <iostream>
-
-#include <vector>
+#include <bits/stdc++.h>
 
 #define longint long long
 #define reg register
@@ -74,7 +72,7 @@ int main()
     		ans = dp[i];
     }
     printf("%d\n", ans.len);
-    for (auto x : ans.now)
+    for (auto x ; ans.now;)
     	printf("%d ", x);
     return 0;
 }

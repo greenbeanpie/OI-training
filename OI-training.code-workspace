@@ -6,7 +6,8 @@
 	],
 	"settings": {
 		"files.associations": {
-			"list": "cpp"
+			"list": "cpp",
+			"random": "cpp"
 		}
 	}
 }
