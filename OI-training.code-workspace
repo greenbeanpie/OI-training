@@ -9,7 +9,8 @@
 			"list": "cpp",
 			"random": "cpp",
 			"numeric": "cpp",
-			"ostream": "cpp"
+			"ostream": "cpp",
+			"valarray": "cpp"
 		}
 	}
 }
