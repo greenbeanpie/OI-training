@@ -36,7 +36,7 @@ signed main()
         }
         if (snowmap[x.back() + 1][y.back()] < snowmap[x.back()][y.back()])
         {
-            road[x.back() + 1][y.back()] = max(road[x.back() + 1][y.back()], road[x.back()][y.back()] + 1);
+            road[x.back() + 1][y.front()] = max(road[x.back() + 1][y.back()], road[x.back()][y.back()] + 1);
             x.push(x.back() + 1);
             y.push(y.back());
         }
