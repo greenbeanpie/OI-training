@@ -1,73 +1,75 @@
 #include <bits/stdc++.h>
 using namespace std;
-#define int long long
-
-
-struct edge{
-    int u,v;
+struct edge
+{
+    int u, v;
 };
-bool cmp(edge u,edge v){
-    if(u.u>v.u){
-        return false;
-    }
-    else if(u.v>v.v){
-        return false;
-    }
-    return true;
+vector<edge> s;
+vector<int> e[100010];
+long long tempu, tempv, n, m;
+bool vis1[100010] = {false};
+bool cmp(edge a, edge b)
+{
+    if (a.u != b.u)
+        return a.u < b.u;
+    else
+        return a.v < b.v;
 }
-vector<int> e[100005];
-int vis[100005],n,m;
-vector<edge> temp;
-void read(int t){
-    int uu,vv;
-    for(int i=0;i<t;i++){
-        cin >> uu >> vv;
-        temp.push_back((edge){uu,vv});
+void read()
+{
+    cin >> n >> m;
+    for (int i = 0; i < m; i++)
+    {
+        cin >> tempu >> tempv;
+        s.push_back((edge){tempu, tempv});
     }
-    sort(temp.begin(),temp.end(),cmp);
-    for(int i=0;i<t;i++){
-        e[temp[i].u].push_back(i);
+    sort(s.begin(), s.end(), cmp);
+    for (int i = 0; i < m; i++)
+    {
+        e[s[i].u].push_back(i);
     }
 }
-
-
-void dfs(int x){
-    vis[x]=true;
+void dfs(int x)
+{
+    vis1[x] = true;
     cout << x << " ";
-    for(int i=0;i<e[x].size();i++){
-        int t=temp[e[x][i]].v;
-        if(!vis[t]){
-        
+    for (int i = 0; i < e[x].size(); i++)
+    {
+        int t = s[e[x][i]].v;
+        if (!vis1[t])
+        {
             dfs(t);
         }
     }
 }
-void bfs(int x){
+void bfs(int x)
+{
     queue<int> q;
     q.push(x);
     cout << x << " ";
-    vis[x]=true;
-    while(!q.empty()){
-        int t=q.front();
+    vis1[x] = true;
+    while (!q.empty())
+    {
+        int t = q.front();
         q.pop();
-        for(int i=0;i<e[t].size();i++){
-            int tt=temp[e[t][i]].v;
-            if(!vis[tt]){
+        for (int i = 0; i < e[t].size(); i++)
+        {
+            int tt = s[e[t][i]].v;
+            if (!vis1[tt])
+            {
+                vis1[tt] = true;
                 q.push(tt);
                 cout << tt << " ";
-                vis[tt]=true;
             }
         }
     }
 }
-
-signed main(){
+int main()
+{
     ios::sync_with_stdio(false);
-    cin >> n >> m;
-    read(m);
-
+    read();
     dfs(1);
-    memset(vis,0,sizeof(vis));
+    memset(vis1, false, sizeof(vis1));
     cout << endl;
     bfs(1);
     return 0;
