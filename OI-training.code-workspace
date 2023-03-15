@@ -16,7 +16,8 @@
 			"vector": "cpp",
 			"string_view": "cpp",
 			"cmath": "cpp",
-			"chrono": "cpp"
+			"chrono": "cpp",
+			"ratio": "cpp"
 		}
 	}
 }
