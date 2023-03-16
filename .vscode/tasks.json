@@ -6,7 +6,7 @@
             "command": "/usr/bin/g++",
             "args": [
                 "-Wall",
-                //"-Werror",
+                "-Werror",
                 "-fdiagnostics-color=always",
                 "-g",
                 "${file}",
