@@ -1,0 +1,1 @@
+{"name":"Local: A","url":"/mnt/c/Users/Administrator/C++/WMSOJ/20230315/A/A.cpp","tests":[{"id":1679031430950,"input":"6 6 3\n3 3 2\n15 1\n15 2\n10 2\n15 2\n10 2\n5 3","output":"60"}],"interactive":false,"memoryLimit":1024,"timeLimit":3000,"srcPath":"/mnt/c/Users/Administrator/C++/WMSOJ/20230315/A/A.cpp","group":"local","local":true}
