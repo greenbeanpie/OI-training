@@ -18,7 +18,8 @@
 			"cmath": "cpp",
 			"chrono": "cpp",
 			"ratio": "cpp",
-			"complex": "cpp"
+			"complex": "cpp",
+			"iostream": "cpp"
 		}
 	}
 }
