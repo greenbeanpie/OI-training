@@ -1,38 +1,43 @@
 #include <bits/stdc++.h>
 using namespace std;
-#define int long long
-
-signed main()
-{
-	ios::sync_with_stdio(false);
-	int n;
-	cin >> n;
-	map<string,int> stu;
-	int ope,score;
-	string name;
-	for(int i=0;i<n;i++){
-		cin >> ope;
-		if(ope==1){
-			cin >> name >> score;
-			stu.erase(name);
-			stu.insert((pair<string,int>){name,score});
-		}
-		else if(ope==2){
-			cin >> name;
-			cout << stu[name] << endl;
-		}
-		else if(ope==3){
-			cin >> name;
-			int temp=stu.erase(name);
-			if(temp==0){
-				cout << "Not found" << endl;
+int main(){
+	int t;
+	cin >> t;
+	unordered_map<string,int> m;
+	for(int i=0;i<t;i++){
+		int op;// 是的就是OP 
+		cin >> op;
+		if(op==1){
+			string a;
+			int b;
+			cin >> a >> b;
+			m[a]=b;
+			cout << "OK" << endl;}
+		else if(op==2){
+				string a;
+				cin >> a;
+				if(!m.count(a)){
+					cout << "Not found" << endl;
+				}
+				else{
+					cout << m[a] << endl;
+				}
+				}
+		else if(op==3){
+				string a;
+				cin >> a;
+				if(!m.count(a)){
+					cout << "Not found" << endl;
+				}
+				else{
+					m.erase(m.find(a));
+					cout << "Deleted successfully" << endl;
+				}
 			}
-			else{
-				cout << "Deleted successfully" << endl;
-			}
-		}
-		else if(ope==4){
-			
-		}
+		else{
+				cout << m.size() << endl;
+				}
+		
 	}
-}
+	return 0;
+} 
