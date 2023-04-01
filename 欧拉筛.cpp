@@ -7,8 +7,9 @@ int primes[N];
 
 int main()
 {
-    int m, n;
-    cin >> n >> m;
+    freopen("dabiao.txt","w",stdout);
+    int m, n=1000005;
+    //cin >> n >> m;
     int cnt = 0;
     for (int i = 2; i <= N; i++)
     {
@@ -26,10 +27,9 @@ int main()
         }
     }
     int num;
-    for (int i = 0; i < m; i++)
+    for (int i = 0;primes[i]<=1e6; i++)
     {
-        cin >> num;
-        cout << primes[num - 1] << endl;
+        cout << primes[i] << ",";
     }
     return 0;
 }
