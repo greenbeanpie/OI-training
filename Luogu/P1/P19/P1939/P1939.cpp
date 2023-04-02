@@ -1,9 +1,9 @@
 #include <bits/stdc++.h>
 using namespace std;
 #define int long long
-#define max_matrix 105
+#define max_matrix 5
 #define mod 1000000007
-int n;// n<=max_matrix
+int n=3;// n<=max_matrix
 struct matrix
 {
     long long mat[max_matrix][max_matrix];
@@ -48,4 +48,21 @@ matrix mquickpower(matrix a, int b)
         b >>= 1;
     }while(b);
     return answer;
+}
+
+signed main(){
+    #ifndef ONLINE_JUDGE
+        freopen("P1939.in","r",stdin);
+    #endif
+    int t;
+    cin >> t;
+    for(int i=0;i<t;i++){
+        int k;
+        cin >> k;
+        matrix ans;
+        ans.mat[1][1]=ans.mat[1][3]=ans.mat[2][1]=ans.mat[3][2]=1;
+        ans=mquickpower(ans,k);
+        cout << ans.mat[2][1] << endl;
+    }
+    return 0;
 }

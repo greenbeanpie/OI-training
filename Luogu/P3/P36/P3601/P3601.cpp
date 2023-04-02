@@ -21,7 +21,7 @@ int eula(int a)
         
         for (int i = 0; primes[i] <= sqrt(a); i++)
         {
-            if (a % primes[i] == 0)
+            if (a % primes[i] == 0&&__gcd(a,primes[i])==1)
             {
                 ans = eula(a / primes[i]) * (primes[i] - 1);
                 break;
