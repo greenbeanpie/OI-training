@@ -1,10 +1,9 @@
 #include <bits/stdc++.h>
 using namespace std;
 #define int long long
-#define max_matrix 105
+#define max_matrix 5
 #define mod 1000000007
-
-int n, k;
+int n=3;// n<=max_matrix
 struct matrix
 {
     long long mat[max_matrix][max_matrix];
@@ -50,29 +49,20 @@ matrix mquickpower(matrix a, int b)
     }while(b);
     return answer;
 }
-signed main()
-{
-    ios::sync_with_stdio(false);
-    freopen("P3390_1.in","r",stdin);
-    freopen("P3390.out","w",stdout);
-    cin >> n >> k;
-    matrix a;
-    a.init();
-    for (int i = 1; i <= n; i++)
-    {
-        for (int j = 1; j <= n; j++)
-        {
-            cin >> a.mat[i][j];
-        }
-    }
-    matrix b=mquickpower(a, k);
-    for (int i = 1; i <= n; i++)
-    {
-        for (int j = 1; j <= n; j++)
-        {
-            cout << b.mat[i][j] % mod << " ";
-        }
-        cout << endl;
+
+signed main(){
+    #ifndef ONLINE_JUDGE
+        freopen("P1939.in","r",stdin);
+    #endif
+    int t;
+    cin >> t;
+    for(int i=0;i<t;i++){
+        int k;
+        cin >> k;
+        matrix ans;
+        ans.mat[1][1]=ans.mat[1][3]=ans.mat[2][1]=ans.mat[3][2]=1;
+        ans=mquickpower(ans,k);
+        cout << ans.mat[2][1] << endl;
     }
     return 0;
 }
