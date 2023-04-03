@@ -1,12 +1,11 @@
 #include <bits/stdc++.h>
 using namespace std;
 #define int long long
-#define max_matrix 105
-#define mod 1000000007
-int n;// n<=max_matrix
+#define max_matrix 5
 struct matrix
 {
     long long mat[max_matrix][max_matrix];
+    int*operator[](const int&x){return mat[x];}
     matrix(){
         memset(mat,0,sizeof(mat));
     }
@@ -21,19 +20,19 @@ struct matrix
 matrix operator*(matrix a, matrix b)
 {
     matrix c;
-    for (int k = 1; k <= n; k++)
+    for (int k = 1; k <= max_matrix; k++)
     {
-        for (int i = 1; i <= n; i++)
+        for (int i = 1; i <= max_matrix; i++)
         {
-            for (int j = 1; j <= n; j++)
+            for (int j = 1; j <= max_matrix; j++)
             {
-                c.mat[i][j] += a.mat[i][k] * b.mat[k][j] % mod;
-                c.mat[i][j] %= mod;
+                c.mat[i][j] += a[i][k] * b[k][j];
             }
         }
     }
     return c;
 }
+
 matrix mquickpower(matrix a, int b)
 {
     matrix answer;

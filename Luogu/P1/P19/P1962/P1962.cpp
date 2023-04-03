@@ -2,7 +2,7 @@
 using namespace std;
 #define int long long
 #define max_matrix 5
-int p,q,n;// p=a+b,q=ab
+#define mod 1000000007
 struct matrix
 {
     long long mat[max_matrix][max_matrix];
@@ -27,11 +27,19 @@ matrix operator*(matrix a, matrix b)
         {
             for (int j = 1; j <= max_matrix; j++)
             {
-                c.mat[i][j] += a[i][k] * b[k][j];
+                c[i][j] += a[i][k] * b[k][j]%mod;
+                
             }
         }
     }
     return c;
+}
+matrix operator%(matrix a,int b){
+    for(int i=1;i<=max_matrix;i++){
+        for(int j=1;j<=max_matrix;j++){
+            a[i][j]%=b;
+        }
+    }return a;
 }
 
 matrix mquickpower(matrix a, int b)
@@ -43,43 +51,24 @@ matrix mquickpower(matrix a, int b)
         if (b & 1)
         {
             answer = answer * a;
+            answer = answer % mod;
         }
         a = a * a;
         b >>= 1;
     }while(b);
     return answer;
 }
-
-int f(int x){// f(n)=a^n+b^n=f(n-1)(a+b)-a^(n-1)*b-a*b^(n-1)=f(n-1)(a+b)-ab(f(n-2));
-    if(x==0){
-        return 2;
-    }
-    else if(x==1){
-        return p;
-    }
-    else{
-        matrix a;
-        a[1][1]=p;
-        a[1][2]=2;
-        matrix b;
-        b[1][1]=p;
-        b[2][1]=-q;
-        b[1][2]=1;
-        b[2][2]=0;
-        a=a*mquickpower(b,n);
-        return a[1][2];
-    }
+int fibonacci(int x){
+matrix a;
+    a[1][1]=a[1][2]=a[2][2]=a[2][3]=a[3][2]=1;
+    return mquickpower(a,x)[3][2]%mod;
 }
 signed main(){
     #ifndef ONLINE_JUDGE
-        freopen("UVA10655.in","r",stdin);
+        freopen("P1962.in","r",stdin);
     #endif
-    while(cin >> p >> q >> n){
-        if(n==-1){
-            break;
-        }
-        cout << f(n) << endl;
-        n=-1;
-    }
+    int n;
+    cin >> n;
+    cout << fibonacci(n);
     return 0;
 }

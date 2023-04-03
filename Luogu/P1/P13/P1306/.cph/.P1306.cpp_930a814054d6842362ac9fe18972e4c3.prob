@@ -1,0 +1,1 @@
+{"name":"Local: P1306","url":"/workspaces/OI-training/Luogu/P1/P13/P1306/P1306.cpp","tests":[{"id":1680525861740,"input":"4 7","output":"1"},{"id":1680526479050,"input":"2020 972020","output":"6765"}],"interactive":false,"memoryLimit":1024,"timeLimit":3000,"srcPath":"/workspaces/OI-training/Luogu/P1/P13/P1306/P1306.cpp","group":"local","local":true}
