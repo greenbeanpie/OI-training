@@ -1,7 +1,8 @@
 P1434
 P5179
 CF1182F
-UVA10655
+P1886
+https://www.luogu.com.cn/discuss/475792
 二进制集合操作
 平衡三进制
 高精度计算
