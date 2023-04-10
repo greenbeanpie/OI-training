@@ -1,0 +1,1 @@
+{"name":"Local: P2032","url":"/workspaces/OI-training/Luogu/P2/P20/P2032/P2032.cpp","tests":[{"id":1681128972684,"input":"5 3\n1 5 3 4 2","output":"5\n5\n4"}],"interactive":false,"memoryLimit":1024,"timeLimit":3000,"srcPath":"/workspaces/OI-training/Luogu/P2/P20/P2032/P2032.cpp","group":"local","local":true}
