@@ -1,0 +1,1 @@
+{"name":"Local: P1440","url":"/workspaces/OI-training/Luogu/P1/P14/P1440/P1440.cpp","tests":[{"id":1681126456765,"input":"6 2\n7 8 1 4 3 2","output":"0\n7\n7\n1\n1\n3"}],"interactive":false,"memoryLimit":1024,"timeLimit":3000,"srcPath":"/workspaces/OI-training/Luogu/P1/P14/P1440/P1440.cpp","group":"local","local":true}

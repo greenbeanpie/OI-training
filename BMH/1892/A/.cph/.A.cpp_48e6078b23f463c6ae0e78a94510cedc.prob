@@ -1,0 +1,1 @@
+{"name":"Local: A","url":"/workspaces/OI-training/BMH/1892/A/A.cpp","tests":[{"id":1680524952947,"input":"3\n0 1\n-8 -4\n-1 4","output":"279.6017"}],"interactive":false,"memoryLimit":1024,"timeLimit":3000,"srcPath":"/workspaces/OI-training/BMH/1892/A/A.cpp","group":"local","local":true}

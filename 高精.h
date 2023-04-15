@@ -2,9 +2,6 @@
 using namespace std;
 #define bimax 20000
 
-//freopen("std.in","r",stdin);
-//freopen("std.out","w",stdout);
-
 struct bigint {
 	int len=0;
 	int num[bimax]= {0};
@@ -35,7 +32,10 @@ struct bigint {
 				num[i+1]+=num[i]/10;
 				num[i]%=10;
 			}
-
+			if(num[i]<0){
+				num[i+1]+=num[i]/10;
+				num[i]=10-abs(num[i])%10;
+			}
 		}
 		while(!num[len]){
 			len--;
@@ -60,6 +60,33 @@ bigint operator+(bigint a,bigint b)
 	c.flatten(max(a.len,b.len)+1);
 	return c;
 }
+bool operator<(bigint a,bigint b){
+	if(a.len>b.len){
+		return false;
+	}
+	else if(a.len<b.len){
+		return true;
+	}
+	else{
+		for(int i=0;i<a.len;i++){
+			if(a[i]-'0'<b[i]-'0'){
+				return true;
+			}
+			else if(a[i]-'0'>b[i]-'0'){
+				return false;
+			}
+		}
+	}
+	return false;
+}
+bigint operator-(bigint a,bigint b){
+	bigint c=0;
+	for(int i=0; i<max(a.len,b.len); i++) {
+		c[i]-=a[i]+b[i];
+	}
+	c.flatten(max(a.len,b.len)+1);
+	return c;
+}
 bigint operator*(bigint a,bigint b)
 {
 	bigint c=0;
@@ -79,17 +106,4 @@ bigint stb(string x,bigint a)
 		a.len++;
 	}
 	return a;
-}
-int main()
-{
-	
-	bigint a(0),b(0);
-	string x,y;
-	cin >> x >> y;
-	a=stb(x,a);
-	b=stb(y,b);
-	bigint c=0;
-	c=a*b;
-	c.print();
-	return 0;
 }
