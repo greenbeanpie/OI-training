@@ -1,0 +1,1 @@
+{"name":"Local: P2880","url":"/workspaces/OI-training/Luogu/P2/P28/P2880/P2880.cpp","tests":[{"id":1681646219395,"input":"6 3\n1\n7\n3\n4\n2\n5\n1 5\n4 6\n2 2","output":"6\n3\n0"}],"interactive":false,"memoryLimit":1024,"timeLimit":3000,"srcPath":"/workspaces/OI-training/Luogu/P2/P28/P2880/P2880.cpp","group":"local","local":true}
