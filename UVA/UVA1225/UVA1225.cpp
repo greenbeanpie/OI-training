@@ -45,11 +45,14 @@ signed main() {
   ios::sync_with_stdio(false);
   cin.tie(0);
   cout.tie(0);
-
-  int s, e;
-  cin >> s >> e;
-  for (int i = 0; i <= 9; i++) {
-    cout << count(e, i) - count(s - 1, i) << " ";
+  int n, s;
+  cin >> n;
+  for (int f = 0; f < n; f++) {
+    cin >> s;
+    for (int i = 0; i <= 8; i++) {
+      printf("%lld ", count(s, i) - count(0, i));
+    }
+    printf("%lld\n", count(s, 9) - count(0, 9));
   }
   return 0;
 }

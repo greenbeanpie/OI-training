@@ -45,11 +45,18 @@ signed main() {
   ios::sync_with_stdio(false);
   cin.tie(0);
   cout.tie(0);
-
   int s, e;
-  cin >> s >> e;
-  for (int i = 0; i <= 9; i++) {
-    cout << count(e, i) - count(s - 1, i) << " ";
+  while (cin >> s >> e) {
+    if (s == 0 && e == 0) {
+      break;
+    }
+    if (s > e) {
+      swap(s, e);
+    }
+    for (int i = 0; i <= 9; i++) {
+      cout << count(e, i) - count(s - 1, i) << " ";
+    }
+    cout << endl;
   }
   return 0;
 }
