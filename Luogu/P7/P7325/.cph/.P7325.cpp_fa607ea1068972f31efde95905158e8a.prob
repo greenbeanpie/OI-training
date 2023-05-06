@@ -1,0 +1,1 @@
+{"name":"Local: P7325","url":"/workspaces/OI-training/Luogu/P7/P7325/P7325.cpp","tests":[{"id":1683274859373,"input":"1 6\n4 4","output":"3"},{"id":1683274865934,"input":"4 5\n0 1\n1 2\n2 3\n3 4","output":"0\n3\n2\n-1"}],"interactive":false,"memoryLimit":1024,"timeLimit":3000,"srcPath":"/workspaces/OI-training/Luogu/P7/P7325/P7325.cpp","group":"local","local":true}

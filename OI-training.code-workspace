@@ -19,7 +19,8 @@
 			"chrono": "cpp",
 			"ratio": "cpp",
 			"complex": "cpp",
-			"iostream": "cpp"
+			"iostream": "cpp",
+			"iosfwd": "cpp"
 		}
 	}
 }

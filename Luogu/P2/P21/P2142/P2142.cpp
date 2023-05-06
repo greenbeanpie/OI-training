@@ -20,8 +20,11 @@ struct bigint {
 		return num[a];
 	}
 	void print() {
+        if(!positive){
+            puts("-");
+        }
 		for(int i=len-1; i>=0; i--) {
-			cout << num[i];
+			printf("%d",num[i]);
 		}
 	}
 	void flatten(int L){
@@ -38,7 +41,7 @@ struct bigint {
 				num[i]=10-abs(num[i])%10;
 			}
 		}
-		while(!num[len]){
+		while(len>=0&&!num[len]){
 			len--;
 		} 
 		len++;
@@ -109,11 +112,24 @@ bigint operator*(bigint a,bigint b)
 	c.flatten(a.len+b.len+1);
 	return c;
 }
-bigint stb(string x,bigint a)
+bigint stob(string x)
 {
+    bigint a;
 	for(int i=x.length()-1; i>=0; i--) {
 		a[i]=x[x.length()-1-i]-'0';
 		a.len++;
 	}
-	return a;
+    return a;
+}
+#define int long long
+signed main(){
+    bigint a,b;
+    string t;
+    cin >> t;
+    a=stob(t);
+    cin >> t;
+    b=stob(t);
+    bigint c=a-b;
+    c.print();
+    return 0;
 }

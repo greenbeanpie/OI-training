@@ -5,6 +5,7 @@
 #include <iostream>
 using namespace std;
 #define int long long
+#define fft fast_fast_tle
 const long double Pi = acos(-1);
 struct complex {
   long double real, imag;
@@ -44,7 +45,7 @@ void change(complex y[], int len) {
   }
 }
 
-void fft(complex y[], int len, int op) {
+void fast_fast_tle(complex y[], int len, int op) {
   change(y, len);
   for (int h = 2; h <= len; h <<= 1) {
     complex wn(cos(2 * Pi / h), sin(op * 2 * Pi / h));
