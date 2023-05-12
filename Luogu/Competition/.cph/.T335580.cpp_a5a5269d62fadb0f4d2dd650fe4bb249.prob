@@ -1,0 +1,1 @@
+{"name":"Local: T335580","url":"/workspaces/OI-training/Luogu/Competition/T335580.cpp","tests":[{"id":1683876745288,"input":"5\n3 2 1 5 4","output":"2 0 2 1 1\n6"}],"interactive":false,"memoryLimit":1024,"timeLimit":3000,"srcPath":"/workspaces/OI-training/Luogu/Competition/T335580.cpp","group":"local","local":true}
