@@ -3,12 +3,17 @@ using namespace std;
 #define int long long
 vector<int> num;
 template <typename T>
-class SegTree
+struct SegTree
 {
+    
     vector<T> tree, lazy;
-    /// @brief
-    vector<T> *arr;
-    int n, root=1, n4, end;
+    vector<T>* arr;
+    int n, root = 1, n4, end;
+    SegTree(vector<T> a){
+        tree=vector<T>(a.size()*4,0);
+        lazy=vector<T>(a.size()*4,0);
+        arr=&a;
+    }
     void maintain(int cl, int cr, int p)
     { // cl:current left(当前的左范围)
         int cmid = cl + (cr - cl) / 2;
@@ -64,26 +69,33 @@ class SegTree
     {
         if (l == r)
         {
-            tree[p] = (*arr)[l];
+            tree[p]=(*arr)[l];
             return;
         }
         int mid = l + (r - l) / 2;
         build(l, mid, p * 2);
         build(mid + 1, r, p * 2 + 1);
+        
         tree[p] = tree[p * 2] + tree[p * 2 + 1];
-        end=max(end,p*2+1);
-    }
-
-public:
-    T range_sum(int l, int r)
-    {
-        return range_sum(l, r, 0, end, root);
-    }
-    void range_add(int l, int r, int val)
-    {
-        range_add(l, r, val, 0, end, root);
+        end = max(end, p * 2 + 1);
     }
 };
+int range_sum(SegTree<int> st,int l,int r){
+    return st.range_sum(l,r,l,r,st.root);
+}
+void range_add(SegTree<int> *st,int l,int r,int val){
+    st->range_add(l,r,val,l,r,(*st).root);
+}
+/*public:
+        T range_sum(int l, int r)
+        {
+            return range_sum(l, r, 0, end, root);
+        }
+        void range_add(int l, int r, int val)
+        {
+            range_add(l, r, val, 0, end, root);
+        }
+};*/
 
 signed main()
 {
@@ -99,8 +111,8 @@ signed main()
         cin >> t;
         num.push_back(t);
     }
-    SegTree<int> ST;
-    ST.build(1,n,1);
+    SegTree<int> ST(num);
+    ST.build(1, n, 1);
     for (int i = 0; i < m; i++)
     {
         int op;
@@ -109,13 +121,13 @@ signed main()
         {
             int x, y, k;
             cin >> x >> y >> k;
-            ST.range_add(x, y, k);
+            range_add(&ST,x, y, k);
         }
         else
         {
             int x, y;
             cin >> x >> y;
-            cout << ST.range_sum(x, y) << endl;
+            cout << range_sum(ST,x, y) << endl;
         }
     }
     return 0;

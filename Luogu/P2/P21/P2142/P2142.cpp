@@ -21,7 +21,7 @@ struct bigint {
 	}
 	void print() {
         if(!positive){
-            puts("-");
+            printf("-");
         }
 		for(int i=len-1; i>=0; i--) {
 			printf("%d",num[i]);
@@ -37,8 +37,9 @@ struct bigint {
 				num[i]%=10;
 			}
 			if(num[i]<0){
-				num[i+1]+=num[i]/10;
+				num[i+1]+=floor(1.0*num[i]/10);
 				num[i]=10-abs(num[i])%10;
+				num[i]%=10;
 			}
 		}
 		while(len>=0&&!num[len]){
@@ -51,11 +52,12 @@ struct bigint {
 	} 
 
 };
+extern bigint operator+(bigint a,bigint b);
+extern bigint operator-(bigint a,bigint b);
 bigint operator+(bigint a,bigint b)
 {
+
 	bigint c=0;
-	
-	
 	for(int i=0; i<max(a.len,b.len); i++) {
 		c[i]+=a[i]+b[i];
 		if(c[i]>=10) {
@@ -67,6 +69,7 @@ bigint operator+(bigint a,bigint b)
 	return c;
 }
 bool operator<(bigint a,bigint b){
+	
 	if(a.len>b.len){
 		return false;
 	}
@@ -74,7 +77,7 @@ bool operator<(bigint a,bigint b){
 		return true;
 	}
 	else{
-		for(int i=0;i<a.len;i++){
+		for(int i=a.len-1;i>=0;i--){
 			if(a[i]-'0'<b[i]-'0'){
 				return true;
 			}
@@ -86,12 +89,19 @@ bool operator<(bigint a,bigint b){
 	return false;
 }
 bigint operator-(bigint a,bigint b){
+	if(!a.positive&&!b.positive){
+		a.positive=true;
+		b.positive=true;
+		bigint c=a+b;
+		c.positive=false;
+		return c;
+	}
 	bigint c=0;
 	if(a<b){
 		bigint temp;
-		temp=a;
-		b=a;
 		temp=b;
+		b=a;
+		a=temp;
 		c.positive=false;
 	}
 	for(int i=0; i<max(a.len,b.len); i++) {
@@ -123,6 +133,9 @@ bigint stob(string x)
 }
 #define int long long
 signed main(){
+	#ifndef ONLINE_JUDGE
+		freopen("P2142_2.in","r",stdin);
+	#endif
     bigint a,b;
     string t;
     cin >> t;
