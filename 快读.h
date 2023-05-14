@@ -1,3 +1,6 @@
+#include <cstdio>
+#include <iostream>
+#include <iomanip>
 namespace IO
 {
 	template <typename _Tp>

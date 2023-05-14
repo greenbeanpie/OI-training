@@ -13,6 +13,7 @@
                 "--std=c++17",
                 "-Wall",
                 "-lm",
+                "-DCODESPACE"
             ],
             "options": {
                 "cwd": "${fileDirname}"
