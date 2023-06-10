@@ -1,4 +1,7 @@
 {
     "C_Cpp.default.compilerPath": "/usr/bin/g++",
-    "C_Cpp.dimInactiveRegions": false
+    "C_Cpp.dimInactiveRegions": false,
+    "files.associations": {
+        "iostream": "cpp"
+    }
 }
