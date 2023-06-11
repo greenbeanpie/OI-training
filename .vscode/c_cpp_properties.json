@@ -25,8 +25,8 @@
                 "limitSymbolsToIncludedHeaders": true
             }
         },
-        {
-            "name": "Linux",
+        /*{
+            "name": "Mac",
             "includePath": [
                 "/Users/hddhp/Documents/GitHub/OI-training/**",
                 "/opt/homebrew/include/c++/12/**"
@@ -51,23 +51,17 @@
                 ],
                 "limitSymbolsToIncludedHeaders": true
             }
-        },
+        },*/
         {
-            "name": "Mac",
+            "name": "Linux",
             "includePath": [
                 "${workspaceFolder}/**"
             ],
             "defines": [],
-            "macFrameworkPath": [
-                "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/Frameworks"
-            ],
-            "compilerPath": "/opt/homebrew/bin/g++-12",
             "cStandard": "c17",
-            "cppStandard": "c++17",
-            "intelliSenseMode": "macos-clang-arm64",
-            "compilerArgs": [
-                "--std=c++20"
-            ]
+            "cppStandard": "gnu++17",
+            "intelliSenseMode": "linux-gcc-arm64",
+            "compilerPath": "/usr/lib64/ccache/g++"
         }
     ],
     "version": 4
