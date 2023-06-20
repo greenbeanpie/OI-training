@@ -6,24 +6,24 @@ template <typename T>
 struct SegTree
 {
     
-    vector<T> tree, lazy;
+    vector<T> tree, lazy_add;
     vector<T>* arr;
     int n, root = 1, n4, end;
     SegTree(vector<T> a){
         tree=vector<T>(a.size()*4,0);
-        lazy=vector<T>(a.size()*4,0);
+        lazy_add=vector<T>(a.size()*4,0);
         arr=&a;
     }
     void maintain(int cl, int cr, int p)
     { // cl:current left(当前的左范围)
         int cmid = cl + (cr - cl) / 2;
-        if (cl >= cr && lazy[p])
+        if (cl >= cr && lazy_add[p])
         {
-            lazy[p * 2] += lazy[p];                   // 更新下左节点的懒惰标记
-            lazy[p * 2 + 1] += lazy[p];               // 更新下右节点的懒惰标记
-            tree[p * 2] += lazy[p] * (cmid - cl + 1); // 更新下左节点的和
-            tree[p * 2 + 1] += lazy[p] * (cr - cmid); // 更新下右节点的和
-            lazy[p] = 0;                              // 更新当前点懒惰标记
+            lazy_add[p * 2] += lazy_add[p];                   // 更新下左节点的懒惰标记
+            lazy_add[p * 2 + 1] += lazy_add[p];               // 更新下右节点的懒惰标记
+            tree[p * 2] += lazy_add[p] * (cmid - cl + 1); // 更新下左节点的和
+            tree[p * 2 + 1] += lazy_add[p] * (cr - cmid); // 更新下右节点的和
+            lazy_add[p] = 0;                              // 更新当前点懒惰标记
         }
     }
     T range_sum(int l, int r, int cl, int cr, int p)
@@ -50,7 +50,7 @@ struct SegTree
         if (l <= cl && cr <= r)
         {
             tree[p] += (cr - cl + 1) * val;
-            lazy[p] += val;
+            lazy_add[p] += val;
             return;
         }
         int mid = cl + (cr - cl) / 2;

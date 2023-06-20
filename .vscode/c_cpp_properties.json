@@ -25,33 +25,6 @@
                 "limitSymbolsToIncludedHeaders": true
             }
         },
-        /*{
-            "name": "Mac",
-            "includePath": [
-                "/Users/hddhp/Documents/GitHub/OI-training/**",
-                "/opt/homebrew/include/c++/12/**"
-            ],
-            "defines": [
-                "_DEBUG",
-                "UNICODE",
-                "_UNICODE"
-            ],
-            "compilerPath": "/usr/bin/g++",
-            "cStandard": "c17",
-            "cppStandard": "gnu++14",
-            "intelliSenseMode": "linux-gcc-x64",
-            "compilerArgs": [
-                "--std=c++14"
-            ],
-            "mergeConfigurations": false,
-            "browse": {
-                "path": [
-                    "${workspaceFolder}/**",
-                    "/opt/homebrew/include/c++/12/**"
-                ],
-                "limitSymbolsToIncludedHeaders": true
-            }
-        },*/
         {
             "name": "Linux",
             "includePath": [
@@ -61,7 +34,7 @@
             "cStandard": "c17",
             "cppStandard": "gnu++17",
             "intelliSenseMode": "linux-gcc-arm64",
-            "compilerPath": "/usr/lib64/ccache/g++"
+            "compilerPath": "/usr/bin/g++"
         }
     ],
     "version": 4
