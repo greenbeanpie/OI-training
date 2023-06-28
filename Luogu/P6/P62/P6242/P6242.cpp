@@ -14,7 +14,7 @@ struct SegTree
 	#define end tree.size()-1
 	struct node
 	{
-		T ls=-1, rs=-1, lr=-1, rr=-1, val=-1, lazy_add=0, lazy_mul=1;
+		T ls=-1, rs=-1, lr=-1, rr=-1, val=-1;
 		T operator&()
 		{
 			return val;
@@ -29,6 +29,14 @@ struct SegTree
 			val = b;
 			return *this;
 		}
+		node &operator=(node b){
+			ls=b.ls;
+			rs=b.rs;
+			lr=b.lr;
+			rr=b.rr;
+			val=b.val;
+			return *this;
+		}
 		T operator+(node b){
 			return val+b.val;
 		}
@@ -36,7 +44,8 @@ struct SegTree
 	vector<node> tree;
 	vector<node*> history_root;
 	vector<T> *arr;
-	int n, root = 1, n4;
+	int n, root = 1;
+	int tot=0;
 	SegTree(vector<T> *a)
 	{
 		arr = a;
@@ -59,7 +68,7 @@ struct SegTree
 	}*/
 	inline T range_sum(int l, int r, int cl, int cr, int p)
 	{
-		if (l <= cl && cr <= r)
+		/*if (l <= cl && cr <= r)
 		{ // 如果当前范围在查询范围内可以直接返回不用去掉左边和右边
 			return tree[p].val;
 		}
@@ -74,38 +83,56 @@ struct SegTree
 		{
 			sum += range_sum(l, r, mid + 1, cr, p * 2 + 1);
 		}
+		return sum;*/
+		if(l<=cl&&cr<=r){
+			return tree[p].val;
+		}
+		int mid=(cl+cr)/2;
+		T sum=0;
+		if(l<=mid){
+			sum+=range_sum(l,r,cl,cmid,p.ls);
+		}
+		if(r>mid){
+			sum+=range_sum(l,r,mid,cr,p,rs);
+		}
 		return sum;
 	}
-	inline void range_add(int l, int r, T val, int cl, int cr, int p)
+	inline int range_add(int l, int r, T val, int cl, int cr, int p)
 	{
+		int now=++tot;
+		tree.push_back(tree[p]);
 		if (l <= cl && cr <= r)
 		{
 			/*tree[p] += (cr - cl + 1) * val;
 			lazy_add[p] += val;
 			*/
-			
+			tree[now]=tree[p]+(cr-cl+1)*val;
 			return;
 		}
+		tree[now]=tree[p];
 		int mid = (cl + cr) / 2;
 		///maintain(cl, cr, p);
 		if (l <= mid)
 		{
-			range_add(l, r, val, cl, mid, p * 2);
+			tree[now].ls=range_add(l, r, val, cl, mid, tree[p].ls);
 		}
 		if (r > mid)
 		{
-			range_add(l, r, val, mid + 1, cr, p * 2 + 1);
+			tree[now].rs=range_add(l, r, val, mid + 1, cr, tree[p].rs);
 		}
-		//tree[p] = tree[p * 2] + tree[p * 2 + 1];
+		tree[p] = tree[tree[p].ls] + tree[tree[p].rs];
 	}
 	inline void range_mul(int l, int r, T val, int cl, int cr, int p)
 	{
-		/*if (l <= cl && cr <= r)
+		int now=++tot;
+		tree.push_back(tree[p]);
+		if (l <= cl && cr <= r)
 		{
-			tree[p] *= val;
+			/*tree[p] *= val;
 			lazy_add[p] *= val;
 			lazy_mul[p] *= val;
-			return;
+			return;*/
+			
 		}
 		int mid = (cl + cr) / 2;
 		maintain(cl, cr, p);
@@ -117,14 +144,15 @@ struct SegTree
 		{
 			range_mul(l, r, val, mid + 1, cr, p * 2 + 1);
 		}
-		tree[p] = tree[p * 2] + tree[p * 2 + 1];*/
+		tree[p] = tree[p * 2] + tree[p * 2 + 1];
 	}
 	void build(int l, int r, int p)
 	{
 		tree[p].lr=l;
 		tree[p].rr=r;
-		while(tree.size()<=p){
+		while(tot<=p){
 			tree.push_back(0);
+			tot++;
 		}
 		if (l == r)
 		{
@@ -136,7 +164,7 @@ struct SegTree
 		build(mid + 1, r, p * 2 + 1);
 		tree[p].ls=p*2;
 		tree[p].rs=p*2+1;
-		tree[p] = tree[p * 2] + tree[p * 2 + 1];
+		tree[p] = tree[tree[p].ls] + tree[tree[p].rs];
 	}
 };
 inline int range_sum(SegTree<int> *st, int l, int r)
@@ -145,11 +173,11 @@ inline int range_sum(SegTree<int> *st, int l, int r)
 }
 inline void range_add(SegTree<int> *st, int l, int r, int val)
 {
-	st->range_add(l, r, val, 1, n, (*st).root);
+	st->range_add(l, r, val, 1, n, st->root);
 }
 inline void range_mul(SegTree<int> *st, int l, int r, int val)
 {
-	st->range_mul(l, r, val, 1, n, (*st).root);
+	st->range_mul(l, r, val, 1, n, st->root);
 }
 /*public:
 		T range_sum(int l, int r)
