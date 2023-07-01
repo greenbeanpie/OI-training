@@ -1,4 +1,5 @@
 #include <bits/stdc++.h>
+<<<<<<< HEAD
 using namespace std;
 #define int long long
 
@@ -58,3 +59,6 @@ signed main()
   }
   return 0;
 }
+=======
+using namespace std
+>>>>>>> 3f56fc9 (上传2023.7.1-3)
