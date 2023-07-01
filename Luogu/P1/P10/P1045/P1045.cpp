@@ -22,12 +22,13 @@ struct bigint {
 		return num[a];
 	}
 	void print() {
-		for(int i=499; i>=0; i--) {
+		for(int i=499; i>0; i--) {
 			cout << num[i];
             if(i%50==0){
                 cout << "\n";
             }
 		}
+		cout << num[0]-1;
 	}
 	void flatten(int L){
 		len=min(L,500);
@@ -107,7 +108,7 @@ int main()
     cin >> p;
     cout << (int)ceil(log10(2)*p) << endl;
     bigint ans=2;
-    ans=quickpower(ans,p)-bigint(1);
+    ans=quickpower(ans,p);
     ans.print();
 	return 0;
 }
