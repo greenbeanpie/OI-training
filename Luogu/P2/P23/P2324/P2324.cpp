@@ -1,7 +1,7 @@
 #include <bits/stdc++.h>
 using namespace std;
 #define int long long
-int max_depth = 15;
+int depth = 15;
 int matrix[6][6], ans = 16;
 int default_matrix[6][6]{
     {0, 0, 0, 0, 0, 0},
@@ -45,7 +45,7 @@ int evaluate()
 }
 void A_star(int dep, int nx, int ny)
 {
-    if (dep == max_depth)
+    if (dep == depth)
     {
         if (!evaluate())
         {
@@ -66,7 +66,7 @@ void A_star(int dep, int nx, int ny)
             continue;
         }
         swap(matrix[nx][ny], matrix[tx][ty]);
-        if (evaluate() + dep <= max_depth)
+        if (evaluate() + dep <= depth)
         {
             A_star(dep + 1, tx, ty);
         }
@@ -109,7 +109,7 @@ signed main()
                 }
             }
         }
-        for (max_depth = 0; max_depth <= 15 && ans > 15; max_depth++)
+        for (depth = 0; depth <= 15 && ans > 15; depth++)
         {
             A_star(0, sx, sy);
         }

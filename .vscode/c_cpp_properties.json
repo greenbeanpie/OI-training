@@ -28,12 +28,13 @@
         {
             "name": "Linux",
             "includePath": [
-                "${workspaceFolder}/**"
+                "${workspaceFolder}/**",
+                "/usr/include/c++/**"
             ],
             "defines": [],
             "cStandard": "c17",
             "cppStandard": "gnu++17",
-            "intelliSenseMode": "linux-gcc-arm64",
+            "intelliSenseMode": "linux-gcc-x64",
             "compilerPath": "/usr/bin/g++"
         }
     ],
