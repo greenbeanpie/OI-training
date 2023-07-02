@@ -3,9 +3,8 @@ using namespace std;
 
 int main()
 {
-	set<int> s;
-	s.insert(1);
-	s.insert(3);
-	cout << *s.erase(s.end());
-    return 0;
+	vector<int> a(3);
+	cout << *a.begin();
+	int a = 3, b = 2;
+	return 0;
 }
