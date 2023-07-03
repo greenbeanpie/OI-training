@@ -12,13 +12,20 @@ signed main()
 #endif
 	std::ios::sync_with_stdio(false);
 	std::cin.tie(0), std::cout.tie(0);
-	int T;
-	std::cin >> T;
-	int tot = 0;
+	int n,T;
+	int tot = 0, last = 0,ans=0;
+	std::cin >> n >> T;
+	while(n--){
+		int t;
+		std::cin >> t;
+		bt.insert({t,tot++});
+	}
+	
 	while (T--)
 	{
 		int op, num;
 		std::cin >> op >> num;
+		num ^= last;
 		switch (op)
 		{
 		case 1:
@@ -28,18 +35,23 @@ signed main()
 			bt.erase(bt.lower_bound({num, -1}));
 			break;
 		case 3:
-			std::cout << bt.order_of_key({num, -1})+1 << "\n";
+			last=bt.order_of_key({num, -1}) + 1;
+			ans^=last;
 			break;
 		case 4:
-			std::cout << (*bt.find_by_order(std::min((int)bt.size()-1,num-1))).first << "\n";
+			last = (*bt.find_by_order(std::min((int)bt.size() - 1, num - 1))).first;
+			ans^=last;
 			break;
 		case 5:
-			std::cout << (*(--bt.lower_bound({num, -1}))).first << "\n";
+			last = (*(--bt.lower_bound({num, -1}))).first;
+			ans^=last;
 			break;
 		case 6:
-			std::cout << (*bt.upper_bound({num, INT_MAX})).first << "\n";
+			last=(*bt.upper_bound({num, INT_MAX})).first;
+			ans^=last;
 			break;
 		}
 	}
+	std::cout << ans;
 	return 0;
 }
