@@ -96,7 +96,7 @@ inline int query(SegTree<T> *st, int l, int r, int pos)
 }
 signed main()
 {
-#ifdef CODESPACE
+#ifndef ONLINE_JUDGE
 	freopen("P3834.in", "r", stdin);
 #endif
 	std::ios::sync_with_stdio(false);
@@ -126,7 +126,7 @@ signed main()
 	for (int i = 0; i < m; i++)
 	{
 		cin >> l >> r >> k;
-		cout << *s.find_by_order(query(&st,l,r,t)-1) << std::endl;
+		cout << *s.find_by_order(query(&st,l,r,k)-1) << std::endl;
 	}
 	return 0;
 }
