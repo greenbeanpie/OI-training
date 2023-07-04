@@ -1,149 +1,132 @@
 #include <bits/stdc++.h>
+#include <bits/extc++.h>
+using namespace __gnu_cxx;
+using namespace __gnu_pbds;
 #define int long long
 #define vector std::vector
 #define cin std::cin
 #define cout std::cout
 vector<int> num;
-int n,discret[200005];
+int n, tot = 0;
+
 template <typename T>
 struct SegTree
 {
-	vector<T> tree, lazy_add, lazy_mul;
+	struct node
+	{
+		T lr = 0, rr = 0, ls = -1, rs = -1, val = 0;
+	};
+	vector<node> tree;
 	vector<T> *arr;
-	int n, root = 1, n4, end;
+	vector<int> his;
+	int n;
+
 	SegTree(vector<T> *a)
 	{
-		tree = vector<T>((*a).size() * 4, 0);
-		lazy_add = vector<T>((*a).size() * 4, 0);
-		lazy_mul = vector<T>((*a).size() * 4, 1);
 		arr = a;
 	}
-	inline void maintain(int cl, int cr, int p)
-	{ // cl:current left(当前的左范围)
-		int cmid = (cl + cr) / 2;
-		if (cl > cr)
-		{
-			return;
-		}
-		lazy_mul[p * 2] *= lazy_mul[p];lazy_mul[p*2]%=mod;
-		lazy_mul[p * 2 + 1] *= lazy_mul[p];lazy_mul[p*2+1]%=mod;
-		lazy_add[p * 2] = (lazy_add[p * 2] * lazy_mul[p] + lazy_add[p])%mod;
-		lazy_add[p * 2 + 1] = (lazy_add[p * 2 + 1] * lazy_mul[p] + lazy_add[p])%mod;
-		tree[p * 2] = (tree[p * 2] * lazy_mul[p] + lazy_add[p] * (cmid - cl + 1))%mod;
-		tree[p * 2 + 1] = (tree[p * 2 + 1] * lazy_mul[p] + lazy_add[p] * (cr - cmid))%mod;
-		lazy_mul[p] = 1;
-		lazy_add[p] = 0;
-	}
-	inline T range_sum(int l, int r, int cl, int cr, int p)
+	inline int point_add(T val, T pos, int p)
 	{
-		if (l <= cl && cr <= r)
+		if (tree[p].lr == tree[p].rr)
 		{
-			return tree[p];
+			node now = tree[p];
+			now.val++;
+			tree.push_back(now);
+			return tree.size() - 1;
 		}
-		int mid = (cl + cr) / 2;
-		T sum = 0;
-		maintain(cl, cr, p);
-		if (l <= mid)
+		node now = tree[p];
+		if (tree[tree[p].ls].rr >= pos)
 		{
-			sum += range_sum(l, r, cl, mid, p * 2);
+			now.ls = point_add(val, pos, tree[p].ls);
 		}
-		if (r > mid)
+		else
 		{
-			sum += range_sum(l, r, mid + 1, cr, p * 2 + 1);
+			now.rs = point_add(val, pos, tree[p].rs);
 		}
-		return sum;
+		now.val++;
+		tree.push_back(now);
+		return tree.size() - 1;
 	}
-	inline void range_add(int l, int r, T val, int cl, int cr, int p)
+	inline int build(int l, int r)
 	{
-		if (l <= cl && cr <= r)
+		int mid = (l + r) / 2;
+		node now;
+		now.lr = l;
+		now.rr = r;
+		now.val = 0;
+		if (l != r)
 		{
-			tree[p] += (cr - cl + 1) * val;
-			lazy_add[p] += val;
-			return;
+			now.ls = build(l, mid);
+			now.rs = build(mid + 1, r);
 		}
-		int mid = (cl + cr) / 2;
-		maintain(cl, cr, p);
-		if (l <= mid)
-		{
-			range_add(l, r, val, cl, mid, p * 2);
-		}
-		if (r > mid)
-		{
-			range_add(l, r, val, mid + 1, cr, p * 2 + 1);
-		}
-		tree[p] = tree[p * 2] + tree[p * 2 + 1];
+		tree.push_back(now);
+		return tree.size() - 1;
 	}
-	inline void range_mul(int l, int r, T val, int cl, int cr, int p)
+	inline int query(int cl, int cr, int rank, int lp, int rp)
 	{
-		if (l <= cl && cr <= r)
+		if (tree[lp].lr == tree[lp].rr)
 		{
-			tree[p] *= val;
-			lazy_add[p] *= val;
-			lazy_mul[p] *= val;
-			return;
+			return tree[lp].lr;
 		}
-		int mid = (cl + cr) / 2;
-		maintain(cl, cr, p);
-		if (l <= mid)
+		int lval = tree[tree[rp].ls].val - tree[tree[lp].ls].val, rval = tree[tree[rp].rs].val - tree[tree[lp].rs].val;
+		if (cl + lval-1 >= rank)
 		{
-			range_mul(l, r, val, cl, mid, p * 2);
+			return query(cl, cl + lval-1, rank, tree[lp].ls, tree[rp].ls);
 		}
-		if (r > mid)
+		else
 		{
-			range_mul(l, r, val, mid + 1, cr, p * 2 + 1);
+			return query(cl + lval, cr, rank, tree[lp].rs, tree[rp].rs);
 		}
-		tree[p] = tree[p * 2] + tree[p * 2 + 1];
-	}
-	void build(int l, int r, int p)
-	{
-        while(tree.size()<=l){
-            tree.push_back(0);
-        }
-		if (l == r)
-		{
-			tree[p] = (*arr)[l];
-			return;
-		}
-		int mid = (r + l) / 2;
-		build(l, mid, p * 2);
-		build(mid + 1, r, p * 2 + 1);
-
-		tree[p] = tree[p * 2] + tree[p * 2 + 1];
-		end = max(end, p * 2 + 1);
 	}
 };
-inline int range_sum(SegTree<int> *st, int l, int r)
+
+template <typename T>
+inline void build(SegTree<T> *st)
 {
-	return st->range_sum(l, r, 1, n, (*st).root);
+	st->his.push_back(st->build(1, tot));
+	for (auto i = st->arr->begin(); i != st->arr->end(); i++)
+	{
+		st->his.push_back(st->point_add(1, *i, *(st->his.rbegin())));
+	}
 }
-inline void range_add(SegTree<int> *st, int l, int r, int val)
+template <typename T>
+inline int query(SegTree<T> *st, int l, int r, int pos)
 {
-	st->range_add(l, r, val, 1, n, (*st).root);
+	return st->query(1, st->tree[st->his[r]].val - st->tree[st->his[l - 1]].val, pos, st->his[l-1], st->his[r]);
 }
-inline void range_mul(SegTree<int> *st, int l, int r, int val)
+signed main()
 {
-	st->range_mul(l, r, val, 1, n, (*st).root);
-}
-int num[200005];
-signed main(){
-    #ifdef CODESPACE
-        freopen("P3834.in","r",stdin);
-    #endif
-    int t;
-    cin >> n;
-    num=vector<int>(n+1,0);
-    std::set<int> s;
-    for(int i=1;i<=n;i++){
-        cin >> t;
-        num[i]=t;
-        s.insert(t);
-    }
-    int tot=0;
-    for(int i=1;i<=n;i++){
-        if(!num[i]){
-            num[i]=++tot;
-        }
-    }
-    
-    return 0;
+#ifndef ONLINE_JUDGE
+	freopen("P3834.in", "r", stdin);
+#endif
+	std::ios::sync_with_stdio(false);
+	cin.tie(0), cout.tie(0);
+	cc_hash_table<int, int> ht;
+	int n, m;
+	cin >> n >> m;
+	tree<int,null_type,std::less<int>,rb_tree_tag,tree_order_statistics_node_update> s;
+	int t;
+	for (int i = 0; i < n; i++)
+	{
+		cin >> t;
+		s.insert(t);
+		num.push_back(t);
+	}
+	for (int i : s)
+	{
+		ht[i] = ++tot;
+	}
+	for (auto i = num.begin(); i != num.end(); i++)
+	{
+		(*i) = ht[*i];
+	}
+	SegTree<int> st(&num);
+	build(&st);
+	int l, r, k;
+	for (int i = 0; i < m; i++)
+	{
+		cin >> l >> r >> k;
+		cout << *s.find_by_order(query(&st,l,r,k)-1) << std::endl;
+	}
+	return 0;
 }

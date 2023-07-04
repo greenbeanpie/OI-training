@@ -35,7 +35,10 @@
             "cStandard": "c17",
             "cppStandard": "gnu++17",
             "intelliSenseMode": "linux-gcc-x64",
-            "compilerPath": "/usr/bin/g++"
+            "compilerPath": "/usr/bin/g++",
+            "compilerArgs": [
+                "--std=c++17 -Wall -DCODESPACE"
+            ]
         }
     ],
     "version": 4
