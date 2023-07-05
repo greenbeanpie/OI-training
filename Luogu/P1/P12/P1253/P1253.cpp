@@ -1,194 +1,228 @@
 #include <bits/stdc++.h>
-using namespace std;
+#define y1 y114514
 #define int long long
-#ifndef ONLINE_JUDGE
-#pragma GCC optimize(2)
-#endif
+
+using namespace std;
+
+const int INF = 1145141919810;
+const int N = 1e6 + 10;
+
+long long a[N], tree[4 * N], lazy_add[4 * N], lazy_mdf[4 * N];
 int n, m;
-vector<int> num;
-template <typename T>
-struct SegTree
+
+void build(int cl, int cr, int p)
+{
+	if (cl == cr)
+	{
+		lazy_mdf[p] = INF;
+		tree[p] = a[cl];
+		return;
+	}
+	int mid = (cl + cr) / 2;
+	build(cl, mid, p * 2);
+	build(mid + 1, cr, p * 2 + 1);
+	tree[p] = max(tree[p * 2], tree[p * 2 + 1]);
+	lazy_mdf[p] = INF;
+}
+
+void range_add(int l, int r, long long c, int cl, int cr, int p)
+{
+	if (l <= cl && r >= cr)
+	{
+		tree[p] += c;
+		if (lazy_mdf[p] == INF)
+			lazy_add[p] += c;
+		else
+			lazy_mdf[p] += c;
+		return;
+	}
+	int mid = (cl + cr) / 2;
+	if (lazy_mdf[p] != INF)
+	{
+		tree[p * 2] = lazy_mdf[p];
+		tree[2 * p + 1] = lazy_mdf[p];
+		lazy_add[2 * p] = 0;
+		lazy_add[2 * p + 1] = 0;
+		lazy_mdf[2 * p] = lazy_mdf[p];
+		lazy_mdf[2 * p + 1] = lazy_mdf[p];
+		lazy_mdf[p] = INF;
+	}
+	if (lazy_add[p])
+	{
+		tree[p * 2] += lazy_add[p];
+		tree[p * 2 + 1] += lazy_add[p];
+		if (lazy_mdf[2 * p] == INF)
+		{
+			lazy_add[2 * p] += lazy_add[p];
+		}
+		else
+		{
+			lazy_mdf[2 * p] += lazy_add[p];
+		}
+		if (lazy_mdf[2 * p + 1] == INF)
+		{
+			lazy_add[2 * p + 1] += lazy_add[p];
+		}
+		else
+		{
+			lazy_mdf[2 * p + 1] += lazy_add[p];
+		}
+		lazy_add[p] = 0;
+	}
+	if (l <= mid)
+	{
+		range_add(l, r, c, cl, mid, p * 2);
+	}
+	if (r > mid)
+	{
+		range_add(l, r, c, mid + 1, cr, p * 2 + 1);
+	}
+	tree[p] = max(tree[p * 2], tree[p * 2 + 1]);
+}
+
+void range_mdf(int l, int r, long long c, int s, int t, int p)
 {
 
-	vector<T> tree, lazy_add, lazy_mdf;
-	vector<bool> is_mdf;
-	vector<T> *arr;
-	int n, root = 1, n4, end;
-	SegTree(vector<T> *a)
+	if (l <= s && r >= t)
 	{
-		tree = vector<T>(a->size() * 4, 0);
-		lazy_add = vector<T>(a->size() * 4, 0);
-		lazy_mdf = vector<T>(a->size() * 4, 0);
-		is_mdf = vector<bool>(a->size() * 4, 0);
-		arr = a;
+		tree[p] = c;
+		lazy_mdf[p] = c;
+		lazy_add[p] = 0;
+		return;
 	}
-	inline void maintain(int cl, int cr, int p)
-	{
 
-		int cmid = (cl + cr) / 2;
-		if (cl <= cr)
-		{
-			if (is_mdf[p])
-			{
-				lazy_mdf[p * 2] = lazy_mdf[p];
-				lazy_mdf[p * 2 + 1] = lazy_mdf[p];
-				tree[p * 2] = lazy_mdf[p] * (cmid - cl + 1);
-				tree[p * 2 + 1] = lazy_mdf[p] * (cr - cmid);
-				lazy_add[p] = lazy_add[p * 2] = lazy_add[p * 2 + 1] = 0;
-				lazy_mdf[p] = 0;
-				is_mdf[p * 2] = is_mdf[p * 2 + 1] = true;
-				is_mdf[p] = false;
-			}
-			else if (lazy_add[p])
-			{
-				lazy_add[p * 2] += lazy_add[p];
-				lazy_add[p * 2 + 1] += lazy_add[p];
-				tree[p * 2] += lazy_add[p] * (cmid - cl + 1);
-				tree[p * 2 + 1] += lazy_add[p] * (cr - cmid);
-				lazy_add[p] = 0;
-			}
-		}
-	}
-	inline T range_max(int l, int r, int cl, int cr, int p)
+	int mid = (s + t) / 2;
+	if (lazy_mdf[p] != INF)
 	{
-		if (l <= cl && cr <= r)
-		{
-			return tree[p];
-		}
-		int mid = (cl + cr) / 2;
-		T maxx = 0;
-		maintain(cl, cr, p);
-		if (l <= mid)
-		{
-			maxx = max(maxx, range_max(l, r, cl, mid, p * 2));
-		}
-		if (r > mid)
-		{
-			maxx = max(maxx, range_max(l, r, mid + 1, cr, p * 2 + 1));
-		}
-		return maxx;
+		tree[p * 2] = lazy_mdf[p];
+		tree[2 * p + 1] = lazy_mdf[p];
+		lazy_add[2 * p] = 0;
+		lazy_add[2 * p + 1] = 0;
+		lazy_mdf[2 * p] = lazy_mdf[p];
+		lazy_mdf[2 * p + 1] = lazy_mdf[p];
+		lazy_mdf[p] = INF;
 	}
-	inline void range_add(int l, int r, T val, int cl, int cr, int p)
+	if (lazy_add[p])
 	{
-		if (l <= cl && cr <= r)
+		tree[p * 2] += lazy_add[p];
+		tree[p * 2 + 1] += lazy_add[p];
+		if (lazy_mdf[2 * p] == INF)
 		{
-			tree[p] += (cr - cl + 1) * val;
-			lazy_add[p] += val;
-			return;
+			lazy_add[2 * p] += lazy_add[p];
 		}
-		int mid = (cl + cr) / 2;
-		maintain(cl, cr, p);
-		if (l <= mid)
+		else
 		{
-			range_add(l, r, val, cl, mid, p * 2);
+			lazy_mdf[2 * p] += lazy_add[p];
 		}
-		if (r > mid)
+		if (lazy_mdf[2 * p + 1] == INF)
 		{
-			range_add(l, r, val, mid + 1, cr, p * 2 + 1);
+			lazy_add[2 * p + 1] += lazy_add[p];
 		}
-		tree[p] = max(tree[p * 2], tree[p * 2 + 1]);
+		else
+		{
+			lazy_mdf[2 * p + 1] += lazy_add[p];
+		}
+		lazy_add[p] = 0;
 	}
-	inline void range_mdf(int l, int r, T val, int cl, int cr, int p)
-	{
-		if (l <= cl && cr <= r)
-		{
-			tree[p] = (cr - cl + 1) * val;
-			lazy_mdf[p] = val;
-			return;
-		}
-		int mid = (cl + cr) / 2;
-		maintain(cl, cr, p);
-		if (l <= mid)
-		{
-			range_mdf(l, r, val, cl, mid, p * 2);
-		}
-		if (r > mid)
-		{
-			range_mdf(l, r, val, mid + 1, cr, p * 2 + 1);
-		}
-		tree[p] = max(tree[p * 2], tree[p * 2 + 1]);
-	}
-	void build(int l, int r, int p)
-	{
-		if (l == r)
-		{
-			tree[p] = (*arr)[l - 1];
-			return;
-		}
-		int mid = (r + l) / 2;
-		build(l, mid, p * 2);
-		build(mid + 1, r, p * 2 + 1);
 
-		tree[p] = max(tree[p * 2], tree[p * 2 + 1]);
-		end = max(end, p * 2 + 1);
+	if (l <= mid)
+	{
+		range_mdf(l, r, c, s, mid, p * 2);
 	}
-};
-inline int range_max(SegTree<int> *st, int l, int r)
-{
-	return st->range_max(l, r, 1, n, (*st).root);
+	if (r > mid)
+	{
+		range_mdf(l, r, c, mid + 1, t, p * 2 + 1);
+	}
+	tree[p] = max(tree[p * 2], tree[p * 2 + 1]);
 }
-inline void range_add(SegTree<int> *st, int l, int r, int val)
+
+int range_max(int l, int r, int s, int t, int p)
 {
-	st->range_add(l, r, val, 1, n, (*st).root);
-}
-inline void range_mdf(SegTree<int> *st, int l, int r, int val)
-{
-	st->range_mdf(l, r, val, 1, n, (*st).root);
-}
-/*public:
-		T range_sum(int l, int r)
+	if (l <= s && r >= t)
+	{
+		return tree[p];
+	}
+
+	int mid = (s + t) / 2;
+	int maxx = -1e18;
+	if (lazy_mdf[p] != INF)
+	{
+		tree[p * 2] = lazy_mdf[p], tree[2 * p + 1] = lazy_mdf[p];
+		lazy_add[2 * p] = 0, lazy_add[2 * p + 1] = 0;
+		lazy_mdf[2 * p] = lazy_mdf[p], lazy_mdf[2 * p + 1] = lazy_mdf[p];
+		lazy_mdf[p] = INF;
+	}
+	if (lazy_add[p])
+	{
+		tree[p * 2] += lazy_add[p];
+		tree[p * 2 + 1] += lazy_add[p];
+		if (lazy_mdf[2 * p] == INF)
 		{
-			return range_sum(l, r, 0, end, root);
+			lazy_add[2 * p] += lazy_add[p];
 		}
-		void range_add(int l, int r, int val)
+		else
 		{
-			range_add(l, r, val, 0, end, root);
+			lazy_mdf[2 * p] += lazy_add[p];
 		}
-};*/
+		if (lazy_mdf[2 * p + 1] == INF)
+		{
+			lazy_add[2 * p + 1] += lazy_add[p];
+		}
+		else
+		{
+			lazy_mdf[2 * p + 1] += lazy_add[p];
+		}
+		lazy_add[p] = 0;
+	}
+	if (l <= mid)
+	{
+		maxx = max(maxx, range_max(l, r, s, mid, p * 2));
+	}
+	if (r > mid)
+	{
+		maxx = max(maxx, range_max(l, r, mid + 1, t, p * 2 + 1));
+	}
+	return maxx;
+}
 
 signed main()
 {
 #ifndef ONLINE_JUDGE
-	freopen("P3372_8.in", "r", stdin);
+	freopen("P1253_6.in", "r", stdin);
+	freopen("P1253.out", "w", stdout);
 #endif
+	ios::sync_with_stdio(false);
+	cin.tie(0);
+	cout.tie(0);
 
-	// cin >> n >> m;
-	scanf("%lld %lld", &n, &m);
+	int op, x, y, z;
 
-	for (int i = 0; i < n; i++)
+	cin >> n >> m;
+	for (int i = 1; i <= n; i++)
 	{
-		int t;
-		// cin >> t;
-		scanf("%lld", &t);
-		num.push_back(t);
+		cin >> a[i];
 	}
-	SegTree<int> ST(&num);
-	ST.build(1, n, 1);
-	for (int i = 0; i < m; i++)
+
+	build(1, n, 1);
+
+	while (m--)
 	{
-		int op;
-		// cin >> op;
-		scanf("%lld", &op);
+		cin >> op >> x >> y;
 		if (op == 1)
 		{
-			int x, y, k;
-			scanf("%lld %lld %lld", &x, &y, &k);
-			range_mdf(&ST, x, y, k);
+			cin >> z;
+			range_mdf(x, y, z, 1, n, 1);
 		}
 		else if (op == 2)
 		{
-			int x, y, k;
-			// cin >> x >> y >> k;
-			scanf("%lld %lld %lld", &x, &y, &k);
-			range_add(&ST, x, y, k);
+			cin >> z;
+			range_add(x, y, z, 1, n, 1);
 		}
-		else
+		else if (op == 3)
 		{
-			int x, y;
-			// cin >> x >> y;
-			scanf("%lld %lld", &x, &y);
-			printf("%lld\n", range_max(&ST, x, y));
+			cout << range_max(x, y, 1, n, 1) << endl;
 		}
 	}
+
 	return 0;
 }

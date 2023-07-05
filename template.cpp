@@ -5,7 +5,8 @@ using namespace std;
 signed main()
 {
 	#ifndef ONLINE_JUDGE
-		freopen("","r",stdin);
+		freopen(".in","r",stdin);
+		freopen(".out","w",stdout);
 	#endif
 	ios::sync_with_stdio(false);
 	cin.tie(0),cout.tie(0);
