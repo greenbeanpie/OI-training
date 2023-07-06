@@ -9,7 +9,7 @@ bool cmp1(node a, node b)
 {
 	return a.a < b.a;
 }
-
+int ans[1005];
 vector<node> l1, l;
 signed main()
 {
@@ -45,6 +45,14 @@ signed main()
 		}                      
 	}
 	int t1=0,t2=0;
-	for(int i=0;i<n;i++ )
+	for(int i=0;i<n;i++){
+		t1+=a[ans[i]];
+		t2=max(t1,t2);
+		t2+=b[ans[i]];
+	}
+	cout << t2 << endl;
+	for(int i=0;i<n;i++){
+		cout << ans[i] << " ";
+	}
 	return 0;
 }
