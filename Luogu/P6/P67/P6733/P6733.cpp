@@ -5,20 +5,20 @@ using namespace std;
 const int N = 1e5 + 10;
 double a[N], c[N];
 int n, k;
-int check(int x)
+bool check(double x)
 {
 	int cnt = 0;
-	vector<int> v = vector<int>(1);
+	vector<double> v = vector<double>(1);
 	for (int i = 1; i <= n; i++)
 	{
-		v.push_back(a[i] * (c[i] - x));
+		v.push_back(1.0 * a[i] * (c[i] - x));
 		if (a[i] * (c[i] - x) >= 0)
 		{
 			cnt--;
 		}
 	}
-	sort(v.begin() + 1, v.end(), less<double>());
-	int r = v.size();
+	sort(v.begin() + 1, v.end());
+	int r = v.size() - 1;
 	for (int i = 1; i <= n; i++)
 	{
 		while (v[i] >= -v[r] && r)
@@ -27,17 +27,33 @@ int check(int x)
 		}
 		cnt += n - r;
 	}
-	return cnt / 2;
+	return cnt >= k * 2;
 }
 
 signed main()
 {
-
+#ifndef ONLINE_JUDGE
+	freopen("P6733.in", "r", stdin);
+	freopen("P6733.out", "w", stdout);
+#endif
 	cin >> n >> k;
 	for (int i = 1; i <= n; i++)
 	{
 		cin >> a[i] >> c[i];
 	}
-
+	double l = 1, r = 1e9;
+	while (r - l > 0.001)
+	{
+		double mid = (l + r) / 2;
+		if (check(mid))
+		{
+			l = mid;
+		}
+		else
+		{
+			r = mid;
+		}
+	}
+	cout << fixed << setprecision(3) << l;
 	return 0;
 }
