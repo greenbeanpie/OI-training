@@ -68,7 +68,7 @@ struct SegTree
 		{
 			return tree[lp].lr;
 		}
-		int lval = tree[tree[rp].ls].val - tree[tree[lp].ls].val, rval = tree[tree[rp].rs].val - tree[tree[lp].rs].val;
+		int lval = tree[tree[rp].ls].val - tree[tree[lp].ls].val;
 		if (cl + lval-1 >= rank)
 		{
 			return query(cl, cl + lval-1, rank, tree[lp].ls, tree[rp].ls);

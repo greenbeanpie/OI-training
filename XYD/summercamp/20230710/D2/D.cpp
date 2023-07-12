@@ -40,9 +40,8 @@ void dfs(int x, int fa) {
 }
 
 int main() {
-	freopen("10.in", "r", stdin);
-	freopen("10.out", "w", stdout);
-
+	freopen("D.in", "r", stdin);
+	freopen("D.out", "w", stdout);
 	scanf("%d%d", &n, &m);
 	Tw.lim = n;
 	for (int i = 1; i <= n; ++i) {
