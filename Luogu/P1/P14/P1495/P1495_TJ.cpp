@@ -11,7 +11,7 @@ long long zxgbs(long long a,long long b){
 //求最小公倍数
 int main(){
 	#ifndef ONLINE_JUDGE
-		freopen("P1495.in","r",stdin);
+		freopen("P1495_2.in","r",stdin);
 		freopen("P1495_TJ.out","w",stdout);
 	#endif
 	cin>>n;
