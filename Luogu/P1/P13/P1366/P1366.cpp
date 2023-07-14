@@ -1,6 +1,8 @@
 #include <bits/stdc++.h>
+#include <bits/extc++.h>
+using namespace __gnu_pbds;
 using namespace std;
-#define int long long
+#define int unsigned long long
 #define endl "\n"
 
 signed main()
@@ -14,18 +16,33 @@ signed main()
 	int T;
 	cin >> T;
 	while(T--){
+		vector<int> a;
 		int n,m;
 		cin >> n >> m;
-		vector<int> a,b;
 		int t;
-		for(int i=0;i<n;i++){
+		for(int i=1;i<=n;i++){
 			cin >> t;
 			a.push_back(t);
 		}
-		for(int i=0;i<m;i++){
+		int ans=0,now=0,last=-1;
+		auto pos=a.begin();
+		for(int i=1;i<=m;i++){
 			cin >> t;
-			b.push_back(t);
-		} 
+			if(t!=last){
+				now==0?1:ans^=now;
+				last=t;
+				now=0;
+
+			}
+			while(*pos<last){
+				pos++;	
+			}
+			if(*pos==last){
+				now++;
+			}
+		}
+		ans^=now;
+		cout << ans << endl;
 	}
 	return 0;
 }
