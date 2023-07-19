@@ -1,112 +1,73 @@
-#include <algorithm>
-#include <cmath>
-#include <cstring>
-#include <iomanip>
-#include <iostream>
-using namespace std;
+#include <bits/stdc++.h>
 #define int long long
-#define double long double
-#define fft fast_fast_tle
-const double Pi = acos(-1);
-struct complex {
-	double real=0, imag=0;
-	inline complex(double r = 0, double i = 0) {
-		real = r;
-		imag = i;
-	}
-};
-const complex I(0, 1);
-complex operator+(complex a, complex b) {
-	complex c(a.real + b.real, a.imag + b.imag);
-	return c;
-}
-complex operator-(complex a, complex b) {
-	complex c(a.real - b.real, a.imag - b.imag);
-	return c;
-}
-complex operator*(complex a, complex b) {
-	complex c(a.real * b.real, a.imag * b.imag);
-	return complex(a.real * b.real-a.imag*b.imag, a.real*b.imag + a.imag*b.real);
+using namespace std;
+const int M=1<<26; 
+const int g=3;
+const int gi=332748118;
+const int MOD=998244353;
+
+int n,m,len,inv,mov,rev[M],a[M],b[M];
+string s1,s2;
+
+int expow(int b,int p){
+	if(p==0)return 1;
+	if(p==1)return b;
+	int temp=expow(b,p/2)%MOD;
+	if(p%2==0)return temp*temp%MOD;
+	return temp*temp%MOD*b%MOD;
 }
 
-void change(complex y[], int len) {
-	int k;
-	for (int i = 1, j = len / 2; i < len - 1; i++) {
-		if (i < j) {
-			swap(y[i], y[j]);
-		}
-		k = len / 2;
-		while (j >= k) {
-			j = j - k;
-			k>>=1;
-		}
-		if (j < k) {
-			j += k;
+void NTT(int a[],int n,int type){
+	for(int i=0;i<n;i++){
+		if(i<rev[i]){
+			swap(a[i],a[rev[i]]);
 		}
 	}
-}
+	int gn,g0,x,y;
+	for(int i=1;i<n;i<<=1){
+		gn=expow(type?g:gi,(MOD-1)/(i<<1));
+		for(int j=0;j<n;j+=(i<<1)){
+			g0=1;
+			for(int k=0;k<i;k++,g0=g0*gn%MOD){
+				x=a[j+k],y=g0*a[i+j+k]%MOD;
+                a[j+k]=(x+y)%MOD;
+                a[i+j+k]=(x-y+MOD)%MOD;
+			}
+		}
+	}
+} 
 
-void fast_fast_tle(complex y[], int len, int op) {
-  change(y, len);
-  for (int h = 2; h <= len; h <<= 1) {
-    complex wn(cos(2 * Pi / h), sin(op * 2 * Pi / h));
-    for (int j = 0; j < len; j += h) {
-      complex w(1,0);
-      for (int k = j; k < j + h / 2; k++) {
-        complex u = y[k];
-        complex t = w * y[k + h / 2];
-        y[k] = u + t;
-        y[k + h / 2] = u - t;
-        w = w * wn;
-      }
-    }
-  }
-  if (op == -1) {
-    for (int i = 0; i < len; i++) {
-      y[i].real /= len;
-    }
-  }
-}
-int sum[200005];
-complex x1[200005], x2[200005];
-signed main() {
-	#ifndef ONLINE_JUDGE
-		freopen("P1919.in","r",stdin);
-	#endif
-	ios::sync_with_stdio(false);
-	string str1, str2;
-	cin >> str1;
-	cin >> str2;
-	int len = 1;
-	while (len < (int)str1.size() * 2 || len < (int)str2.size() * 2) {//确保位数为2^n(n∈N)
-		len <<= 1;
+signed main(){
+	ios::sync_with_stdio(0);
+	cin.tie(0); cout.tie(0);
+	cin>>s1>>s2;
+	n=s1.size()-1,m=s2.size()-1;
+	for(int i=0;i<=n;i++){
+		a[i]=s1[i]-'0';
 	}
-	for (int i = 0; i < (int)str1.size(); i++) {
-		x1[i] = complex(str1[str1.size() - 1 - i] - '0', 0);
+	for(int i=0;i<=m;i++){
+		b[i]=s2[i]-'0';
 	}
-	for (int i = 0; i < (int)str2.size(); i++) {
-		x2[i] = complex(str2[str2.size() - 1 - i] - '0', 0);
+	mov=max((int)ceil(log2(n+m)),1ll);
+	len=1<<mov;
+	for(int i=0;i<len;i++){
+		rev[i]=(rev[i>>1]>>1)|((i&1)<<(mov-1));
 	}
-	fft(x1, len, 1);
-	fft(x2, len, 1);
-	for (int i = 0; i < len; i++) {
-		x1[i] = x1[i] * x2[i];
+	NTT(a,len,1);
+	NTT(b,len,1);
+	for(int i=0;i<=len;i++){
+		a[i]=a[i]*b[i]%MOD;
 	}
-	fft(x1, len, -1);
-	for (int i = 0; i < len; i++) {
-		sum[i] = (int)(x1[i].real + 0.5);
+	NTT(a,len,0);
+	inv=expow(len,MOD-2);
+	int last=0;
+	for(int i=n+m;i>=0;i--){
+		a[i]=a[i]*inv%MOD+last;
+		last=a[i]/10;
+		if(i!=0)a[i]%=10;
 	}
-	for (int i = 0; i < len; i++) {
-		sum[i + 1] += sum[i] / 10;
-		sum[i] %= 10;
-	}
-	len=str1.size()+str2.size()-1;
-	while(!sum[len]&&len>0){
-		len--;
-	}
-	
-	for (int i = len; i >= 0; i--) {
-		cout << sum[i];
+	for(int i=0;i<=n+m;i++){
+		cout<<a[i];
 	}
 	return 0;
 }

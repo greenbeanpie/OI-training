@@ -94,33 +94,30 @@ inline void range_add(SegTree<int> *st, int l, int r, int val)
 signed main()
 {
 #ifndef ONLINE_JUDGE
-	freopen("P3372_8.in", "r", stdin);
+	freopen("P2068.in", "r", stdin);
+	freopen("P2068.out", "w", stdout);
 #endif
-	scanf("%lld %lld", &n, &m);
-
-	for (int i = 0; i < n; i++)
-	{
-		int t;
-		scanf("%lld", &t);
-		num.push_back(t);
-	}
+	ios::sync_with_stdio(false);
+	cin.tie(0),cout.tie(0);
+	cin >> n >> m;
+	num = vector<int>(n);
 	SegTree<int> ST(&num);
 	ST.build(1, n, 1);
 	for (int i = 0; i < m; i++)
 	{
-		int op;
-		scanf("%lld", &op);
-		if (op == 1)
+		char op;
+		cin >> op;
+		if (op == 'x')
 		{
-			int x, y, k;
-			scanf("%lld %lld %lld", &x, &y, &k);
-			range_add(&ST, x, y, k);
+			int x, y;
+			cin >> x >> y;
+			range_add(&ST, x, x, y);
 		}
 		else
 		{
 			int x, y;
-			scanf("%lld %lld", &x, &y);
-			printf("%lld\n", range_sum(&ST, x, y));
+			cin >> x >> y;
+			cout << range_sum(&ST, x, y) << "\n";
 		}
 	}
 	return 0;
