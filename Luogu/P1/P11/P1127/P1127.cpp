@@ -3,6 +3,7 @@
 using namespace __gnu_pbds;
 using namespace __gnu_cxx;
 using namespace std;
+#pragma GCC target("sse,sse2,sse3,ssse3,sse4.1,sse4.2,avx,avx2,popcnt,tune=native")
 #define int long long
 #define endl "\n"
 
@@ -70,6 +71,7 @@ signed main()
 		q.pop_front();
 	}
 	q.push_front(str[0]);
+	vis[0]=true;
 	dfs();
 	cout << "***";
 	return 0;
