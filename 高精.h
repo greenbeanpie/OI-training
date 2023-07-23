@@ -13,6 +13,7 @@ const double Pi = acos(-1);
 #define double long double
 #define fft fast_fast_tle
 #define ceil ceilf64x
+#define floor floorf64x
 struct bigint {
 	bool positive=true;
 	int len=0;
