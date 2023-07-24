@@ -3,7 +3,6 @@
 using namespace __gnu_pbds;
 using namespace __gnu_cxx;
 using namespace std;
-#pragma GCC target("sse,sse2,sse3,ssse3,sse4.1,sse4.2,avx,avx2,popcnt,tune=native")
 #define int long long
 #define endl "\n"
 
@@ -14,10 +13,10 @@ signed main(){
 	ios::sync_with_stdio(false);
 	cin.tie(0),cout.tie(0);
 	sfmt11213_64 random(time(0));
-	int n=random()%5+1,q=random()%10+1;
+	int n=random()%100000+1,q=random()%100000+1;
 	cout << n << " " << q << endl;
 	for(int i=1;i<=n;i++){
-		cout << random()%10 << " ";
+		cout << random()%1000000 << " ";
 	}
 	cout << endl;
 	for(int i=1;i<=q;i++){

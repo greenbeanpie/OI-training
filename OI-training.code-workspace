@@ -79,7 +79,26 @@
 			"thread": "cpp",
 			"typeindex": "cpp",
 			"typeinfo": "cpp",
-			"variant": "cpp"
+			"variant": "cpp",
+			"barrier": "cpp",
+			"compare": "cpp",
+			"concepts": "cpp",
+			"coroutine": "cpp",
+			"expected": "cpp",
+			"source_location": "cpp",
+			"rope": "cpp",
+			"slist": "cpp",
+			"format": "cpp",
+			"latch": "cpp",
+			"numbers": "cpp",
+			"ranges": "cpp",
+			"semaphore": "cpp",
+			"span": "cpp",
+			"spanstream": "cpp",
+			"stacktrace": "cpp",
+			"stdfloat": "cpp",
+			"stop_token": "cpp",
+			"syncstream": "cpp"
 		},
 		"[python]": {
 			"editor.defaultFormatter": "ms-python.autopep8"

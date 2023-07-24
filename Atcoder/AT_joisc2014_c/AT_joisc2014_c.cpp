@@ -3,19 +3,76 @@
 using namespace __gnu_pbds;
 using namespace __gnu_cxx;
 using namespace std;
-#pragma GCC target("sse,sse2,sse3,ssse3,sse4.1,sse4.2,avx,avx2,popcnt,tune=native")
 #define int long long
 #define endl "\n"
-
+ #pragma GCC target("avx,sse2,sse3,sse4,mmx,avx512f,sse4.1,sse4.2")
+ #pragma GCC optimize(3)
+ #pragma GCC optimize("Ofast")
+#pragma GCC optimize("inline")
+#pragma GCC optimize("-fgcse")
+#pragma GCC optimize("-fgcse-lm")
+#pragma GCC optimize("-fipa-sra")
+#pragma GCC optimize("-ftree-pre")
+#pragma GCC optimize("-ftree-vrp")
+#pragma GCC optimize("-fpeephole2")
+#pragma GCC optimize("-ffast-math")
+#pragma GCC optimize("-fsched-spec")
+#pragma GCC optimize("unroll-loops")
+#pragma GCC optimize("-falign-jumps")
+#pragma GCC optimize("-falign-loops")
+#pragma GCC optimize("-falign-labels")
+#pragma GCC optimize("-fdevirtualize")
+#pragma GCC optimize("-fcaller-saves")
+#pragma GCC optimize("-fcrossjumping")
+#pragma GCC optimize("-fthread-jumps")
+#pragma GCC optimize("-funroll-loops")
+#pragma GCC optimize("-fwhole-program")
+#pragma GCC optimize("-freorder-blocks")
+#pragma GCC optimize("-fschedule-insns")
+#pragma GCC optimize("inline-functions")
+#pragma GCC optimize("-ftree-tail-merge")
+#pragma GCC optimize("-fschedule-insns2")
+#pragma GCC optimize("-fstrict-aliasing")
+#pragma GCC optimize("-fstrict-overflow")
+#pragma GCC optimize("-falign-functions")
+#pragma GCC optimize("-fcse-skip-blocks")
+#pragma GCC optimize("-fcse-follow-jumps")
+#pragma GCC optimize("-fsched-interblock")
+#pragma GCC optimize("-fpartial-inlining")
+#pragma GCC optimize("no-stack-protector")
+#pragma GCC optimize("-freorder-functions")
+#pragma GCC optimize("-findirect-inlining")
+#pragma GCC optimize("-fhoist-adjacent-loads")
+#pragma GCC optimize("-frerun-cse-after-loop")
+#pragma GCC optimize("inline-small-functions")
+#pragma GCC optimize("-finline-small-functions")
+#pragma GCC optimize("-ftree-switch-conversion")
+#pragma GCC optimize("-foptimize-sibling-calls")
+#pragma GCC optimize("-fexpensive-optimizations")
+#pragma GCC optimize("-funsafe-loop-optimizations")
+#pragma GCC optimize("inline-functions-called-once")
+#pragma GCC optimize("-fdelete-null-pointer-checks")
+int read()
+{
+	int x = 0, f = 1;
+	char c = getchar();
+	while (!isdigit(c))
+	{
+		if (c == '-')
+			f = -1;
+		c = getchar();
+	}
+	while (isdigit(c))
+		x = x * 10 + c - '0', c = getchar();
+	return x * f;
+}
 struct node
 {
 	int l, r, k, lblock, rblock;
 };
-tree<int, null_type, less<int>, rb_tree_tag, tree_order_statistics_node_update> discrete;
-int ori[100005], val[100005], num[1000005], cnt[100005], ans[100005], block_size,
+int a[100005], b[100005], cnt[100005], ans[100005], block_size,
 	l, r, maxnum, n, q, tempans, nowl;
 node prob[100005];
-
 bool cmp(node a, node b)
 {
 	if (a.lblock == b.lblock)
@@ -27,13 +84,13 @@ bool cmp(node a, node b)
 
 void add(int pos, int &maxinum)
 {
-	++cnt[val[pos]];
-	maxinum = max(cnt[val[pos]] * num[val[pos]], maxinum);
+	++cnt[a[pos]];
+	maxinum = max(cnt[a[pos]] * b[a[pos]], maxinum);
 }
 
 void sub(int pos)
 {
-	--cnt[val[pos]];
+	--cnt[a[pos]];
 }
 
 signed main()
@@ -42,74 +99,77 @@ signed main()
 	freopen("AT_joisc2014_c.in", "r", stdin);
 	freopen("AT_joisc2014_c.out", "w", stdout);
 #endif
-	ios::sync_with_stdio(false);
-	cin.tie(0), cout.tie(0);
-	cin >> n >> q;
-	block_size = ceil(sqrt(n));
+	n = read(), q = read();
+	block_size = sqrt(n);
 	for (int i = 1; i <= n; i++)
 	{
-		cin >> ori[i];
-		discrete.insert(ori[i]);
+		a[i] = b[i] = read();
 	}
-	for (int i = 1; i <= n; i++)
+	sort(b + 1, b + 1 + n);
+	int len = unique(b + 1, b + 1 + n) - b - 1;
+	for (int i = 1; i <= n; ++i)
 	{
-		val[i] = discrete.order_of_key(ori[i]) + 1;
-		num[i] = *discrete.find_by_order(i - 1);
+		a[i] = lower_bound(b + 1, b + 1 + len, a[i]) - b;
 	}
+	// for (int i = 1; i <= n; i++)
 	for (int i = 1; i <= q; i++)
 	{
-		cin >> prob[i].l >> prob[i].r;
+		prob[i].l = read(), prob[i].r = read();
 		prob[i].k = i;
 		prob[i].lblock = (prob[i].l - 1) / block_size + 1;
 		prob[i].rblock = (prob[i].r - 1) / block_size + 1;
 	}
 	sort(prob + 1, prob + 1 + q, cmp);
-	int lastblock =-1;
-	l=1;
-	//r = (prob[1].rblock - 1) * block_size + 1, l = nowl = r + 1, maxnum = -1;
-	for (int i = 1; i <= q; i++)
+	int lastblock = -1;
+	l = 1;
+	// r = (prob[1].rblock - 1) * block_size + 1, l = nowl = r + 1, maxnum = -1;
+	int now = 1;
+	for (int i = 1; i <= ceil(1.0*n/block_size); i++)
 	{
-		if (prob[i].rblock== prob[i].lblock)
+		memset(cnt,0,sizeof(cnt));
+		r = i * block_size + 1, l = nowl = r + 1;
+		maxnum = -1;
+		while (prob[now].lblock == i)
 		{
-			int c[100005]={0};
-			int maxinum = 0;
-			for (int j = prob[i].l; j <= prob[i].r; j++)
+			if (prob[now].rblock == prob[now].lblock)
 			{
-				++c[val[j]];
-				maxinum=max(maxinum,c[val[j]]*num[val[j]]);
+				static int cnt[100005];
+				tempans=maxnum;
+				for (int j = prob[now].l; j <= prob[now].r; j++)
+				{
+					++cnt[a[j]];
+					maxnum = max(maxnum, cnt[a[j]] * b[a[j]]);
+				}
+				ans[prob[now].k] = maxnum;
+				for (int j = prob[now].l; j <= prob[now].r; j++)
+				{
+					--cnt[a[j]];
+				}
+				maxnum=tempans;
+				now++;
+				continue;
 			}
-			ans[prob[i].k] = maxinum;
-			continue;
-		}
-		if (prob[i].lblock ^ lastblock)
-		{
-			lastblock = prob[i].lblock;
-			while (l <= r)
+			while (r < prob[now].r)
+			{
+				add(++r, maxnum);
+			}
+			tempans = maxnum;
+			while (l > prob[now].l)
+			{
+				add(--l, maxnum);
+			}
+			ans[prob[now].k] = maxnum;
+			while (l < nowl)
 			{
 				sub(l++);
 			}
-			r = (prob[i].rblock-1)  * block_size + 1, l = nowl = r + 1;
-			maxnum = 0;
+			maxnum = tempans;
+			now++;
 		}
-		while (r < prob[i].r)
-		{
-			add(++r, maxnum);
-		}
-		tempans = maxnum;
-		while (l > prob[i].l)
-		{
-			add(--l, maxnum);
-		}
-		ans[prob[i].k] = maxnum;
-		while (l < nowl)
-		{
-			sub(l++);
-		}
-		maxnum = tempans;
 	}
 	for (int i = 1; i <= q; i++)
 	{
-		cout << ans[i] << endl;
+		printf("%lld\n", ans[i]);
 	}
 	return 0;
 }

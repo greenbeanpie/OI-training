@@ -1,96 +1,109 @@
-#include <cstdio>
-#include <cmath>
-#include <cstdint>
-#include <cstring>
-#include <algorithm>
-
-using std::sort;
-using std::unique;
-using std::lower_bound;
-
-const int maxn=2e5+100;
-
-int a[maxn],b[maxn];
-int L[maxn],R[maxn],blo[maxn];
-
-struct Qry
-{
-    int l,r,id;
-    bool operator< (const Qry& q){return blo[l]==blo[q.l]?r<q.r:l<q.l;}
-}Q[maxn];
-
-template<class T>inline T max(T a,T b){return a<b?b:a;}
-template<class T>inline T min(T a,T b){return a<b?a:b;}
-
-int cnt[maxn];
-int64_t tmp;
-
-inline void add(int x,int val=1)
-{
-    cnt[a[x]]+=val;
-    tmp=max(tmp,(int64_t)cnt[a[x]]*b[a[x]]);
+#include <bits/stdc++.h>
+ 
+typedef long long ll;
+const int N = 1e5 + 5;
+ll n, m, Max, tot, a[N], b[N], st[N], ed[N], bel[N], ans[N], cnt[N], c[N];
+ 
+struct Question {
+    int l, r;
+    int id;
+} q[N];
+ 
+bool cmp(Question x, Question y) {
+    return bel[x.l] == bel[y.l] ? x.r < y.r : bel[x.l] < bel[y.l];
 }
-
-inline int64_t brute_force(int l,int r)
-{
-    static int c[maxn];
-    int64_t ans=0;
-    for (int i=l;i<=r;++i) ++c[a[i]];
-    for (int i=l;i<=r;++i) ans=max(ans,(int64_t)c[a[i]]*b[a[i]]);
-    for (int i=l;i<=r;++i) --c[a[i]];
-    return ans;
+ 
+ll read() {
+    ll x = 0, f = 1;
+    char c = getchar();
+    while (!isdigit(c)) {
+        if (c == '-') f = -1;
+        c = getchar();
+    }
+    while (isdigit(c)) x = x * 10 + c - '0', c = getchar();
+    return x * f;
 }
-
-int main()
-{
-	#ifndef ONLINE_JUDGE
+ 
+void add(int pos) {
+    ++cnt[a[pos]];
+    Max = std::max(Max, cnt[a[pos]] * b[a[pos]]);
+}
+ 
+int main() {
+#ifndef ONLINE_JUDGE
 	freopen("AT_joisc2014_c.in", "r", stdin);
 	freopen("AT_joisc2014_c_TJ.out", "w", stdout);
 #endif
-    int n,q;
-    scanf("%d%d",&n,&q);
-    for (int i=1;i<=n;++i)
-        scanf("%d",a+i),b[i]=a[i];
-    for (int i=1;i<=q;++i)
-        scanf("%d%d",&Q[i].l,&Q[i].r),Q[i].id=i;
-    sort(b+1,b+n+1);
-    int tot=unique(b+1,b+n+1)-b-1;
-    // for (int i=1;i<=tot;++i) printf("%d ",b[i]);
-    // putchar('\n');
-    // printf("%d\n",tot);
-    for (int i=1;i<=n;++i)
-        a[i]=lower_bound(b+1,b+tot+1,a[i])-b;
-    int T=sqrt(n),bl=n/T;
-    for (int i=1;i<=bl;++i)
-        L[i]=R[i-1]+1,R[i]=L[i]+T-1;
-    if (R[bl]<n) ++bl,L[bl]=R[bl-1]+1,R[bl]=n;
-    for (int i=1;i<=n;++i)
-        blo[i]=(i-1)/T+1;
-    sort(Q+1,Q+q+1);
-    static int64_t ans[maxn];
-    for (int i=1,lp=1,r=0,l=0;i<=bl;++i)
-    {
-        memset(cnt,0,sizeof(cnt));
-        r=R[i];
-        tmp=0;
-        // for (l=L[i];l<=R[i];++l) add(l,-1);
-        while (blo[Q[lp].l]==i)
-        {
-            l=R[i]+1;
-            if (Q[lp].r-Q[lp].l<=T)
-            {
-                ans[Q[lp].id]=brute_force(Q[lp].l,Q[lp].r);
-                ++lp;
+    n = read(), m = read();
+    for (int i = 1; i <= n; ++i)
+        a[i] = b[i] = read();
+    
+    // discretization
+    std::sort(b + 1, b + 1 + n);
+    int len = std::unique(b + 1, b + 1 + n) - b - 1;
+    for (int i = 1; i <= n; ++i)
+        a[i] = std::lower_bound(b + 1, b + 1 + len, a[i]) - b;
+    
+    // split block 
+    ll block = sqrt(n);
+    for (int i = 1; i <= block; ++i) {
+        st[i] = n / block * (i - 1) + 1;
+        ed[i] = n / block * i;
+    }
+    ed[block] = n;
+    for (int i = 1; i <= block; ++i)
+        for (int j = st[i]; j <= ed[i]; ++j)
+            bel[j] = i;
+ 
+    // sort question 
+    for (int i = 1; i <= m; ++i) {
+        q[i].l = read(), q[i].r = read();
+        q[i].id = i;
+    }
+    std::sort(q + 1, q + 1 + m, cmp);
+ 
+    // mo
+    int p = 1;
+    for (int i = 1; i <= block; ++i) {
+        int l;
+        int r = ed[i];
+        memset(cnt, 0, sizeof (cnt));
+        Max = -1;
+        while (bel[q[p].l] == i) {
+            // std::cout << "sdasda";
+            //Max = -1;
+            tot = 0;
+            l = ed[i] + 1;
+            if (bel[q[p].l] == bel[q[p].r]) {
+                ll cur = Max;
+                for (int j = q[p].l; j <= q[p].r; ++j) {
+                    ++cnt[a[j]];
+                    c[++tot] = a[j];
+                    Max = std::max(Max, cnt[a[j]] * b[a[j]]);
+                }
+                ans[q[p].id] = Max;
+                for (int j = 1; j <= tot; ++j)
+                    --cnt[c[j]];
+                ++p;
+                Max = cur;
                 continue;
             }
-            while (Q[lp].r>r) add(++r);
-            int64_t now=tmp;
-            while (l>Q[lp].l) add(--l);
-            ans[Q[lp].id]=tmp;
-            tmp=now;
-            while (l<=R[i]) --cnt[a[l++]];
-            ++lp;
+            while (r < q[p].r)
+                add(++r);
+            ll cur = Max;
+            //std::cout << "cur: " << cur << std::endl;
+            while (l > q[p].l)
+                add(--l);
+            ans[q[p].id] = Max;
+            Max = cur;
+            while (l <= ed[i]) 
+                --cnt[a[l++]];
+            ++p;
         }
     }
-    for (int i=1;i<=q;++i) printf("%lld\n",ans[i]);
+ 
+    // output
+    for (int i = 1; i <= m; ++i)
+        printf("%lld\n", ans[i]);
+    return 0;
 }

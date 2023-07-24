@@ -2,12 +2,11 @@
 import random
 import os
 import time
-os.chdir("/mnt/c/Users/Administrator/Desktop/OI-training/Atcoder/AT_joisc2014_c")
+os.chdir("/home/hddhp/OI-training/Atcoder/AT_joisc2014_c")
 tot=1
 while True:
 	# launch your data generator or generate input data here
 	os.system("./generator")
-	time.sleep(0.15)
 	# launch your program ${program_name}$ here
 	os.system("./AT_joisc2014_c")
 	os.system("./AT_joisc2014_c_TJ")
