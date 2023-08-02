@@ -3,5 +3,6 @@
 	"C_Cpp.codeAnalysis.clangTidy.checks.disabled": [
 		"clang-diagnostic-error"
 	],
-	"python.analysis.typeCheckingMode": "basic"
+	"python.analysis.typeCheckingMode": "basic",
+	"C_Cpp.errorSquiggles": "enabled"
 }
