@@ -3,21 +3,35 @@ using namespace std;
 #define int long long
 
 int dp[15][10];
-int count(int n, int nowlen)
+int count(int n, int nowlen,bool flag=false)
 {
-	if (n == 0&&nowlen!=1)
+	if (n == 0)
 	{
-		dp[nowlen][0] = 1;
-		return 1;
+		if (nowlen != 0)
+		{
+			count(n, nowlen - 1);
+		}
+		else
+		{
+			dp[nowlen][0] = 1;
+			return 1;
+		}
+		for (int i = 2; i <= 9; i++)
+		{
+			dp[nowlen][0] += dp[nowlen - 1][i];
+		}
+		return dp[nowlen][0];
 	}
 	int now = n, len = log10(n), ans = 0, last = n / pow(10, len);
-	if(nowlen-len>1){
-		memset(dp,0,sizeof(dp));
-		return 0;
-	}
 	if (len < nowlen)
 	{
-		memset(dp, 0, sizeof(dp));
+		for (int i = 0; i < len; i++)
+		{
+			for (int j = 0; j <= 9; j++)
+			{
+				dp[i][j] = 0;
+			}
+		}
 		count(now, nowlen - 1);
 		for (int i = 2; i <= 9; i++)
 		{
@@ -60,25 +74,36 @@ int count(int n, int nowlen)
 	{
 		temp += dp[len - 1][j];
 	}
-	for (int i = 1; i < last; i++)
+	for (int i = flag?1:0; i < last; i++)
 	{
 		if (i == 9)
 		{
 			dp[len][9] = temp - dp[len - 1][9] - dp[len - 1][8];
+			ans += dp[len][i];
+		}
+		else if(i==0){
+			dp[len][0]=temp-dp[len-1][0]-dp[len-1][1];
 		}
 		else
 		{
 			dp[len][i] = temp - dp[len - 1][i - 1] - dp[len - 1][i] - dp[len - 1][i + 1];
+			ans += dp[len][i];
 		}
-		ans += dp[len][i];
 	}
-	memset(dp, 0, sizeof(dp));
+	for (int i = 0; i < len; i++)
+	{
+		for (int j = 0; j <= 9; j++)
+		{
+			dp[i][j] = 0;
+		}
+	}
 	now %= (int)pow(10, len);
 	count(now, nowlen - 1);
 	for (int i = 0; i <= 9; i++)
 	{
 		if (abs(last - i) >= 2)
 		{
+			dp[len][last] += dp[len - 1][i];
 			ans += dp[len - 1][i];
 		}
 	}
@@ -94,15 +119,18 @@ signed main()
 	ios::sync_with_stdio(false);
 	cin.tie(0);
 	cout.tie(0);
-	__gcd(1, 2);
 	int l, r;
 	cin >> l >> r;
 	int a = count(r, log10(r));
 	memset(dp, 0, sizeof(dp));
 	int b = 0;
-	if (l != 1)
+	if (l > 1)
 	{
-		b = count(l - 1, log10(l - 1));
+		b = count(l - 1, log10(l - 1),1);
+	}
+	else
+	{
+		b = count(l - 1, 0,1);
 	}
 	cout << a - b;
 	return 0;

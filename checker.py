@@ -1,7 +1,7 @@
 # encoding=utf-8
 import os
 work_dir="/OI-training/"
-problem_name="P2657"
+problem_name="P1831"
 if(problem_name[0]=='P'):
 	os.chdir(work_dir+"Luogu/"+problem_name[0:2]+"/"+problem_name[0:3]+"/"+problem_name+"/")
 os.system("g++ generator.cpp -Ofast -ogenerator")
