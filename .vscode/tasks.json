@@ -12,6 +12,7 @@
                 "${fileDirname}/${fileBasenameNoExtension}",
                 "--std=c++17",
                 "-Wall",
+				"-Wextra",
                 "-lm",
                 "-DCODESPACE"
             ],
