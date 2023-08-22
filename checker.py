@@ -1,7 +1,7 @@
 # encoding=utf-8
 import os
-work_dir="D:\OI-training\\"
-problem_name="test"
+work_dir="D:\\OI-training\\"
+problem_name="P9575"
 if(problem_name[0]=='P'):
 	os.chdir(work_dir+"Luogu\\"+problem_name[0:2]+"\\"+problem_name[0:3]+"\\"+problem_name+"\\")
 elif(problem_name=="test"):
@@ -19,7 +19,7 @@ while True:
 	# open your output file here
 	output_hmz=open(problem_name+".out","r")
 	output_tj=open(problem_name+"_TJ.out","r")
-	if(output_hmz.read()!=output_tj.read()):
+	if(os.system("python checker.py")):
 		print("你妈炸了")
 		break
 	else:

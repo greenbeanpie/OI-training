@@ -3,14 +3,14 @@
         {
             "name": "Win32",
             "includePath": [
-                "/Users/hddhp/Documents/GitHub/OI-training/**"
+                "${workspaceFolder}/**"
             ],
             "defines": [
                 "_DEBUG",
                 "UNICODE",
                 "_UNICODE"
             ],
-            "compilerPath": "/opt/homebrew/bin/g++-12",
+            "compilerPath": "D:/mingw64/bin/g++.exe",
             "cStandard": "c17",
             "cppStandard": "gnu++17",
             "intelliSenseMode": "macos-gcc-arm64",
