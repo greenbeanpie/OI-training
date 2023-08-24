@@ -1,6 +1,7 @@
 {
 	"C_Cpp.default.compilerPath": "/usr/bin/g++",
 	"C_Cpp.codeAnalysis.clangTidy.checks.disabled": [
+		"clang-diagnostic-error",
 		"clang-diagnostic-error"
 	],
 	"python.analysis.typeCheckingMode": "basic",

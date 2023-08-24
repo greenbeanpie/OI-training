@@ -103,6 +103,6 @@
 		"[python]": {
 			"editor.defaultFormatter": "ms-python.python"
 		},
-		"python.formatting.provider": "none",
-		"winopacity.opacity": 180
+		"winopacity.opacity": 200
 	}
+}

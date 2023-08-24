@@ -10,95 +10,220 @@ using namespace std;
 #define problemname "P3384"
 #define const constexpr
 
-const int N = 1e5 + 10;
+const int N = 10;
 
 vector<int> e[N];
 
 namespace Segtree
 {
-	struct Segtree
+	// 	template <typename T>
+	// 	struct Segtree
+	// 	{
+	// 	protected:
+	// 		vector<T> tree = vector<int>(N << 4), sum = vector<T>(N << 4), l = vector<T>(N << 4), r = vector<T>(N << 4), add = vector<T>(N << 4);
+	// 		vector<T> *arr;
+	// 		int idx = 0;
+
+	// 		void build(int u, int cl, int cr)
+	// 		{
+	// #define l l[u]
+	// #define r r[u]
+	// 			l = cl;
+	// 			r = cr;
+	// 			if (cl == cr)
+	// 			{
+	// 				tree[++idx] = arr->at(cl);
+	// 				return;
+	// 			}
+	// 			int mid = (cl + cr) >> 1;
+	// 			build(u << 1, cl, mid), build(u << 1 | 1, mid + 1, cr);
+	// 			tree[u] = tree[u << 1] + tree[u << 1 | 1];
+	// #undef l
+	// #undef r
+	// 		}
+	// 		void maintain(int u)
+	// 		{
+	// 			if (add[u])
+	// 			{
+	// 				int lson = u * 2, rson = lson | 1;
+	// 				add[lson] += add[u], add[rson] += add[u];
+	// 				tree[lson] += (r[lson] - l[lson] + 1) * add[u];
+	// 				tree[rson] += (r[rson] - l[rson] + 1) * add[u];
+	// 				add[u] = 0;
+	// 			}
+	// 		}
+	// 		T range_sum(int l, int r, int u)
+	// 		{
+	// #define cl this->l[u]
+	// #define cr this->r[u]
+	// 			if (l <= cl && cr <= r)
+	// 			{
+	// 				return tree[u];
+	// 			}
+	// 			maintain(u);
+	// 			T sum = 0;
+	// 			int mid = (cl + cr) >> 1;
+	// 			if (l <= mid)
+	// 			{
+	// 				sum += range_sum(l, r, u << 1);
+	// 			}
+	// 			if (r > mid)
+	// 			{
+	// 				sum += range_sum(l, r, u << 1 | 1);
+	// 			}
+	// 			return sum;
+	// #undef cl
+	// #undef cr
+	// 		}
+	// 		void range_add(int u, int l, int r, int val)
+	// 		{
+	// #define cl this->l[u]
+	// #define cr this->r[u]
+	// 			if (l <= cl && cr <= r)
+	// 			{
+	// 				add[u] += val;
+	// 				tree[u] += (cr - cl + 1) * val;
+	// 				return;
+	// 			}
+	// 			maintain(u);
+	// 			int mid = (cl + cr) >> 1;
+	// 			if (l <= mid)
+	// 			{
+	// 				range_add(u << 1, l, r, val);
+	// 			}
+	// 			if (r > mid)
+	// 			{
+	// 				range_add(u << 1 | 1, l, r, val);
+	// 			}
+	// 			tree[u] = tree[u << 1] + tree[u << 1 | 1];
+	// #undef cl
+	// #undef cr
+	// 		}
+
+	// 	public:
+	// 		Segtree(vector<T> *num)
+	// 		{
+	// 			arr = num;
+	// 		}
+	// 		void range_add(int l, int r, int val)
+	// 		{
+	// 			if (l > r)
+	// 			{
+	// 				swap(l, r);
+	// 			}
+	// 			range_add(1, l, r, val);
+	// 		}
+	// 		T range_sum(int l, int r)
+	// 		{
+	// 			if (l > r)
+	// 			{
+	// 				swap(l, r);
+	// 			}
+	// 			return range_sum(1, arr->size() - 1, 1);
+	// 		}
+	// 		void build(int n)
+	// 		{
+	// 			build(1, 1, n);
+	// 		}
+	// 	};
+	template <typename T>
+	struct SegTree
 	{
-	protected:
-		vector<int> tree = vector<int>(n << 4), sum = vector<int>(n << 4), l = vector<int>(n << 4), r = vector<int>(n << 4);
-		vector<int> *arr;
-		int idx = 0;
-		void build(int u, int l, int r)
+
+		vector<T> tree, lazy;
+		vector<T> *arr;
+		int n, root = 1, n4, end;
+		SegTree(vector<T> *a)
 		{
-			l[u] = l;
-			r[u] = r;
-			if (l == r)
-			{
-				tree[++idx] = *arr[l];
-			}
-			int mid = (l + r) >> 1;
-			build(u << 1, l, mid), build(u << 1 | 1, mid + 1, r);
-			tree[u] = tree[u << 1] + tree[u << 1 | 1];
+			tree = vector<T>((*a).size() * 4, 0);
+			lazy = vector<T>((*a).size() * 4, 0);
+			arr = a;
 		}
-		void maintain(int u)
-		{
-			if (add[u])
+		inline void maintain(int cl, int cr, int p)
+		{ // cl:current left(当前的左范围)
+			int cmid = (cl + cr) / 2;
+			if (cl <= cr && lazy[p])
 			{
-				int lson = u * 2, rson = lson | 1;
-				add[lson] += add[u], add[rson] += add[u];
-				tree[lson] += (r[lson] - l[lson] + 1) * add[u];
-				tree[rson] += (r[rson] - l[rson] + 1) * add[u];
-				add[u] = 0;
+				lazy[p * 2] += lazy[p];					  // 更新下左节点的懒惰标记
+				lazy[p * 2 + 1] += lazy[p];				  // 更新下右节点的懒惰标记
+				tree[p * 2] += lazy[p] * (cmid - cl + 1); // 更新下左节点的和
+				tree[p * 2 + 1] += lazy[p] * (cr - cmid); // 更新下右节点的和
+				lazy[p] = 0;							  // 更新当前点懒惰标记
 			}
 		}
-		int range_sum(int cl, int cr, int u)
+		inline T range_sum(int l, int r, int cl, int cr, int p)
 		{
-			if (cl <= l[u] && r[u] <= cr)
-			{
-				return tree[u];
+			if (l <= cl && cr <= r)
+			{ // 如果当前范围在查询范围内可以直接返回不用去掉左边和右边
+				return tree[p];
 			}
-			maintain(u);
-			int sum = 0;
-			int mis = (l[u] + r[u]) >> 1;
-			if (l[u] <= mid)
-			{
-				sum += range_sum(cl, cr, u << 1);
-			}
-			if (r[u] > mid)
-			{
-				res += query(cl, cr, u << 1 | 1);
-			}
-			return sum;
-		}
-		void range_add(int u, int cl, int cr, int val)
-		{
-			int l = l[u], r = r[u];
-			if (cl <= l && r <= cr)
-			{
-				add[u] += val;
-				tree[u] += (r - l + 1) * val;
-				return;
-			}
-			maintain(u);
-			int mid = (l + r) >> 1;
+			int mid = (cl + cr) / 2;
+			T sum = 0;
+			maintain(cl, cr, p);
 			if (l <= mid)
 			{
-				add_path(u << 1, cl, cr, val);
+				sum += range_sum(l, r, cl, mid, p * 2);
 			}
 			if (r > mid)
 			{
-				add_path(u << 1 | 1, cl, cr, val);
+				sum += range_sum(l, r, mid + 1, cr, p * 2 + 1);
 			}
-			tree[u] = tree[u << 1] + tree[u << 1 | 1];
+			return sum;
 		}
-	public:
-		void range_add(int l,int r,int val){
-			range_add(1,l,r,val);
+		inline void range_add(int l, int r, T val, int cl, int cr, int p)
+		{
+			if (l <= cl && cr <= r)
+			{
+				tree[p] += (cr - cl + 1) * val;
+				lazy[p] += val;
+				return;
+			}
+			int mid = (cl + cr) / 2;
+			maintain(cl, cr, p);
+			if (l <= mid)
+			{
+				range_add(l, r, val, cl, mid, p * 2);
+			}
+			if (r > mid)
+			{
+				range_add(l, r, val, mid + 1, cr, p * 2 + 1);
+			}
+			tree[p] = tree[p * 2] + tree[p * 2 + 1];
 		}
-		int range_sum(int l,int r){
-			return range_sum(l,r,1);
+		void build(int l, int r, int p)
+		{
+			if (l == r)
+			{
+				tree[p] = (*arr)[l];
+				return;
+			}
+			int mid = (r + l) / 2;
+			build(l, mid, p * 2);
+			build(mid + 1, r, p * 2 + 1);
+
+			tree[p] = tree[p * 2] + tree[p * 2 + 1];
+			end = max(end, p * 2 + 1);
+		}
+		int range_sum(int l, int r)
+		{
+			return range_sum(l, r, 1, tree.size(), root);
+		}
+		void range_add(int l, int r, int val)
+		{
+			range_add(l, r, val, 1, tree.size(), root);
+		}
+		void build(){
+			build(1, arr->size() - 1, 1);
 		}
 	};
+
 };
 
 namespace Main
 {
-	int val[N], size[N], dep[N], id[N], top[N], cnt = 0, fa[N], son[N],n, m, r, p,x,y,op,k;
-	Segtree::Segtree Tree;
+	int size[N], dep[N], id[N], top[N], cnt = 0, fa[N], son[N], n, m, r, p, x, y, op, z, temp;
+	vector<int> val = vector<int>(1), nw = vector<int>(1);
+	Segtree::SegTree<int> Tree(&nw);
 
 	int query_path(int u, int v)
 	{
@@ -112,11 +237,11 @@ namespace Main
 			res += Tree.range_sum(id[top[u]], id[u]);
 			u = fa[top[u]];
 		}
-		if (dep < dep[v])
+		if (dep[u] < dep[v])
 		{
 			swap(u, v);
 		}
-		res += Tree.query(id[u], id[v]);
+		res += Tree.range_sum(id[v], id[u]);
 		return res;
 	}
 	void add_path(int u, int v, int val)
@@ -127,10 +252,14 @@ namespace Main
 			{
 				swap(u, v);
 			}
-			Tree.range_add(id[u],id[top[u]],val);
-			u=fa[top[u]];
+			Tree.range_add(id[u], id[top[u]], val);
+			u = fa[top[u]];
 		}
-		range_add(id[u],id[v],val);
+		if (dep[u] < dep[v])
+		{
+			swap(u, v);
+		}
+		Tree.range_add(id[u], id[v], val);
 	}
 
 	void dfs1(int u, int father)
@@ -152,9 +281,13 @@ namespace Main
 	}
 	void dfs2(int u, int tp)
 	{
+		top[u] = tp;
 		id[u] = ++cnt;
+		nw.push_back(val[u]);
 		if (!son[u])
+		{
 			return;
+		}
 		dfs2(son[u], tp);
 		for (auto i : e[u])
 		{
@@ -166,11 +299,11 @@ namespace Main
 	}
 	int main()
 	{
-		
 		cin >> n >> m >> r >> p;
 		for (int i = 1; i <= n; i++)
 		{
-			cin >> val[i];
+			cin >> temp;
+			val.push_back(temp);
 		}
 		int u, v;
 		for (int i = 1; i < n; i++)
@@ -179,29 +312,31 @@ namespace Main
 			e[u].push_back(v);
 			e[v].push_back(u);
 		}
-		dfs1(1, 0);
-		dfs2(1, 1);
-		build(1, 1, n);
-		cin >> m;
-		for(int i=1;i<=m;i++){
+		dfs1(r, 0);
+		dfs2(r, r);
+		Tree.build();
+		for (int i = 1; i <= m; i++)
+		{
 			cin >> op;
-			switch(op){
-				case 1:
-					cin >> x >> y >> z;
-					add_path(x,y,z);
-					break;
-				case 2:
-					cin >> x >> y;
-					cout << query_path(x,y) << endl;
-					break;
-				case 3:
-					cin >> x >> z;
-					add_path(x,x+size[x]-1,z);
-					break;
-				case 4:
-					cin >> x;
-					cout << query_path(x,x+size[x]-1) << endl;
-					break;
+			if (op == 1)
+			{
+				cin >> x >> y >> z;
+				add_path(id[x], id[y], z);
+			}
+			else if (op == 2)
+			{
+				cin >> x >> y;
+				cout << query_path(x, y) << endl;
+			}
+			else if (op == 3)
+			{
+				cin >> x >> z;
+				add_path(id[x], id[x] + size[x] - 1, z);
+			}
+			else if (op == 4)
+			{
+				cin >> x;
+				cout << query_path(id[x], id[x] + size[x] - 1) << endl;
 			}
 		}
 		return 0;

@@ -10,7 +10,7 @@
                 "${file}",
                 "-o",
                 "${fileDirname}/${fileBasenameNoExtension}",
-                "--std=c++17",
+                "--std=c++23",
                 "-Wall",
 				"-Wextra",
                 "-lm",

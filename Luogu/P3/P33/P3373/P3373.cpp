@@ -2,40 +2,34 @@
 using namespace std;
 #define int long long
 #ifndef ONLINE_JUDGE
-#ifndef CODESPACE
 #pragma GCC optimize(2)
 #endif
-#endif
-int n, m, mod = 571313;
+int n, m;
 vector<int> num;
 template <typename T>
 struct SegTree
 {
-	vector<T> tree, lazy_add, lazy_mul;
+
+	vector<T> tree, lazy;
 	vector<T> *arr;
 	int n, root = 1, n4, end;
 	SegTree(vector<T> *a)
 	{
 		tree = vector<T>((*a).size() * 4, 0);
-		lazy_add = vector<T>((*a).size() * 4, 0);
-		lazy_mul = vector<T>((*a).size() * 4, 1);
+		lazy = vector<T>((*a).size() * 4, 0);
 		arr = a;
 	}
 	inline void maintain(int cl, int cr, int p)
 	{ // cl:current left(当前的左范围)
 		int cmid = (cl + cr) / 2;
-		if (cl > cr)
+		if (cl <= cr && lazy[p])
 		{
-			return;
+			lazy[p * 2] += lazy[p];					  // 更新下左节点的懒惰标记
+			lazy[p * 2 + 1] += lazy[p];				  // 更新下右节点的懒惰标记
+			tree[p * 2] += lazy[p] * (cmid - cl + 1); // 更新下左节点的和
+			tree[p * 2 + 1] += lazy[p] * (cr - cmid); // 更新下右节点的和
+			lazy[p] = 0;							  // 更新当前点懒惰标记
 		}
-		lazy_mul[p * 2] *= lazy_mul[p];lazy_mul[p*2]%=mod;
-		lazy_mul[p * 2 + 1] *= lazy_mul[p];lazy_mul[p*2+1]%=mod;
-		lazy_add[p * 2] = (lazy_add[p * 2] * lazy_mul[p] + lazy_add[p])%mod;
-		lazy_add[p * 2 + 1] = (lazy_add[p * 2 + 1] * lazy_mul[p] + lazy_add[p])%mod;
-		tree[p * 2] = (tree[p * 2] * lazy_mul[p] + lazy_add[p] * (cmid - cl + 1))%mod;
-		tree[p * 2 + 1] = (tree[p * 2 + 1] * lazy_mul[p] + lazy_add[p] * (cr - cmid))%mod;
-		lazy_mul[p] = 1;
-		lazy_add[p] = 0;
 	}
 	inline T range_sum(int l, int r, int cl, int cr, int p)
 	{
@@ -61,7 +55,7 @@ struct SegTree
 		if (l <= cl && cr <= r)
 		{
 			tree[p] += (cr - cl + 1) * val;
-			lazy_add[p] += val;
+			lazy[p] += val;
 			return;
 		}
 		int mid = (cl + cr) / 2;
@@ -73,27 +67,6 @@ struct SegTree
 		if (r > mid)
 		{
 			range_add(l, r, val, mid + 1, cr, p * 2 + 1);
-		}
-		tree[p] = tree[p * 2] + tree[p * 2 + 1];
-	}
-	inline void range_mul(int l, int r, T val, int cl, int cr, int p)
-	{
-		if (l <= cl && cr <= r)
-		{
-			tree[p] *= val;
-			lazy_add[p] *= val;
-			lazy_mul[p] *= val;
-			return;
-		}
-		int mid = (cl + cr) / 2;
-		maintain(cl, cr, p);
-		if (l <= mid)
-		{
-			range_mul(l, r, val, cl, mid, p * 2);
-		}
-		if (r > mid)
-		{
-			range_mul(l, r, val, mid + 1, cr, p * 2 + 1);
 		}
 		tree[p] = tree[p * 2] + tree[p * 2 + 1];
 	}
@@ -120,10 +93,6 @@ inline void range_add(SegTree<int> *st, int l, int r, int val)
 {
 	st->range_add(l, r, val, 1, n, (*st).root);
 }
-inline void range_mul(SegTree<int> *st, int l, int r, int val)
-{
-	st->range_mul(l, r, val, 1, n, (*st).root);
-}
 /*public:
 		T range_sum(int l, int r)
 		{
@@ -138,11 +107,11 @@ inline void range_mul(SegTree<int> *st, int l, int r, int val)
 signed main()
 {
 #ifndef ONLINE_JUDGE
-	freopen("P3373_1.in", "r", stdin);
+	freopen("P3372_8.in", "r", stdin);
 #endif
 
 	// cin >> n >> m;
-	scanf("%lld %lld %lld", &n, &m, &mod);
+	scanf("%lld %lld", &n, &m);
 
 	for (int i = 0; i < n; i++)
 	{
@@ -163,13 +132,6 @@ signed main()
 			int x, y, k;
 			// cin >> x >> y >> k;
 			scanf("%lld %lld %lld", &x, &y, &k);
-			range_mul(&ST, x, y, k);
-		}
-		else if (op == 2)
-		{
-			int x, y, k;
-			// cin >> x >> y >> k;
-			scanf("%lld %lld %lld", &x, &y, &k);
 			range_add(&ST, x, y, k);
 		}
 		else
@@ -177,7 +139,7 @@ signed main()
 			int x, y;
 			// cin >> x >> y;
 			scanf("%lld %lld", &x, &y);
-			printf("%lld\n", range_sum(&ST, x, y) % mod);
+			printf("%lld\n", range_sum(&ST, x, y));
 		}
 	}
 	return 0;
