@@ -1,108 +1,84 @@
 #include <bits/stdc++.h>
-#include <bits/extc++.h>
-using namespace __gnu_pbds;
-using namespace __gnu_cxx;
-using namespace std;
-#pragma GCC target("sse,sse2,sse3,ssse3,sse4.1,sse4.2,avx,avx2,popcnt,tune=native")
 #define int long long
-#define double long double
-#define endl "\n"
-#define problemname "array"
-#define const constexpr
+namespace Main{
+	constexpr int N = 2.5e5 + 5;
 
-namespace Main
-{
-	mt19937 random(time(0));
-	int n, m;
-	int cnt[100005], minans;
-	bool mp[20][100005];
-	void check()
+	struct Edge
 	{
-		int res = 0;
-		for (int i = 1; i <= m; i++)
-		{
-			res += max(cnt[i], n - cnt[i]);
-		}
-		minans = max(minans, res);
-	}
-	void dfs(int now)
-	{
-		if (clock() >= 1.95 * CLOCKS_PER_SEC)
-		{
-			check();
-			return;
-		}
-		if (now == n + 1)
-		{
-			check();
-			return;
-		}
-		if (random() % 2)
-		{
-			dfs(now + 1);
-			for (int i = 1; i <= m; i++)
-			{
-				mp[now][i] = !mp[now][i];
-				if (mp[now][i])
-				{
-					++cnt[i];
-				}
-				else
-				{
-					--cnt[i];
-				}
-			}
-			dfs(now + 1);
-		}
-		else
-		{
-			dfs(now + 1);
-			for (int i = 1; i <= m; i++)
-			{
-				mp[now][i] = !mp[now][i];
-				if (mp[now][i])
-				{
-					++cnt[i];
-				}
-				else
-				{
-					--cnt[i];
-				}
-			}
-			dfs(now + 1);
-		}
-	}
-	int main()
-	{
-		char c;
-		cin >> n >> m;
-		for (int i = 1; i <= n; i++)
-		{
-			for (int j = 1; j <= m; j++)
-			{
-				cin >> c;
-				if (c == '1')
-				{
+		int to, nxt;
+		int a, b;
+	} e[N << 1];
+	int head[N], tot;
 
-					mp[i][j] = 1;
-					++cnt[j];
-				}
+	inline void addEdge(int u, int v, int a, int b)
+	{
+		e[++tot] = Edge{v, head[u], a, b}, head[u] = tot;
+	}
+
+	int n, lim;
+	int d1[N], d2[N], d;
+
+	inline void dfs(int u, int fa, int delta)
+	{
+		d1[u] = d2[u] = 0;
+		for (int i = head[u]; i; i = e[i].nxt)
+		{
+			int v = e[i].to;
+			if (v == fa)
+				continue;
+			dfs(v, u, delta);
+			int w = e[i].a + e[i].b * delta;
+			int dis = d1[v] + w;
+			if (dis > d1[u])
+				d2[u] = d1[u], d1[u] = dis;
+			else if (dis > d2[u])
+				d2[u] = dis;
+		}
+		d = std::max(d1[u] + d2[u], d);
+	}
+
+	inline int calc(int x)
+	{
+		d = 0;
+		dfs(1, 0, x);
+		return d;
+	}
+
+	inline void main()
+	{
+		std::cin >> n >> lim;
+		for (int i = 1; i < n; i++)
+		{
+			int u, v, a, b;
+			std::cin >> u >> v >> a >> b;
+			addEdge(u, v, a, b);
+			addEdge(v, u, a, b);
+		}
+		int l = 0, r = lim;
+		while (l < r)
+		{
+			int mid = (l + r) >> 1;
+			if (calc(mid) > calc(mid + 1))
+			{
+				l = mid + 1;
+			}
+			else
+			{
+				r = mid;
 			}
 		}
-		dfs(1);
-		cout << n * m - minans;
-		return 0;
+		std::cout << l << '\n'
+				  << calc(l) << '\n';
+		return;
 	}
-};
+}
 
 signed main()
 {
-#ifndef ONLINE_JUDGE
-	freopen(problemname ".in", "r", stdin);
-	freopen(problemname ".out", "w", stdout);
-#endif
-	ios::sync_with_stdio(false);
-	cin.tie(0), cout.tie(0);
+	freopen("tree.in", "r", stdin);
+	freopen("tree.out", "w", stdout);
+	std::ios::sync_with_stdio(false);
+	std::cin.tie(0), std::cout.tie(0);
 	Main::main();
 	return 0;
 }

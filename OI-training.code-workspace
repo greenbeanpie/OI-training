@@ -101,8 +101,9 @@
 			"syncstream": "cpp"
 		},
 		"[python]": {
-			"editor.defaultFormatter": "ms-python.python"
+			"editor.defaultFormatter": "ms-python.black-formatter"
 		},
-		"winopacity.opacity": 200
+		"winopacity.opacity": 200,
+		"python.formatting.provider": "none"
 	}
 }

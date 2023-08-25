@@ -5,5 +5,21 @@
 		"clang-diagnostic-error"
 	],
 	"python.analysis.typeCheckingMode": "basic",
-	"C_Cpp.errorSquiggles": "enabled"
+	"C_Cpp.errorSquiggles": "enabled",
+	"editor.formatOnPaste": true,
+	"editor.formatOnSave": true,
+	"diffEditor.codeLens": true,
+	"editor.formatOnType": true,
+	"editor.formatOnSaveMode": "modificationsIfAvailable",
+	"diffEditor.experimental.collapseUnchangedRegions": false,
+	"diffEditor.experimental.showMoves": true,
+	"editor.cursorBlinking": "smooth",
+	"editor.cursorSmoothCaretAnimation": "on",
+	"editor.cursorSurroundingLinesStyle": "default",
+	"C_Cpp.inlayHints.autoDeclarationTypes.enabled": true,
+	"C_Cpp.inlayHints.autoDeclarationTypes.showOnLeft": true,
+	"C_Cpp.inlayHints.referenceOperator.enabled": true,
+	"C_Cpp.inlayHints.referenceOperator.showSpace": true,
+	"C_Cpp.inlayHints.parameterNames.enabled": true,
+	"C_Cpp.clang_format_style": "Visual Studio"
 }

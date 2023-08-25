@@ -1,32 +1,72 @@
 # encoding=utf-8
-import os
-work_dir="D:\\OI-training\\"
-problem_name="P9575"
-if(problem_name[0]=='P'):
-	os.chdir(work_dir+"Luogu\\"+problem_name[0:2]+"\\"+problem_name[0:3]+"\\"+problem_name+"\\")
-elif(problem_name=="test"):
-	os.chdir(work_dir+"\\test\\")
-os.system("g++ generator.cpp -Ofast -ogenerator")
-os.system("g++ "+problem_name+".cpp -O2 -Wall -Wextra --std=c++14 -o"+problem_name)
-os.system("g++ "+problem_name+"_TJ.cpp -O2 -Wall -Wextra --std=c++14 -o"+problem_name+"_TJ")
-tot=1
+import os,prettytable
+
+result=prettytable.PrettyTable()
+result.field_names=["Test Case","Result","Time"]
+
+work_dir = "D:\\OI-training\\"
+
+problem_name = input("请输入希望进行对拍的题目的题号")
+if problem_name[0] == "P":
+	os.chdir(
+		work_dir
+		+ "Luogu\\"
+		+ problem_name[0:2]
+		+ "\\"
+		+ problem_name[0:3]
+		+ "\\"
+		+ problem_name
+		+ "\\"
+	)
+elif problem_name == "test":
+	os.chdir(work_dir + "\\test\\")
+
+generator_cpp = bool(int(input("请选择生成器语言: C++(0)/Python(1)")))
+if generator_cpp:
+	os.system("g++ generator.cpp -Ofast -ogenerator")
+spj = bool(int(input("是否需要使用SPJ(testlib.h)? 0: 否 1: 是")))
+if spj:
+	os.system("g++ checker.cpp -ochecker -O2 -Wall -Wextra --std=c++23")
+else:
+	os.system(
+	"g++ "
+	+ problem_name
+	+ "_TJ.cpp -O2 -Wall -Wextra --std=c++23 -o"
+	+ problem_name
+	+ "_TJ")
+os.system(
+	"g++ " + problem_name + ".cpp -O2 -Wall -Wextra --std=c++23 -o" + problem_name
+)
+
+tot = 0
 while True:
+	tot=tot+1
 	# launch your data generator or generate input data here
-	os.system(".\\generator")
-	# launch your program ${program_name}$ here
-	os.system(".\\"+problem_name+"_TJ")
-	os.system(".\\"+problem_name)
-	# open your output file here
-	output_hmz=open(problem_name+".out","r")
-	output_tj=open(problem_name+"_TJ.out","r")
-	if(os.system("python checker.py")):
-		print("你妈炸了")
-		break
+	if generator_cpp:
+		os.system(".\\generator")
 	else:
-		print("第"+str(tot)+"次你妈没炸")
+		os.system("python generator.py")
+	# launch your program here
+	res_hmz=os.system(".\\" + problem_name)
+	if res_hmz:
+		# Runtime Error check
+		result.add_row([str(tot),"Runtime Error","-1"])
+	if not(spj):
+		output_hmz = open(problem_name + ".out", "r")
+		os.system(".\\" + problem_name + "_TJ")
+		output_tj = open(problem_name + "_TJ.out", "r")
+		if(output_tj.read()!=output_hmz.read()):
+			break
+		output_tj.close()
+	else:
+		# Special Judge required
+		os.system(".\\checker "+problem_name+".in "+problem_name+".out "+problem_name+".ans "+problem_name+".res")
+		res=open(problem_name+".res","r+")
+		if res.read().find("Wrong Answer"):
+
+		else:
+
+
 	output_hmz.close()
-	output_tj.close()
-	if(tot>=1000):
-		print("你妈没炸!!!太厉害了!!!%%%orz")
-		break
-	tot+=1
+	
+print("Wrong Answer.\nWrong answer on test "+str(tot)+". Check output file for more detail.")
