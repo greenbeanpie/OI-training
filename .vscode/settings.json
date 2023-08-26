@@ -21,5 +21,12 @@
 	"C_Cpp.inlayHints.referenceOperator.enabled": true,
 	"C_Cpp.inlayHints.referenceOperator.showSpace": true,
 	"C_Cpp.inlayHints.parameterNames.enabled": true,
-	"C_Cpp.clang_format_style": "Visual Studio"
+	"C_Cpp.clang_format_style": "Visual Studio",
+	"python.terminal.activateEnvInCurrentTerminal": true,
+	"git.alwaysShowStagedChangesResourceGroup": true,
+	"git.alwaysSignOff": true,
+	"git.autofetch": "all",
+	"git.autoStash": false,
+	"git.branchRandomName.enable": true,
+	"editor.cursorStyle": "line"
 }

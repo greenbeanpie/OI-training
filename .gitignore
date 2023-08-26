@@ -3,3 +3,4 @@ test
 test.cpp
 compare.cpp
 test.in
+*.exe
