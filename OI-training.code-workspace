@@ -98,12 +98,13 @@
 			"stacktrace": "cpp",
 			"stdfloat": "cpp",
 			"stop_token": "cpp",
-			"syncstream": "cpp"
+			"syncstream": "cpp",
+			"ios": "cpp"
 		},
 		"[python]": {
 			"editor.defaultFormatter": "ms-python.black-formatter"
 		},
-		"winopacity.opacity": 200,
+		"winopacity.opacity": 255,
 		"python.formatting.provider": "none"
 	}
 }
