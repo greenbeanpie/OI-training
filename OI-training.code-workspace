@@ -102,9 +102,10 @@
 			"ios": "cpp"
 		},
 		"[python]": {
-			"editor.defaultFormatter": "ms-python.black-formatter"
+			"editor.defaultFormatter": "ms-python.python"
 		},
-		"winopacity.opacity": 255,
-		"python.formatting.provider": "none"
+		"winopacity.opacity": 200,
+		"python.formatting.provider": "none",
+		"editor.cursorBlinking": "smooth"
 	}
 }
