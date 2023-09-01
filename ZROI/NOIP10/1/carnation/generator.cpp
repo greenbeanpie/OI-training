@@ -29,7 +29,7 @@ namespace Main
 		}
 		e[++idx] = {1, point, abs((int)myrand()) % 1000, abs((int)myrand()) % 1000};
 		// int n = myrand() % 200000;
-		int n = myrand() % 300000;
+		int n = myrand() % 200000 + point;
 		cout << n << " ";
 		while (point < n)
 		{
@@ -50,33 +50,43 @@ namespace Main
 			// 				abs((int)myrand()) % 1000};
 			// }
 			// point = end;
-			int start = myrand() % point + 1, circle_size = myrand() % 200 + 3, len_size = myrand() % 200 + 1;
+			int start = myrand() % point + 1, circle_size = myrand() % 200 + 3, len_size = myrand() % 200;
+			if (len_size)
+			{
+				e[++idx] = {start,
+							++point,
+							abs((int)myrand()) % 1000,
+							abs((int)myrand()) % 1000};
+				for (int i = 2; i <= len_size; i++)
+				{
+					e[++idx] = {point,
+								point + 1,
+								abs((int)myrand()) % 1000,
+								abs((int)myrand()) % 1000};
+					++point;
+				}
+			}
+			start = point;
 			e[++idx] = {start,
-						++point,
+						point + 1,
 						abs((int)myrand()) % 1000,
 						abs((int)myrand()) % 1000};
-			for (int i = 2; i <= len_size; i++)
+			++point;
+			for (int i = 2; i <= circle_size; i++)
 			{
 				e[++idx] = {point,
-							++point,
+							point + 1,
 							abs((int)myrand()) % 1000,
 							abs((int)myrand()) % 1000};
+				++point;
 			}
-			start=point;
-			e[++idx] = { start,
-						 ++point,
-						 abs((int)myrand()) % 1000,
-						 abs((int)myrand()) % 1000};
-			for (int i = 2; i <= circle_size;i++){
+			if (myrand() % 2)
+			{
 				e[++idx] = {point,
-							++point,
+							start,
 							abs((int)myrand()) % 1000,
 							abs((int)myrand()) % 1000};
 			}
-			e[++idx] = {point,
-						start,
-						abs((int)myrand()) % 1000,
-						abs((int)myrand()) % 1000};
 		}
 		cout << idx << endl;
 		shuffle(e + 1, e + 1 + idx, myrand);
