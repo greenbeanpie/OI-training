@@ -1,12 +1,12 @@
 // 应硫代硫酸钠要求,本火车头为赛时由Python生成。
 #ifndef ONLINE_JUDGE
-#pragma GCC optimize("-O1")
-#pragma GCC optimize("-O2")
-#pragma GCC optimize("-O3")
+// #pragma GCC optimize("-O1")
+// #pragma GCC optimize("-O2")
+// #pragma GCC optimize("-O3")
 #pragma GCC optimize("-Ofast")
-#pragma GCC optimize("-Og")
-#pragma GCC optimize("-Os")
-#pragma GCC optimize("-Oz")
+// #pragma GCC optimize("-Og")
+// #pragma GCC optimize("-Os")
+// #pragma GCC optimize("-Oz")
 #pragma GCC optimize("-faggressive-loop-optimizations")
 #pragma GCC optimize("-falign-functions")
 #pragma GCC optimize("-falign-jumps")

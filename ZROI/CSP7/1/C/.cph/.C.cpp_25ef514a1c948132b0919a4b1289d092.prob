@@ -1,0 +1,1 @@
+{"name":"Local: C","url":"d:\\OI-training\\ZROI\\CSP7\\1\\C\\C.cpp","tests":[{"id":1694312857870,"input":"5 3\n1 4 5\n","output":"128"},{"id":1694312868154,"input":"2027 2\n2 7","output":"1705"}],"interactive":false,"memoryLimit":1024,"timeLimit":3000,"srcPath":"d:\\OI-training\\ZROI\\CSP7\\1\\C\\C.cpp","group":"local","local":true}
