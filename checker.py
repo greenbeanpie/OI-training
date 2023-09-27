@@ -14,9 +14,16 @@ if sys.platform[0:3]=="win":
 print(
     "Python code checker for OI.\nDeveloped by HMZ_0915.\nThese features are developing in progress: check by subtasks, memory limit set(on linux platform)\n\n"
 )
+if sys.platform[0:3]=="win":
+    print("\033[43mWindows platform does not support set memory limit(this feature will be released soon). Use Linux to enable this feature.\033[0m")
+
+print(
+    "Python code checker for OI.\nDeveloped by HMZ_0915.\nThese features are developing in progress: check by subtasks, memory limit set(on linux platform)\n\n"
+)
 
 work_dir = "D:\\OI-training\\"
 
+print("目前支持自动查找文件目录的题目: Luogu, CodeForces, ZROI 10-day NOIP")
 print("目前支持自动查找文件目录的题目: Luogu, CodeForces, ZROI 10-day NOIP")
 
 problem_name = input("请输入希望进行对拍的题目 ")
@@ -79,13 +86,45 @@ spj = bool(int(input("是否需要使用SPJ(testlib.h)? 0: 否 1: 是 ")))
 multi_threading=1
 if not spj:
     multi_threading = int(input("使用线程数量: (建议数量:"+str(multiprocessing.cpu_count()-1)+") "))
+spj = bool(int(input("是否需要使用SPJ(testlib.h)? 0: 否 1: 是 ")))
+multi_threading=1
+if not spj:
+    multi_threading = int(input("使用线程数量: (建议数量:"+str(multiprocessing.cpu_count()-1)+") "))
 generator_cpp = bool(int(input("请选择生成器语言: Python(0)/C++(1) ")))
 if generator_cpp:
     if multi_threading==1:
         prc = subprocess.Popen(["g++", "generator.cpp", "-Ofast", "-ogenerator"])
     else:
         prc = subprocess.Popen(["g++", "generator.cpp", "-Ofast", "-ogenerator","-DONLINE_JUDGE"])
+    if multi_threading==1:
+        prc = subprocess.Popen(["g++", "generator.cpp", "-Ofast", "-ogenerator"])
+    else:
+        prc = subprocess.Popen(["g++", "generator.cpp", "-Ofast", "-ogenerator","-DONLINE_JUDGE"])
 if spj:
+    subprocess.Popen(["g++", "checker.cpp", "-Ofast", "-ochecker"])
+elif multi_threading == 1:
+    prc = subprocess.Popen(
+        [
+            "g++",
+            problem_name + "_TJ.cpp",
+            "-O2",
+            "-Wall",
+            "-Wextra",
+            "--std=c++23",
+            "-o" + problem_name + "_TJ",
+        ]
+    )
+    prc1 = subprocess.Popen(
+        [
+            "g++",
+            problem_name + ".cpp",
+            "-O2",
+            "-Wall",
+            "-Wextra",
+            "--std=c++23",
+            "-o" + problem_name,
+        ]
+    )
     subprocess.Popen(["g++", "checker.cpp", "-Ofast", "-ochecker"])
 elif multi_threading == 1:
     prc = subprocess.Popen(
@@ -141,6 +180,7 @@ timeout = float(input("请输入超时时间(单位:s) "))
 timeout*=f # Don't ask me why. I just know the computer on Luogu platform is fx faster than the computer in my school. You can change this in your own way.
 stopwhennotac = bool(int(input("是否需要在第一次答案错误时退出?(1. 是 0. 否)")))
 validator = bool(int(input("是否需要使用数据校验程序(validator.cpp)?(1: 是 0: 否)")))
+prc2=0
 prc2=0
 if validator:
     prc2 = subprocess.Popen(
