@@ -21,24 +21,14 @@ print(
     "Python code checker for OI.\nDeveloped by HMZ_0915.\nThese features are developing in progress: check by subtasks, memory limit set(on linux platform)\n\n"
 )
 
-work_dir = "D:\\OI-training\\"
+work_dir = "C:\\Users\\Administrator.DESKTOP-51JH54T\\Documents\\OI-training\\"
 
-print("目前支持自动查找文件目录的题目: Luogu, CodeForces, ZROI 10-day NOIP")
 print("目前支持自动查找文件目录的题目: Luogu, CodeForces, ZROI 10-day NOIP")
 
 problem_name = input("请输入希望进行对拍的题目 ")
 try:
     if problem_name[0] == "P":
-        os.chdir(
-            work_dir
-            + "Luogu\\"
-            + problem_name[0:2]
-            + "\\"
-            + problem_name[0:3]
-            + "\\"
-            + problem_name
-            + "\\"
-        )
+        os.chdir(work_dir+ "Luogu\\"+ problem_name[0:2]+ "\\"+ problem_name[0:3]+ "\\"+ problem_name+ "\\")
     elif problem_name[0:2]=="CF":
         problem_name = problem_name[2:]
         sub_dir = problem_name[:len(problem_name)-1]
@@ -84,8 +74,6 @@ prc1=1
 
 spj = bool(int(input("是否需要使用SPJ(testlib.h)? 0: 否 1: 是 ")))
 multi_threading=1
-if not spj:
-    multi_threading = int(input("使用线程数量: (建议数量:"+str(multiprocessing.cpu_count()-1)+") "))
 spj = bool(int(input("是否需要使用SPJ(testlib.h)? 0: 否 1: 是 ")))
 multi_threading=1
 if not spj:

@@ -42,6 +42,9 @@ namespace Main
 
 		void maintain(node *u)
 		{
+			if(!u){
+				return;
+			}
 			u->size = (u->son[0] ? u->son[0]->size : 0) + (u->son[1] ? u->son[1]->size : 0) + 1;
 		}
 		bool check(node *u)
@@ -51,15 +54,12 @@ namespace Main
 
 		void not_rotate(node *x)
 		{ // Of course FHQ doesn't need rotate(
-			if (root == x)
-			{
-				return;
-			}
 			auto f1 = x->father, f2 = f1->father;
-			auto r1 = check(x), r2 = check(f1);
-			if (x->son[r1 != r2])
+			auto r1 = check(x);
+			if (x->son[r1 ^1])
 			{
-				x->son[r1 != r2]->father = f1;
+				x->son[r1 ^1]->father = f1;
+				
 			}
 			// f1->son[r1] = x->son[r1 ^ 1];
 			x->son[r1 ^ 1] = f1;
@@ -67,17 +67,18 @@ namespace Main
 			f1->father = x;
 			if (f2)
 			{
-				f2->son[r2] = x;
+				f2->son[f1==f2->son[1]] = x;
 			}
 			maintain(x), maintain(f1);
 		}
 		void fhq(node *x)
 		{ // emmm,function fhq.
-			while (x->father)
-			{
-				not_rotate(check(x) == check(x->father) ? x->father : x);
-				not_rotate(x);
+			for(auto father=x->father;father=x->father,father;not_rotate(x)){
+				if(father->father){
+					not_rotate(check(x)==check(father)?father:x);
+				}
 			}
+			root = x;
 		}
 		void insert(int val)
 		{
@@ -89,6 +90,8 @@ namespace Main
 					if (cur->val == val)
 					{
 						++cur->cnt;
+						maintain(cur);
+						maintain(cur->father);
 						fhq(cur);
 						break;
 					}
@@ -99,12 +102,14 @@ namespace Main
 					}
 					else
 					{
-						node temp;
-						temp.val = val;
-						temp.father = cur;
-						temp.cnt = 1;
-						temp.father = cur;
-						_T[++tot] = temp;
+						// node temp;
+						// temp.val = val;
+						// temp.father = cur;
+						// temp.cnt = 1;
+						// _T[++tot] = temp;
+						_T[++tot].val = val;
+						++_T[tot].cnt;
+						_T[tot].father = cur;
 						cur->son[cur->val < val] = _T + tot;
 						maintain(cur);
 						maintain(cur->son[cur->val < val]);
@@ -115,9 +120,9 @@ namespace Main
 			}
 			else
 			{
-				tot = 0;
 				_T[++tot] = {val, 1, 1};
-				root = _T + 1;
+				root = _T + tot;
+				maintain(root);
 			}
 		}
 		int rk(int k)
@@ -126,13 +131,13 @@ namespace Main
 			int now = 0;
 			while (1)
 			{
-				if (k <= cur->val)
+				if (cur->son[0] && k <= cur->val)
 				{
 					cur = cur->son[0];
 				}
-				else
+				else if (cur->son[1])
 				{
-					now += cur->son[0]->size;
+					now += (cur->son[0] ? cur->son[0]->size : 0);
 					if (k <= 0)
 					{
 						fhq(cur);
@@ -140,6 +145,11 @@ namespace Main
 					}
 					now += cur->cnt;
 					cur = cur->son[1];
+				}
+				else
+				{
+					fhq(cur);
+					return now + 1;
 				}
 			}
 		}
@@ -152,7 +162,7 @@ namespace Main
 				{
 					cur = cur->son[0];
 				}
-				else
+				else if (cur->son[1])
 				{
 					k -= cur->cnt + cur->son[0]->size;
 					if (k <= 0)
@@ -161,6 +171,11 @@ namespace Main
 						return cur->val;
 					}
 					cur = cur->son[1];
+				}
+				else
+				{
+					fhq(cur);
+					return cur->val;
 				}
 			}
 		}
@@ -183,7 +198,7 @@ namespace Main
 			auto cur = x->son[1];
 			if (!cur)
 			{
-				return x;
+				return nullptr;
 			}
 			while (cur->son[0])
 			{
@@ -192,21 +207,70 @@ namespace Main
 			fhq(cur);
 			return cur;
 		}
-		void del(int x){
+		void del(int x)
+		{
 			rk(x);
-			auto cur=root;
-			if(cur->cnt>1){
+			auto cur = root;
+			if (cur->cnt > 1)
+			{
 				--cur->cnt;
 				maintain(cur);
 				return;
 			}
-			if(!cur->)
+			if (!cur->son[0] && !cur->son[1])
+			{
+				root = nullptr;
+				return;
+			}
+			if (!cur->son[0])
+			{
+				root = cur->son[1];
+				root->father = nullptr;
+			}
+			auto oldroot=root;
+			node *x1 = pre(root);
+			cur->son[1]->father = x1;
+			x1->son[1] = cur->son[1];
+			maintain(root);
+			oldroot->cnt = oldroot->size = oldroot->val = 0;
+			oldroot->father = oldroot->son[0] = oldroot->son[1]=nullptr;
 		}
-	};
+	} tree;
 
 	int main()
 	{
-
+		int n;
+		cin >> n;
+		int opt, x;
+		while (n--)
+		{
+			cin >> opt >> x;
+			switch (opt)
+			{
+			case 1:
+				tree.insert(x);
+				break;
+			case 2:
+				tree.del(x);
+				break;
+			case 3:
+				cout << tree.rk(x) << endl;
+				break;
+			case 4:
+				cout << tree.kth(x) << endl;
+				break;
+			case 5:
+				tree.insert(x);
+				cout << tree.pre(tree.root)->val << endl;
+				tree.del(x);
+				break;
+			case 6:
+				tree.insert(x);
+				cout << tree.nxt(tree.root)->val << endl;
+				tree.del(x);
+				break;
+			}
+		}
 		return 0;
 	}
 };
