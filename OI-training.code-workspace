@@ -102,12 +102,15 @@
 			"ios": "cpp"
 		},
 		"[python]": {
-			"editor.defaultFormatter": "ms-python.python"
+			"editor.defaultFormatter": "ms-python.black-formatter"
 		},
 		"winopacity.opacity": 220,
-		"python.formatting.provider": "autopep8",
+		"python.formatting.provider": "none",
 		"editor.cursorBlinking": "smooth",
 		"terminal.integrated.defaultProfile.windows": "PowerShell",
-		"editor.cursorSmoothCaretAnimation": "on"
+		"editor.cursorSmoothCaretAnimation": "on",
+		"editor.formatOnPaste": true,
+		"editor.formatOnSave": true,
+		"editor.formatOnType": true
 	}
 }

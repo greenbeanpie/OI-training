@@ -37,15 +37,15 @@ namespace Main
 			}
 		};
 
-		node _T[N];
 		node *root;
 
 		void maintain(node *u)
 		{
-			if(!u){
+			if (!u)
+			{
 				return;
 			}
-			u->size = (u->son[0] ? u->son[0]->size : 0) + (u->son[1] ? u->son[1]->size : 0) + 1;
+			u->size = (u->son[0] ? u->son[0]->size : 0) + (u->son[1] ? u->son[1]->size : 0) + u->cnt;
 		}
 		bool check(node *u)
 		{
@@ -56,26 +56,28 @@ namespace Main
 		{ // Of course FHQ doesn't need rotate(
 			auto f1 = x->father, f2 = f1->father;
 			auto r1 = check(x);
-			if (x->son[r1 ^1])
+			if (x->son[r1 ^ 1])
 			{
-				x->son[r1 ^1]->father = f1;
-				
+				x->son[r1 ^ 1]->father = f1;
+				f1->son[r1] = x->son[r1 ^ 1];
 			}
-			// f1->son[r1] = x->son[r1 ^ 1];
+			f1->son[r1] = x->son[r1 ^ 1];
 			x->son[r1 ^ 1] = f1;
 			x->father = f2;
 			f1->father = x;
 			if (f2)
 			{
-				f2->son[f1==f2->son[1]] = x;
+				f2->son[f1 == f2->son[1]] = x;
 			}
-			maintain(x), maintain(f1);
+			maintain(f1), maintain(x);
 		}
 		void fhq(node *x)
 		{ // emmm,function fhq.
-			for(auto father=x->father;father=x->father,father;not_rotate(x)){
-				if(father->father){
-					not_rotate(check(x)==check(father)?father:x);
+			for (auto father = x->father; father = x->father, father; not_rotate(x))
+			{
+				if (father->father)
+				{
+					not_rotate(check(x) == check(father) ? father : x);
 				}
 			}
 			root = x;
@@ -102,15 +104,10 @@ namespace Main
 					}
 					else
 					{
-						// node temp;
-						// temp.val = val;
-						// temp.father = cur;
-						// temp.cnt = 1;
-						// _T[++tot] = temp;
-						_T[++tot].val = val;
-						++_T[tot].cnt;
-						_T[tot].father = cur;
-						cur->son[cur->val < val] = _T + tot;
+						cur->son[cur->val < val] = new node;
+						cur->son[cur->val < val]->val = val;
+						++cur->son[cur->val < val]->cnt;
+						cur->son[cur->val < val]->father = cur;
 						maintain(cur);
 						maintain(cur->son[cur->val < val]);
 						fhq(cur->son[cur->val < val]);
@@ -120,8 +117,10 @@ namespace Main
 			}
 			else
 			{
-				_T[++tot] = {val, 1, 1};
-				root = _T + tot;
+				root = new node;
+				root->cnt = 1;
+				root->size = 1;
+				root->val = val;
 				maintain(root);
 			}
 		}
@@ -131,14 +130,14 @@ namespace Main
 			int now = 0;
 			while (1)
 			{
-				if (cur->son[0] && k <= cur->val)
+				if (cur->son[0] && k < cur->val)
 				{
 					cur = cur->son[0];
 				}
 				else if (cur->son[1])
 				{
 					now += (cur->son[0] ? cur->son[0]->size : 0);
-					if (k <= 0)
+					if (k == cur->val)
 					{
 						fhq(cur);
 						return now + 1;
@@ -148,6 +147,7 @@ namespace Main
 				}
 				else
 				{
+					now += (cur->son[0] ? cur->son[0]->size : 0);
 					fhq(cur);
 					return now + 1;
 				}
@@ -164,7 +164,7 @@ namespace Main
 				}
 				else if (cur->son[1])
 				{
-					k -= cur->cnt + cur->son[0]->size;
+					k -= cur->cnt + (cur->son[0]?cur->son[0]->size:0);
 					if (k <= 0)
 					{
 						fhq(cur);
@@ -198,7 +198,7 @@ namespace Main
 			auto cur = x->son[1];
 			if (!cur)
 			{
-				return nullptr;
+				return x;
 			}
 			while (cur->son[0])
 			{
@@ -226,14 +226,17 @@ namespace Main
 			{
 				root = cur->son[1];
 				root->father = nullptr;
+				return;
 			}
-			auto oldroot=root;
+			auto oldroot = root;
 			node *x1 = pre(root);
-			cur->son[1]->father = x1;
+			if (cur->son[1])
+			{
+				cur->son[1]->father = x1;
+			}
 			x1->son[1] = cur->son[1];
+			delete oldroot;
 			maintain(root);
-			oldroot->cnt = oldroot->size = oldroot->val = 0;
-			oldroot->father = oldroot->son[0] = oldroot->son[1]=nullptr;
 		}
 	} tree;
 

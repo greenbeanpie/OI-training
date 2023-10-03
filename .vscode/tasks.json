@@ -11,6 +11,7 @@
                 "-o",
                 "${fileDirname}/${fileBasenameNoExtension}",
                 "--std=c++23",
+				// "--stack=1000000000",
                 "-Wall",
 				"-Wextra",
                 "-lm",

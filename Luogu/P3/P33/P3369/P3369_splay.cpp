@@ -2,7 +2,7 @@
 const int N = 100005;
 int rt, tot, fa[N], ch[N][2], val[N], cnt[N], sz[N];
 
-struct Splay
+struct FHQ
 {
 	void maintain(int x) { sz[x] = sz[ch[x][0]] + sz[ch[x][1]] + cnt[x]; }
 
@@ -28,7 +28,7 @@ struct Splay
 		maintain(x);
 	}
 
-	void splay(int x)
+	void fhq(int x)
 	{
 		for (int f = fa[x]; f = fa[x], f; rotate(x))
 			if (fa[f])
@@ -54,7 +54,7 @@ struct Splay
 				cnt[cur]++;
 				maintain(cur);
 				maintain(f);
-				splay(cur);
+				fhq(cur);
 				break;
 			}
 			f = cur;
@@ -67,7 +67,7 @@ struct Splay
 				ch[f][val[f] < k] = tot;
 				maintain(tot);
 				maintain(f);
-				splay(tot);
+				fhq(tot);
 				break;
 			}
 		}
@@ -87,7 +87,7 @@ struct Splay
 				res += sz[ch[cur][0]];
 				if (k == val[cur])
 				{
-					splay(cur);
+					fhq(cur);
 					return res + 1;
 				}
 				res += cnt[cur];
@@ -110,7 +110,7 @@ struct Splay
 				k -= cnt[cur] + sz[ch[cur][0]];
 				if (k <= 0)
 				{
-					splay(cur);
+					fhq(cur);
 					return val[cur];
 				}
 				cur = ch[cur][1];
@@ -125,7 +125,7 @@ struct Splay
 			return cur;
 		while (ch[cur][1])
 			cur = ch[cur][1];
-		splay(cur);
+		fhq(cur);
 		return cur;
 	}
 
@@ -136,7 +136,7 @@ struct Splay
 			return cur;
 		while (ch[cur][0])
 			cur = ch[cur][0];
-		splay(cur);
+		fhq(cur);
 		return cur;
 	}
 
