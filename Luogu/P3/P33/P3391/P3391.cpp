@@ -7,13 +7,14 @@ using namespace std;
 #define int long long
 #define double long double
 #define endl "\n"
-#define problemname "P3369"
+#define problemname "P3391"
 #define const constexpr
 
 const int N = 1e5 + 5;
 
 namespace Main
 {
+	int n;
 	struct FHQ
 	{
 		int tot = 0;
@@ -52,16 +53,16 @@ namespace Main
 		{
 			if (x && x->tag)
 			{
-				swap(x->son[0], x->son[1]);
-				x->tag = 0;
-				if (x->son[0])
-				{
-					x->son[0]->tag ^= 1;
-				}
 				if (x->son[1])
 				{
 					x->son[1]->tag ^= 1;
 				}
+				if (x->son[0])
+				{
+					x->son[0]->tag ^= 1;
+				}
+				swap(x->son[0], x->son[1]);
+				x->tag = 0;
 			}
 		}
 		bool check(node *u)
@@ -98,7 +99,21 @@ namespace Main
 					not_rotate(check(x) == check(father) ? father : x);
 				}
 			}
-			if (to->val == 0)
+			if (!to)
+			{
+				root = x;
+			}
+		}
+		void fhq(node *x, int to)
+		{ // emmm,function fhq.
+			for (auto father = x->father; father = x->father, father->val != to; not_rotate(x))
+			{
+				if (father->father->val != to)
+				{
+					not_rotate(check(x) == check(father) ? father : x);
+				}
+			}
+			if (!to)
 			{
 				root = x;
 			}
@@ -106,21 +121,35 @@ namespace Main
 		node *find(int val)
 		{
 			auto cur = root;
-			while (cur->val != val)
+			while (val)
 			{
-				cur = cur->son[cur->val < val];
+				pushdown(cur);
+				if (cur->son[0] && val <= cur->son[0]->size)
+				{
+					cur = cur->son[0];
+				}
+				else
+				{
+					val -= (cur->son[0] ? cur->son[0]->size : 0) + cur->cnt;
+					if (!val)
+					{
+						return cur;
+					}
+					cur = cur->son[1];
+				}
 			}
 			return cur;
 		}
 		void reverse(int l, int r)
 		{
-			auto left = find(l), right = find(r);
-			fhq(left, root);
+			auto left = find(l-1), right = find(r+1);
+			fhq(left, 0ll);
 			fhq(right, left);
 			root->son[1]->son[0]->tag ^= 1;
 		}
 		node *build(int l, int r, node *fa)
 		{
+
 			if (l > r)
 			{
 				return nullptr;
@@ -130,6 +159,14 @@ namespace Main
 			now->val = mid;
 			now->father = fa;
 			++now->cnt;
+			if (mid==n+1)
+			{
+				now->val = INT_MAX;
+			}
+			if (mid==0)
+			{
+				now->val = INT_MIN;
+			}
 			now->son[0] = build(l, mid - 1, now);
 			now->son[1] = build(mid + 1, r, now);
 			maintain(now);
@@ -151,29 +188,31 @@ namespace Main
 			{
 				dfs(now->son[0]);
 			}
-			cout << now->val << " ";
+			if (now->val <= 1e9 && now->val >= -1e9)
+			{
+				cout << now->val << " ";
+			}
 			if (now->son[1])
 			{
 				dfs(now->son[1]);
 			}
 		}
 	} tree;
-
 	int main()
 	{
-		int n;
 		cin >> n;
 		tree.createroot();
-		tree.build(1, n, tree.root);
+
+		tree.root = tree.build(0, n + 1, tree.root);
 		int m;
 		cin >> m;
 		int x, y;
 		for (int i = 1; i <= m; i++)
 		{
 			cin >> x >> y;
-			tree.reverse(x, y);
+			tree.reverse(x+1, y + 1);
 		}
-		dfs(tree.root->son[1]);
+		tree.dfs(tree.root);
 		return 0;
 	}
 };

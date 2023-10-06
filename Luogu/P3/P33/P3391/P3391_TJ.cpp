@@ -2,16 +2,20 @@
 using namespace std;
 #define MAXN 1000007
 #define INF 100000089
+
 struct fhq_tree
 {
 	int f, sub_size, cnt, value, tag;
 	int son[2];
 } s[MAXN];
+
 int original[MAXN], root, wz;
+
 inline bool which(int x)
 {
 	return x == s[s[x].f].son[1];
 }
+
 inline void update(int x)
 {
 	if (x)
@@ -23,6 +27,7 @@ inline void update(int x)
 			s[x].sub_size += s[s[x].son[1]].sub_size;
 	}
 }
+
 inline void pushdown(int x)
 {
 	if (x && s[x].tag)
@@ -33,6 +38,7 @@ inline void pushdown(int x)
 		s[x].tag = 0;
 	}
 }
+
 inline void rotate(int x)
 {
 	int fnow = s[x].f, ffnow = s[fnow].f;
@@ -49,6 +55,7 @@ inline void rotate(int x)
 	}
 	update(fnow);
 }
+
 inline void fhq(int x, int goal)
 {
 	for (int qwq; (qwq = s[x].f) != goal; rotate(x))
@@ -82,6 +89,7 @@ int build_tree(int l, int r, int fa)
 	update(now);
 	return now;
 }
+
 inline int find(int x)
 {
 	int now = root;
@@ -101,6 +109,7 @@ inline int find(int x)
 		}
 	}
 }
+
 inline void reverse(int x, int y)
 {
 	int l = x - 1, r = y + 1;
@@ -111,6 +120,7 @@ inline void reverse(int x, int y)
 	pos = s[pos].son[0];
 	s[pos].tag ^= 1;
 }
+
 inline void dfs(int now)
 {
 	pushdown(now);
@@ -123,8 +133,13 @@ inline void dfs(int now)
 	if (s[now].son[1])
 		dfs(s[now].son[1]);
 }
+
 int main()
 {
+#ifndef ONLINE_JUDGE
+	freopen("P3391.in", "r", stdin);
+	freopen("P3391_TJ.out", "w", stdout);
+#endif
 	int n, m, x, y;
 	cin >> n >> m;
 	original[1] = -INF, original[n + 2] = INF;

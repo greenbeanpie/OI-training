@@ -53,7 +53,7 @@ namespace Main
 		}
 
 		void not_rotate(node *x)
-		{ // Of course FHQ doesn't need rotate(
+		{
 			auto f1 = x->father, f2 = f1->father;
 			auto r1 = check(x);
 			if (x->son[r1 ^ 1])

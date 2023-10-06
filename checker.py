@@ -89,15 +89,16 @@ except FileNotFoundError:
     except:
         os.chdir(relative_dir)
 
+def compile(problem,OJ):
+    if OJ:
+        return subprocess.open(["g++",problem+".cpp","-O2","-Wall","-Wextra","--std=c++14","-o"+problem,"-DONLINE_JUDGE"])
+    return subprocess.open(["g++",problem+".cpp","-O2","-Wall","-Wextra","--std=c++14","-o"+problem])
+
 prc = 1
 prc1 = 1
 
 spj = bool(int(input("是否需要使用SPJ(testlib.h)? 0: 否 1: 是 ")))
-multi_threading = 1
-if not spj:
-    multi_threading = int(
-        input("使用线程数量: (建议数量:" + str(multiprocessing.cpu_count() - 1) + ") ")
-    )
+multi_threading = int(input("使用线程数量: (建议数量:" + str(multiprocessing.cpu_count()/2) + ") "))
 generator_cpp = bool(int(input("请选择生成器语言: Python(0)/C++(1) ")))
 if generator_cpp:
     if multi_threading == 1:
@@ -185,7 +186,8 @@ def writedata(stdin):
     output.close()
     print(result.get_string())
     print("Hack data has written. Check will now exit.")
-    sys.exit(0)
+    os.system("taskkill /im python.exe /f")
+    # sys.exit(0)
 
 def check(cnt1):
     global tot
@@ -384,7 +386,7 @@ else:
                     continue
             except subprocess.TimeoutExpired:
                 result.add_row(
-                    [str(tot), "\033[35m Time Limit Exceeded \033[0m", ">1000s"]
+                    [str(tot), "\033[35m Time Limit Exceeded \033[0m", ">1000ms"]
                 )
                 if stopwhennotac:
                     break
