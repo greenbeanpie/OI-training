@@ -102,7 +102,7 @@
 			"ios": "cpp"
 		},
 		"[python]": {
-			"editor.defaultFormatter": "ms-python.black-formatter"
+			"editor.defaultFormatter": null
 		},
 		"winopacity.opacity": 220,
 		"python.formatting.provider": "none",

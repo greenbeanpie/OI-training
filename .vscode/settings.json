@@ -67,5 +67,14 @@
 	"editor.formatOnSave": true,
 	"editor.formatOnSaveMode": "modificationsIfAvailable",
 	"editor.formatOnType": true,
-	"diffEditor.codeLens": true
+	"diffEditor.codeLens": true,
+	"editor.wordWrap": "bounded",
+	"editor.bracketPairColorization.independentColorPoolPerBracketType": true,
+	"diffEditor.experimental.showMoves": true,
+	"diffEditor.experimental.useVersion2": true,
+	"editor.acceptSuggestionOnEnter": "smart",
+	"editor.inlineSuggest.suppressSuggestions": false,
+	"editor.suggest.preview": true,
+	"editor.suggest.shareSuggestSelections": false,
+	"files.autoGuessEncoding": true
 }

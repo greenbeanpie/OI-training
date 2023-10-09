@@ -74,7 +74,7 @@
 			"	int l=0,r=INT_MAX;"
 			"	random_device rd;",
 			"	sfmt216091_64 myrand(rd());",
-			"	 uniform_int_distribution<> dist(l,r);",
+			"	uniform_int_distribution<> dist(l,r);",
 			"	",
 			"	int main(){",
 			"		",

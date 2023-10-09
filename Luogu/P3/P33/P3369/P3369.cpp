@@ -164,7 +164,7 @@ namespace Main
 				}
 				else if (cur->son[1])
 				{
-					k -= cur->cnt + (cur->son[0]?cur->son[0]->size:0);
+					k -= cur->cnt + (cur->son[0] ? cur->son[0]->size : 0);
 					if (k <= 0)
 					{
 						fhq(cur);

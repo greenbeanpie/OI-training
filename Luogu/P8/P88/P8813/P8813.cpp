@@ -7,35 +7,42 @@ using namespace std;
 #define int long long
 #define double long double
 #define endl "\n"
-#define problemname "A"
+#define problemname "P8813"
 #define const constexpr
 
 namespace Main{
 	
-	
-	int main(){
-		int q;
-		cin >> q;
-		while(q--){
-			int op,n,x;
-			cin >> op >> n >> x;
-			if(x<n-1){
-				cout << -1 << endl;
-				continue;
-			}
-			for(int i=1;i<=n-2;i++){
-				cout << 1 << " ";
-			}
-			int last=x-n+2;
-			if(op==1){
-				cout << last << " ";
-			}
-			else{
-				cout << 1 << " ";
-			}
-			cout << last << endl;
+	int quickpower(int a,int b){
+		if(a==1){
+			return 1;
 		}
-		
+		if(a>=2&&b>=30){
+			return -1;
+		}
+		int base = a, ans = 1;
+		while(b){
+			if (base > 1e9 || ans > 1e9)
+			{
+				return -1;
+			}
+			if(b&1){
+				ans *= base;
+			}
+			base *= base;
+			b >>= 1;
+			
+		}
+		if(ans>1e9){
+			return -1;
+		}
+		return ans;
+	}
+
+	int main(){
+		int a, b;
+		cin >> a >> b;
+		cout << quickpower(a, b);
+
 		return 0;
 	}
 };

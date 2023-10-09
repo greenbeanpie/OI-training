@@ -7,43 +7,25 @@ using namespace std;
 #define int long long
 #define double long double
 #define endl "\n"
-#define problemname "A"
+#define problemname "P8813"
 #define const constexpr
 
 namespace Main{
-	
+	int l=1,r=40;
+	random_device rd;
+	sfmt216091_64 myrand(rd());
+	uniform_int_distribution<> dist(l,r);
 	
 	int main(){
-		int q;
-		cin >> q;
-		while(q--){
-			int op,n,x;
-			cin >> op >> n >> x;
-			if(x<n-1){
-				cout << -1 << endl;
-				continue;
-			}
-			for(int i=1;i<=n-2;i++){
-				cout << 1 << " ";
-			}
-			int last=x-n+2;
-			if(op==1){
-				cout << last << " ";
-			}
-			else{
-				cout << 1 << " ";
-			}
-			cout << last << endl;
-		}
 		
+		cout << dist(myrand) << " "<< dist(myrand);
 		return 0;
 	}
 };
 
 signed main(){
 #ifndef ONLINE_JUDGE
-	freopen(problemname".in","r",stdin);
-	freopen(problemname".out","w",stdout);
+	freopen(problemname".in","w",stdout);
 #endif
 	ios::sync_with_stdio(false);
 	cin.tie(0),cout.tie(0);
