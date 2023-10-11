@@ -1,5 +1,5 @@
 {
-	"C_Cpp.errorSquiggles": "enabled",
+	"C_Cpp.errorSquiggles": "enabledIfIncludesResolve",
 	"files.associations": {
 		"array": "cpp",
 		"atomic": "cpp",
@@ -68,7 +68,7 @@
 	"editor.formatOnSaveMode": "modificationsIfAvailable",
 	"editor.formatOnType": true,
 	"diffEditor.codeLens": true,
-	"editor.wordWrap": "bounded",
+	"editor.wordWrap": "on",
 	"editor.bracketPairColorization.independentColorPoolPerBracketType": true,
 	"diffEditor.experimental.showMoves": true,
 	"diffEditor.experimental.useVersion2": true,
@@ -76,5 +76,14 @@
 	"editor.inlineSuggest.suppressSuggestions": false,
 	"editor.suggest.preview": true,
 	"editor.suggest.shareSuggestSelections": false,
-	"files.autoGuessEncoding": true
+	"files.autoGuessEncoding": true,
+	"C_Cpp.autocompleteAddParentheses": true,
+	"C_Cpp.inlayHints.autoDeclarationTypes.enabled": true,
+	"C_Cpp.inlayHints.referenceOperator.enabled": true,
+	"C_Cpp.inlayHints.referenceOperator.showSpace": true,
+	"C_Cpp.intelliSenseEngineFallback": "enabled",
+	"C_Cpp.legacyCompilerArgsBehavior": false,
+	"C_Cpp.inlayHints.autoDeclarationTypes.showOnLeft": true,
+	"C_Cpp.inlayHints.parameterNames.enabled": true,
+	"C_Cpp.vcFormat.indent.caseContentsWhenBlock": true
 }

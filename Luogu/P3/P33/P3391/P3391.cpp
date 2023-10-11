@@ -15,7 +15,7 @@ const int N = 1e5 + 5;
 namespace Main
 {
 	int n;
-	struct FHQ
+	struct Splay
 	{
 		int tot = 0;
 
@@ -70,8 +70,8 @@ namespace Main
 			return u->father && (u == (u->father->son[1]));
 		}
 
-		void not_rotate(node *x)
-		{ // Of course FHQ doesn't need rotate(
+		void rotate(node *x)
+		{
 			auto f1 = x->father, f2 = f1->father;
 			pushdown(x), pushdown(f1);
 			auto r1 = check(x);
@@ -90,13 +90,13 @@ namespace Main
 			}
 			maintain(f1), maintain(x);
 		}
-		void fhq(node *x, node *to)
-		{ // emmm,function fhq.
-			for (auto father = x->father; father = x->father, father != to; not_rotate(x))
+		void splay(node *x, node *to)
+		{
+			for (auto father = x->father; father = x->father, father != to; rotate(x))
 			{
 				if (father->father != to)
 				{
-					not_rotate(check(x) == check(father) ? father : x);
+					rotate(check(x) == check(father) ? father : x);
 				}
 			}
 			if (!to)
@@ -104,13 +104,13 @@ namespace Main
 				root = x;
 			}
 		}
-		void fhq(node *x, int to)
-		{ // emmm,function fhq.
-			for (auto father = x->father; father = x->father, father->val != to; not_rotate(x))
+		void splay(node *x, int to)
+		{
+			for (auto father = x->father; father = x->father, father->val != to; rotate(x))
 			{
 				if (father->father->val != to)
 				{
-					not_rotate(check(x) == check(father) ? father : x);
+					rotate(check(x) == check(father) ? father : x);
 				}
 			}
 			if (!to)
@@ -143,8 +143,8 @@ namespace Main
 		void reverse(int l, int r)
 		{
 			auto left = find(l-1), right = find(r+1);
-			fhq(left, 0ll);
-			fhq(right, left);
+			splay(left, 0ll);
+			splay(right, left);
 			root->son[1]->son[0]->tag ^= 1;
 		}
 		node *build(int l, int r, node *fa)

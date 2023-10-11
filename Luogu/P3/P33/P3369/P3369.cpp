@@ -14,7 +14,7 @@ const int N = 1e5 + 5;
 
 namespace Main
 {
-	struct FHQ
+	struct Splay
 	{
 		int tot = 0;
 
@@ -52,7 +52,7 @@ namespace Main
 			return u->father && (u == (u->father->son[1]));
 		}
 
-		void not_rotate(node *x)
+		void rotate(node *x)
 		{
 			auto f1 = x->father, f2 = f1->father;
 			auto r1 = check(x);
@@ -71,13 +71,13 @@ namespace Main
 			}
 			maintain(f1), maintain(x);
 		}
-		void fhq(node *x)
-		{ // emmm,function fhq.
-			for (auto father = x->father; father = x->father, father; not_rotate(x))
+		void splay(node *x)
+		{
+			for (auto father = x->father; father = x->father, father; rotate(x))
 			{
 				if (father->father)
 				{
-					not_rotate(check(x) == check(father) ? father : x);
+					rotate(check(x) == check(father) ? father : x);
 				}
 			}
 			root = x;
@@ -94,7 +94,7 @@ namespace Main
 						++cur->cnt;
 						maintain(cur);
 						maintain(cur->father);
-						fhq(cur);
+						splay(cur);
 						break;
 					}
 					// auto father = cur->father;
@@ -110,7 +110,7 @@ namespace Main
 						cur->son[cur->val < val]->father = cur;
 						maintain(cur);
 						maintain(cur->son[cur->val < val]);
-						fhq(cur->son[cur->val < val]);
+						splay(cur->son[cur->val < val]);
 						break;
 					}
 				}
@@ -139,7 +139,7 @@ namespace Main
 					now += (cur->son[0] ? cur->son[0]->size : 0);
 					if (k == cur->val)
 					{
-						fhq(cur);
+						splay(cur);
 						return now + 1;
 					}
 					now += cur->cnt;
@@ -148,7 +148,7 @@ namespace Main
 				else
 				{
 					now += (cur->son[0] ? cur->son[0]->size : 0);
-					fhq(cur);
+					splay(cur);
 					return now + 1;
 				}
 			}
@@ -167,14 +167,14 @@ namespace Main
 					k -= cur->cnt + (cur->son[0] ? cur->son[0]->size : 0);
 					if (k <= 0)
 					{
-						fhq(cur);
+						splay(cur);
 						return cur->val;
 					}
 					cur = cur->son[1];
 				}
 				else
 				{
-					fhq(cur);
+					splay(cur);
 					return cur->val;
 				}
 			}
@@ -190,7 +190,7 @@ namespace Main
 			{
 				cur = cur->son[1];
 			}
-			fhq(cur);
+			splay(cur);
 			return cur;
 		}
 		node *nxt(node *x)
@@ -204,7 +204,7 @@ namespace Main
 			{
 				cur = cur->son[0];
 			}
-			fhq(cur);
+			splay(cur);
 			return cur;
 		}
 		void del(int x)
