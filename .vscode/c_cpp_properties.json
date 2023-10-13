@@ -12,10 +12,10 @@
             ],
             "compilerPath": "D:/mingw64/bin/g++.exe",
             "cStandard": "c17",
-            "cppStandard": "gnu++17",
+            "cppStandard": "gnu++14",
             "intelliSenseMode": "macos-gcc-arm64",
             "compilerArgs": [
-                "--std=c++20"
+                "--std=c++14"
             ],
             "mergeConfigurations": false,
             "browse": {
@@ -31,13 +31,15 @@
                 "${workspaceFolder}/**",
                 "/usr/include/c++/**"
             ],
-            "defines": [],
+            "defines": [
+                "CODESPACE"
+            ],
             "cStandard": "c17",
-            "cppStandard": "gnu++17",
+            "cppStandard": "c++14",
             "intelliSenseMode": "linux-gcc-x64",
             "compilerPath": "/usr/bin/g++",
             "compilerArgs": [
-                "--std=c++17 -Wall -DCODESPACE"
+                "--std=c++14 -Wall -DCODESPACE"
             ]
         }
     ],

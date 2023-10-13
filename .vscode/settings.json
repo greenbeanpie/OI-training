@@ -85,5 +85,8 @@
 	"C_Cpp.legacyCompilerArgsBehavior": false,
 	"C_Cpp.inlayHints.autoDeclarationTypes.showOnLeft": true,
 	"C_Cpp.inlayHints.parameterNames.enabled": true,
-	"C_Cpp.vcFormat.indent.caseContentsWhenBlock": true
+	"C_Cpp.vcFormat.indent.caseContentsWhenBlock": true,
+	"C_Cpp.default.cppStandard": "c++14",
+	"python.analysis.typeCheckingMode": "basic",
+	"python.analysis.autoImportCompletions": true
 }

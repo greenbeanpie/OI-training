@@ -336,10 +336,11 @@ namespace Main
 		struct node
 		{
 			int cl, cr;
-			node *son[2] = {nullptr, nullptr}, *father=nullptr;
-			Splay *t;
-			node(){
-				t = new Splay;
+			node *son[2] = {nullptr, nullptr}, *father = nullptr;
+			Splay *tree;
+			node()
+			{
+				tree = new Splay;
 			}
 		};
 		vector<int> *arr;
@@ -352,15 +353,81 @@ namespace Main
 		{
 			node *p = new node;
 			p->cl = cl, p->cr = cr;
+			for (auto i = arr->begin() + cl; i <= arr->begin() + cr; i++)
+			{
+				p->tree->insert(*i);
+			}
 			if (cl == cr)
 			{
-				p->t->insert(arr->at(cl));
 				return;
 			}
 			int mid = (cl + cr) >> 1;
 			p->son[0] = build_tree(cl, mid, p);
 			p->son[1] = build_tree(mid + 1, cr, p);
 			return p;
+		}
+		void modify(int k, int val, node *p)
+		{
+			p->tree->del(arr->at(k));
+			p->tree->insert(val);
+			if (p->cl == p->cr)
+			{
+				return;
+			}
+			else
+			{
+				return modify(k, val, p->son[((p->cl + p->cr) >> 1) <= k]);
+			}
+		}
+		void modify(int k, int val)
+		{
+			modify(k, val, root);
+			(*arr)[k] = val;
+		}
+		int rk(int l, int r, int k, node *p)
+		{
+			if (l <= p->cl && p->cr <= r)
+			{
+				return p->tree->rk(k);
+			}
+			int res = 0;
+			if (l <= p->son[0]->cr)
+			{
+				res += rk(l, r, k, p->son[0]);
+			}
+			if (r >= p->son[1]->cl)
+			{
+				res += rk(l, r, k, p->son[1]);
+			}
+			return res;
+		}
+		int rk(int l, int r, int k)
+		{
+			return rk(l, r, k, root);
+		}
+		int pre(int l, int r, int val, node *p)
+		{
+			if (l <= p->cl && p->cr <= r)
+			{
+				p->tree->insert(val);
+				int ans = p->tree->pre(p->tree->root)->val;
+				p->tree->del(val);
+				return ans;
+			}
+			int ans = INT_MIN;
+			if(l<=p->son[0]->cr){
+				ans = max(ans, pre(l, r, val, p->son[1]));
+			}
+			if(r>=p->son[1]->cl){
+				ans = max(ans, pre(l, r, val, p->son[0]));
+			}
+			return ans;
+		}
+		int pre(int l,int r,int val){
+			return pre(l, r, val, root);
+		}
+		int nxt(int l,int r,int val,node *p){
+			
 		}
 	} Tree;
 
@@ -375,26 +442,16 @@ namespace Main
 			switch (opt)
 			{
 			case 1:
-				// tree.insert(x);
 				break;
 			case 2:
-				// tree.del(x);
 				break;
 			case 3:
-				// cout << tree.rk(x) << endl;
 				break;
 			case 4:
-				// cout << tree.kth(x) << endl;
 				break;
 			case 5:
-				// tree.insert(x);
-				// cout << tree.pre(tree.root)->val << endl;
-				// tree.del(x);
 				break;
 			case 6:
-				// tree.insert(x);
-				// cout << tree.nxt(tree.root)->val << endl;
-				// tree.del(x);
 				break;
 			}
 		}

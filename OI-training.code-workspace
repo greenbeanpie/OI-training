@@ -102,15 +102,22 @@
 			"ios": "cpp"
 		},
 		"[python]": {
-			"editor.defaultFormatter": null
+			"editor.defaultFormatter": "ms-python.black-formatter"
 		},
 		"winopacity.opacity": 220,
-		"python.formatting.provider": "none",
+		"python.formatting.provider": "black",
 		"editor.cursorBlinking": "smooth",
 		"terminal.integrated.defaultProfile.windows": "PowerShell",
 		"editor.cursorSmoothCaretAnimation": "on",
 		"editor.formatOnPaste": true,
 		"editor.formatOnSave": true,
-		"editor.formatOnType": true
+		"editor.formatOnType": true,
+		"C_Cpp.inlayHints.referenceOperator.enabled": true,
+		"C_Cpp.inlayHints.referenceOperator.showSpace": true,
+		"C_Cpp.inlayHints.parameterNames.enabled": true,
+		"C_Cpp.inlayHints.autoDeclarationTypes.showOnLeft": true,
+		"C_Cpp.inlayHints.autoDeclarationTypes.enabled": true,
+		"C_Cpp.default.cppStandard": "c++14",
+		"files.eol": "\n"
 	}
 }
