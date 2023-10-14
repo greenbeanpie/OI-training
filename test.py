@@ -9,6 +9,6 @@ def f(x):
 	if(x>1):
 		print(int(x))
 
-x=96
+x=4557785
 
-f(x)
+f(int(input()))

@@ -7,7 +7,7 @@ using namespace std;
 #define int long long
 #define double long double
 #define endl "\n"
-#define problemname ""
+#define problemname "P114514"
 #define const constexpr
 
 namespace Main{
@@ -16,7 +16,8 @@ namespace Main{
 	sfmt216091_64 myrand(rd());
 	uniform_int_distribution<> dist(l,r);
 	int main(){
-		cout << dist(myrand) << " " << dist(myrand);
+		// cout << dist(myrand) << " " << dist(myrand);
+		cout << rd() << " " << rd();
 		return 0;
 	}
 };
