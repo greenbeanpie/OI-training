@@ -75,6 +75,8 @@ try:
                     + problem_name[10:]
                 )
                 problem_name = problem_name[10:]
+    elif problem_name[0:2]=="SP":
+        os.chdir(work_dir+"SPOJ\\"+problem_name)
     elif problem_name == "test":
         os.chdir(work_dir + "\\test\\")
     else:
