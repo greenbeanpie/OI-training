@@ -1,0 +1,189 @@
+#include <bits/stdc++.h>
+#include <bits/extc++.h>
+using namespace std;
+using namespace __gnu_cxx;
+using namespace __gnu_pbds;
+#define int long long
+
+constexpr int N = 1e5 + 5;
+
+vector<int> e[N];
+
+struct node
+{
+	int fa, last, id, dep = 0;
+	int anc[18] = {0};
+	int anc_dis[18] = {0};
+	node(int a, int b, int c, int d)
+	{
+		fa = a, last = b, id = c, dep = d;
+	}
+	node(int b)
+	{
+		last = b;
+	}
+	node()
+	{
+		fa = last = id = dep = 0;
+	}
+};
+
+node subtree[N];
+int siz[N], dep[N], fa[N][18];
+int tot = 0;
+
+void dfs1(int u, int father)
+{
+	fa[u][0] = father;
+	for (int i = 1; i <= 18; i++)
+	{
+		fa[u][i] = fa[fa[u][i - 1]][i - 1];
+		if (!fa[u][i])
+		{
+			break;
+		}
+	}
+	dep[u] = dep[father] + 1;
+	siz[u] = 1;
+	for (auto i : e[u])
+	{
+		if (i != father)
+		{
+			dfs1(i, u);
+			siz[u] += siz[i];
+		}
+	}
+}
+
+bool cmp(node a, node b)
+{
+	return a.last < b.last;
+}
+// bool cmp(node a,int b){
+// 	return a.last < b;
+// }
+
+signed main()
+{
+	freopen("tree.in", "r", stdin);
+	freopen("tree.out", "w", stdout);
+	int n, m, q;
+	cin >> n >> m >> q;
+	for (int i = 1, u, v; i < n; i++)
+	{
+		cin >> u >> v;
+		e[u].push_back(v);
+		e[v].push_back(u);
+	}
+	dfs1(1, 0);
+	subtree[++tot] = {0, n, 0, 1};
+	for (int i = 1, a, b; i <= m; i++)
+	{
+		cin >> a >> b;
+		++tot;
+		subtree[tot] = {b, n = n + siz[a], a, lower_bound(subtree + 1, subtree + tot, node(b), cmp)->dep + 1};
+	}
+	sort(subtree + 1, subtree + tot + 1, cmp);
+	for (int i = 1; i <= tot; i++)
+	{
+		subtree[i].anc[0] = subtree[i].fa;
+		subtree[i].anc_dis[0] = dep[subtree[i].id];
+		for (int j = 1; j <= 18; j++)
+		{
+			subtree[i].anc[j] = subtree[subtree[i].anc[j - 1]].anc[j - 1];
+			if (!subtree[i].anc[j])
+			{
+				break;
+			}
+			subtree[i].anc_dis[j] = subtree[subtree[i].anc[0]].anc_dis[j] - subtree[subtree[i].anc[j]].anc_dis[0] + subtree[i].anc_dis[0];
+		}
+	}
+	for (int i = 1, x, y, ans = 0; i <= q; i++, ans = 0)
+	{
+		cin >> x >> y;
+		int posx = lower_bound(subtree + 1, subtree + tot + 1, node(x), cmp) - subtree, posy = lower_bound(subtree + 1, subtree + tot + 1, node(y), cmp) - subtree;
+		if (posx != posy)
+		{
+			if (x > subtree[posx - 1].last + 1)
+			{
+				ans += dep[x - subtree[posx - 1].last + subtree[posx].id] - 1;
+				x = subtree[posx - 1].last + 1;
+			}
+
+			if (y > subtree[posy - 1].last + 1)
+			{
+				ans += dep[y - subtree[posy - 1].last + subtree[posy].id] - 1;
+				y = subtree[posy - 1].last + 1;
+			}
+			if (subtree[posx].dep < subtree[posy].dep)
+			{
+				swap(x, y);
+				swap(posx, posy);
+			}
+			if (subtree[posx].dep > subtree[posy].dep)
+			{
+				for (int i = 17; i >= 1; i--)
+				{
+					if (subtree[posx].dep - subtree[posy].dep >= (1 << i))
+					{
+						ans += subtree[posx].anc_dis[i];
+						posx = subtree[posx].anc[i];
+					}
+				}
+			}
+			while (subtree[posx].anc[0] != subtree[posy].anc[0])
+			{
+				for (int i = 17; i >= 1; i--)
+				{
+					if (subtree[posx].anc[i] != subtree[posy].anc[i])
+					{
+						ans += subtree[posx].anc_dis[i] + subtree[posy].anc_dis[i];
+						posx = subtree[posx].anc[i], posy = subtree[posy].anc[i];
+					}
+				}
+			}
+			subtree[posx] = subtree[posx].anc[0];
+			subtree[posy] = subtree[posy].anc[0];
+			x = subtree[posx].last, y = subtree[posy].last;
+			ans += 2;
+		}
+		if (posx != 1)
+		{
+			x = x - subtree[posx - 1].last + subtree[posx - 1].id, y = y - subtree[posy - 1].last + subtree[posy - 1].id;
+		}
+		if (dep[x] < dep[y])
+		{
+			swap(x, y);
+		}
+		if (dep[x] > dep[y])
+		{
+			for (int j = 17; j >= 1; j--)
+			{
+				if (dep[x] - dep[y] >= (1 << j))
+				{
+					ans += (1 << j);
+					x = fa[x][j];
+				}
+			}
+		}
+		while (x != y)
+		{
+			if (fa[x][0] == fa[y][0])
+			{
+				ans += 2;
+				x = y = fa[x][0];
+				break;
+			}
+			for (int j = 17; j >= 1; j--)
+			{
+				if (fa[x][j] != fa[y][j])
+				{
+					x = fa[x][j], y = fa[y][j];
+					ans += (1 << (j + 1));
+				}
+			}
+		}
+		cout << ans << endl;
+	}
+	return 0;
+}

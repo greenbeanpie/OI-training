@@ -266,6 +266,10 @@ int read()
 
 int main()
 {
+#ifndef ONLINE_JUDGE
+	freopen("P3380.in", "r", stdin);
+	freopen("P3380_TJ.out", "w", stdout);
+#endif
 	n = read();
 	m = read();
 	for (int i = 1; i < n + 1; ++i)

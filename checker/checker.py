@@ -12,7 +12,9 @@ lock1 = threading.Lock()
 result = prettytable.PrettyTable()
 result.field_names = ["Test Case", "Result", "Time"]
 
-max_buffer_size = 20 * 1048576
+max_buffer_size = -1
+
+generator_timeout = 5
 
 islinux = True
 
@@ -26,7 +28,8 @@ print(
     "Python code checker for OI.\nDeveloped by HMZ_0915.\nThese features are developing in progress: check by subtasks, memory limit set(on linux platform)\n\n"
 )
 
-work_dir = "F:\\OI-training\\"
+# work_dir = "F:/OI-training/"
+work_dir = os.getcwd()+"/"
 
 print("目前支持自动查找文件目录的题目: Luogu, CodeForces, ZROI 10-day NOIP")
 
@@ -36,22 +39,22 @@ try:
     if problem_name[0] == "P":
         os.chdir(
             work_dir
-            + "Luogu\\"
+            + "Luogu/"
             + problem_name[0:2]
-            + "\\"
+            + "/"
             + problem_name[0:3]
-            + "\\"
+            + "/"
             + problem_name
-            + "\\"
+            + "/"
         )
     elif problem_name[0:2] == "CF":
         problem_name = problem_name[2:]
         sub_dir = problem_name[: len(problem_name) - 1]
         os.chdir(
             work_dir
-            + "Codeforce\\"
+            + "Codeforce/"
             + sub_dir
-            + "\\"
+            + "/"
             + problem_name[len(problem_name) - 1 :]
         )
         problem_name = problem_name[len(problem_name) - 1 :]
@@ -60,25 +63,25 @@ try:
             if problem_name[8:10] == "10":
                 os.chdir(
                     work_dir
-                    + "ZROI\\NOIP10\\"
+                    + "ZROI/NOIP10/"
                     + problem_name[8:10]
-                    + "\\"
+                    + "/"
                     + problem_name[11:]
                 )
                 problem_name = problem_name[11:]
             else:
                 os.chdir(
                     work_dir
-                    + "ZROI\\NOIP10\\"
+                    + "ZROI/NOIP10/"
                     + problem_name[8:9]
-                    + "\\"
+                    + "/"
                     + problem_name[10:]
                 )
                 problem_name = problem_name[10:]
     elif problem_name[0:2]=="SP":
-        os.chdir(work_dir+"SPOJ\\"+problem_name)
+        os.chdir(work_dir+"SPOJ/"+problem_name)
     elif problem_name == "test":
-        os.chdir(work_dir + "\\test\\")
+        os.chdir(work_dir + "/test/")
     else:
         relative_dir = input("请输入路径 ")
         try:
@@ -92,8 +95,9 @@ except FileNotFoundError:
     except:
         os.chdir(relative_dir)
 
+enable_sanitizer = bool(int(input("Enable UE/Address sanitizer?")))
 
-def compile(problem, OJ):
+def compile(problem, OJ,sanitizer=enable_sanitizer):
     if OJ:
         return subprocess.Popen(
             [
@@ -132,12 +136,9 @@ if generator_cpp:
 
 if spj:
     compile("checker", 1)
-elif multi_threading == 1:
-    prc = compile(problem_name + "_TJ", 0)
-    prc1 = compile(problem_name, 0)
-else:
-    prc = compile(problem_name + "_TJ", 1)
-    prc1 = compile(problem_name, 1)
+
+prc = compile(problem_name + "_TJ", 1)
+prc1 = compile(problem_name, 1)
 
 cnt = int(input("请输入对拍次数 "))
 timeout = float(input("请输入超时时间(单位:s) "))
@@ -172,6 +173,8 @@ def writedata(stdin):
     print(result.get_string())
     print("Hack data has written. Check will now exit.")
     os.system("taskkill /im python.exe /f")
+    os.system("killall python")
+    os.system("killall python3")
     # sys.exit(0)
 
 
@@ -181,9 +184,10 @@ def compare(
     if mode == 0:
         str1 = str1.replace(" \n", "\n")
         str2 = str2.replace(" \n", "\n")
-        while str1[len(str1) - 1] == "\n" or str1[len(str1) - 1] == " ":
+        
+        while len(str1)>1 and (str1[len(str1) - 1] == "\n" or str1[len(str1) - 1] == " "):
             str1 = str1[0 : len(str1) - 1]
-        while str2[len(str2) - 1] == "\n" or str2[len(str2) - 1] == " ":
+        while len(str2)>1 and (str2[len(str2) - 1] == "\n" or str2[len(str2) - 1] == " "):
             str2 = str2[0 : len(str2) - 1]
         return str1 == str2
     elif mode == 1:
@@ -204,7 +208,7 @@ def compare(
 # $ \geq 16$. Partial Accepted
 
 
-def run(name="", stdin="", timeout=114514.0):
+def run(name="", stdin="", timeout=generator_timeout):
     start = time.perf_counter()
     prc = 0
     if islinux:
@@ -212,19 +216,20 @@ def run(name="", stdin="", timeout=114514.0):
             ["./" + name],
             stdin=subprocess.PIPE,
             stdout=subprocess.PIPE,
-            bufsize=max_buffer_size,
+            # bufsize=max_buffer_size,
         )
     else:
         prc = subprocess.Popen(
-            [".\\" + name],
+            ["./" + name],
             stdin=subprocess.PIPE,
             stdout=subprocess.PIPE,
-            bufsize=max_buffer_size,
+            # bufsize=max_buffer_size,
         )
     code = 0
     output = b""
     try:
-        output = prc.communicate(input=stdin.encode(), timeout=timeout)[0]
+        output = prc.communicate(input=stdin.encode(), timeout=timeout)
+        output=output[0]
         code = prc.returncode
     except subprocess.TimeoutExpired:
         return (output.decode(), 6, -1.0)
@@ -245,7 +250,7 @@ def judge(ins="", out="", ans="", spj=False):
 
 
 def gen():
-    return run("generator")[0]
+    return run("generator")
 
 
 def operate(stdin=""):
@@ -255,12 +260,19 @@ def operate(stdin=""):
 def check(cnt1):
     global tot
     for i in range(1, cnt1 + 1):
+        
         wawrite.acquire()
         wawrite.release()
         # launch your data generator or generate input data here
         stdin = ""
         if generator_cpp:
-            stdin = run("generator")[0]
+            stdin = gen()
+            if(stdin[1]!=0):
+                tot=tot+1
+                result.add_row([str(tot), "\033[35m Unknown Error(Generator) \033[0m", "-1ms"])
+                continue
+            else:
+                stdin = stdin[0]
         else:
             stdin = subprocess.Popen(["python", "generator.py"],stdin=subprocess.PIPE,stdout=subprocess.PIPE,).communicate()[0].decode()
             
@@ -272,6 +284,8 @@ def check(cnt1):
         # launch your program here
         TJ = run(problem_name + "_TJ", stdin=stdin)
         target = run(problem_name, stdin=stdin, timeout=timeout)
+        # lock1.acquire()
+        tot=tot+1
         if target[1] == 5:
             result.add_row([str(tot), "\033[35m Runtime Error \033[0m", "-1ms"])
             if stopwhennotac:
@@ -300,8 +314,8 @@ def check(cnt1):
             )
             if stopwhennotac:
                 writedata(stdin)
-        tot = tot + 1
         print("checking in progress: " + str(tot) + "/" + str(cnt), end="\r")
+        # lock1.release()
 
 total = floor(cnt / multi_threading)
 num1 = total

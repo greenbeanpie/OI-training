@@ -4,10 +4,11 @@ using namespace __gnu_pbds;
 using namespace __gnu_cxx;
 using namespace std;
 #pragma GCC target("sse,sse2,sse3,ssse3,sse4.1,sse4.2,avx,avx2,popcnt,lzcnt,abm,bmi,bmi2,fma,tune=native")
+// #pragma GCC optimize(2)
 #define int long long
 #define double long double
 #define endl "\n"
-#define problemname "P3369"
+#define problemname "P3380"
 
 #define gc() (p1 == p2 && (p2 = (p1 = ibuf) + fread(ibuf, 1, SIZE, stdin), p1 == p2) ? EOF : *p1++)
 namespace FastIO
@@ -87,7 +88,7 @@ namespace FastIO
 		pc(' ');
 	}
 	template <typename _Tp>
-	inline void writeln(_Tp x) { write(x), pc(' '); }
+	inline void writeln(_Tp x) { write(x), pc('\n'); }
 	template <typename _Tp, typename... Args>
 	inline void read(_Tp &x, Args &...args) { read(x), read(args...); }
 	template <typename _Tp, typename... Args>
@@ -105,6 +106,9 @@ const int N = 1e5 + 5;
 
 namespace Main
 {
+
+	vector<int> num = vector<int>(1);
+
 	struct Splay
 	{
 		int tot = 0;
@@ -128,7 +132,7 @@ namespace Main
 			}
 		};
 
-		node *root;
+		node *root = nullptr;
 
 		void maintain(node *u)
 		{
@@ -221,20 +225,31 @@ namespace Main
 			int now = 0;
 			while (1)
 			{
-				if (cur->son[0] && k < cur->val)
+				if (k < cur->val)
 				{
-					cur = cur->son[0];
-				}
-				else if (cur->son[1])
-				{
-					now += (cur->son[0] ? cur->son[0]->size : 0);
-					if (k == cur->val)
+					if (cur->son[0])
+					{
+						cur = cur->son[0];
+					}
+					else
 					{
 						splay(cur);
 						return now + 1;
 					}
+				}
+				else if (k > cur->val)
+				{
+					now += (cur->son[0] ? cur->son[0]->size : 0);
 					now += cur->cnt;
-					cur = cur->son[1];
+					if (cur->son[1])
+					{
+						cur = cur->son[1];
+					}
+					else
+					{
+						splay(cur);
+						return now + 1;
+					}
 				}
 				else
 				{
@@ -345,13 +360,20 @@ namespace Main
 		};
 		vector<int> *arr;
 		node *root;
+		Segtree()
+		{
+			arr = nullptr;
+			root = nullptr;
+		}
 		Segtree(vector<int> &a)
 		{
 			arr = &a;
+			root = build_tree(1, arr->size() - 1, nullptr);
 		}
 		node *build_tree(int cl, int cr, node *fa)
 		{
 			node *p = new node;
+			p->father = fa;
 			p->cl = cl, p->cr = cr;
 			for (auto i = arr->begin() + cl; i <= arr->begin() + cr; i++)
 			{
@@ -359,7 +381,7 @@ namespace Main
 			}
 			if (cl == cr)
 			{
-				return;
+				return p;
 			}
 			int mid = (cl + cr) >> 1;
 			p->son[0] = build_tree(cl, mid, p);
@@ -376,7 +398,7 @@ namespace Main
 			}
 			else
 			{
-				return modify(k, val, p->son[((p->cl + p->cr) >> 1) <= k]);
+				return modify(k, val, p->son[(p->son[0]->cr < k)]);
 			}
 		}
 		void modify(int k, int val)
@@ -384,26 +406,29 @@ namespace Main
 			modify(k, val, root);
 			(*arr)[k] = val;
 		}
-		int rk(int l, int r, int k, node *p)
+		int rnk(int l, int r, int k, node *p)
 		{
 			if (l <= p->cl && p->cr <= r)
 			{
-				return p->tree->rk(k);
+				// p->tree->insert(k);
+				int res = p->tree->rk(k) - 1;
+				// p->tree->del(k);
+				return res;
 			}
 			int res = 0;
 			if (l <= p->son[0]->cr)
 			{
-				res += rk(l, r, k, p->son[0]);
+				res += rnk(l, r, k, p->son[0]);
 			}
 			if (r >= p->son[1]->cl)
 			{
-				res += rk(l, r, k, p->son[1]);
+				res += rnk(l, r, k, p->son[1]);
 			}
 			return res;
 		}
-		int rk(int l, int r, int k)
+		int rnk(int l, int r, int k)
 		{
-			return rk(l, r, k, root);
+			return rnk(l, r, k, root) + 1;
 		}
 		int pre(int l, int r, int val, node *p)
 		{
@@ -412,49 +437,113 @@ namespace Main
 				p->tree->insert(val);
 				int ans = p->tree->pre(p->tree->root)->val;
 				p->tree->del(val);
+				if (ans >= val)
+				{
+					return -2147483647;
+				}
 				return ans;
 			}
 			int ans = INT_MIN;
-			if(l<=p->son[0]->cr){
-				ans = max(ans, pre(l, r, val, p->son[1]));
-			}
-			if(r>=p->son[1]->cl){
+			if (l <= p->son[0]->cr)
+			{
 				ans = max(ans, pre(l, r, val, p->son[0]));
+			}
+			if (r >= p->son[1]->cl)
+			{
+				ans = max(ans, pre(l, r, val, p->son[1]));
 			}
 			return ans;
 		}
-		int pre(int l,int r,int val){
+		int pre(int l, int r, int val)
+		{
 			return pre(l, r, val, root);
 		}
-		int nxt(int l,int r,int val,node *p){
-			
+		int nxt(int l, int r, int val, node *p)
+		{
+			if (l <= p->cl && p->cr <= r)
+			{
+				p->tree->insert(val);
+				int ans = p->tree->nxt(p->tree->root)->val;
+				p->tree->del(val);
+				if (ans <= val)
+				{
+					return 2147483647;
+				}
+				return ans;
+			}
+			int ans = 2147483647;
+			if (l <= p->son[0]->cr)
+			{
+				ans = min(ans, nxt(l, r, val, p->son[0]));
+			}
+			if (r >= p->son[1]->cl)
+			{
+				ans = min(ans, nxt(l, r, val, p->son[1]));
+			}
+			return ans;
+		}
+		int nxt(int l, int r, int val)
+		{
+			return nxt(l, r, val, root);
+		}
+		int kth(int l, int r, int val)
+		{
+			int cl = -1, cr = 1e8 + 1, mid;
+			while (cl < cr)
+			{
+				mid = (cl + cr+1) >> 1;
+				if (rnk(l, r, mid) <= val)
+				{
+					cl = mid;
+				}
+				else
+				{
+					cr = mid - 1;
+				}
+			}
+			return cl;
 		}
 	} Tree;
 
 	int main()
 	{
-		int n;
-		cin >> n;
-		int opt, x;
-		while (n--)
+		int n, m;
+		FastIO::read(n, m);
+		for (int i = 1, temp; i <= n; i++)
 		{
-			cin >> opt >> x;
+			FastIO::read(temp);
+			num.push_back(temp);
+		}
+		Tree = Segtree(num);
+		int opt, l, r, pos, x;
+		while (m--)
+		{
+			FastIO::read(opt);
 			switch (opt)
 			{
 			case 1:
+				FastIO::read(l, r, x);
+				FastIO::writeln(Tree.rnk(l, r, x));
 				break;
 			case 2:
+				FastIO::read(l, r, x);
+				FastIO::writeln(Tree.kth(l, r, x));
 				break;
 			case 3:
+				FastIO::read(pos, x);
+				Tree.modify(pos, x);
 				break;
 			case 4:
+				FastIO::read(l, r, x);
+				FastIO::writeln(Tree.pre(l, r, x));
 				break;
 			case 5:
-				break;
-			case 6:
+				FastIO::read(l, r, x);
+				FastIO::writeln(Tree.nxt(l, r, x));
 				break;
 			}
 		}
+		FastIO::flush();
 		return 0;
 	}
 };
