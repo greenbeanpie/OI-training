@@ -124,8 +124,10 @@ string c[N];
 
 signed main()
 {
+#ifndef ONLINE_JUDGE
 	freopen("string.in", "r", stdin);
 	freopen("string.out", "w", stdout);
+#endif
 	ios::sync_with_stdio(false);
 	cin.tie(0), cout.tie(0);
 	int n;
