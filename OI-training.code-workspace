@@ -105,7 +105,7 @@
 			"editor.defaultFormatter": "ms-python.black-formatter"
 		},
 		"winopacity.opacity": 220,
-		"python.formatting.provider": "black",
+		"python.formatting.provider": "none",
 		"editor.cursorBlinking": "smooth",
 		"terminal.integrated.defaultProfile.windows": "PowerShell",
 		"editor.cursorSmoothCaretAnimation": "on",

@@ -10,7 +10,7 @@ def write(
     pronunciation="", # 音标
     chinese="", # 中文
     part_of_speech="", # 词性
-    attri="" # 其他属性，如是否可数
+    attri="", # 其他属性，如是否可数
     example_CHN=[], # 例子中文
     example_ENG=[], # 例子英文
     sentence=[], # 只有英文的例句
