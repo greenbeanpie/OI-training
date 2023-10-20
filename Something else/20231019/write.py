@@ -5,14 +5,15 @@ shape = ""
 
 
 def write(
-    file,
-    word="",
-    pronunciation="",
-    chinese="",
-    part_of_speech="",
-    example_CHN=[],
-    example_ENG=[],
-    sentence=[],
+    file, # 要写入的文件
+    word="", # 原文
+    pronunciation="", # 音标
+    chinese="", # 中文
+    part_of_speech="", # 词性
+    attri="" # 其他属性，如是否可数
+    example_CHN=[], # 例子中文
+    example_ENG=[], # 例子英文
+    sentence=[], # 只有英文的例句
 ):
     file.write("")
     file.write("\\begin{itemize}\n")

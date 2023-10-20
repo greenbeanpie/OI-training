@@ -74,17 +74,6 @@ for j in range(cnt):
     # for j in res:
     pronoun = content.find_all("span", class_="pron dpron")[0]
 	temp = content.find_all("")
-    write(
-        file,
-        word,
-        j.find_all("span", class_="trans dtrans dtrans-se break-cj")[0].text,
-        j.find_all("span", class_="pos dpos")[0].text,
-        j.find_all(
-            "span", class_="trans dtrans dtrans-se hdb break-cj", lang="zh-Hans"
-        ),
-        j.find_all("span", class_="eg deg"),
-        j.find_all("li", class_="eg dexamp hax"),
-    )
     file.write("\n\n\n")
 
 file.write(tail)
