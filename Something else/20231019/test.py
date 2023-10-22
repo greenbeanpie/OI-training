@@ -1,22 +1,35 @@
 #! /usr/bin/python3
 # encoding=utf-8
 
-import requests, os
+import requests, os, sys
 from bs4 import BeautifulSoup
 from write import *
+from tqdm import tqdm
+from requests.adapters import HTTPAdapter
+from requests.packages.urllib3.util.retry import Retry
 
-os.chdir(os.getcwd() + "/Something else/")
+os.chdir(os.getcwd() + "/Something else/20231019/")
 
 
 head = """
-\\documentclass[a4paper,12pt]{article}
+\\documentclass[a4paper,12pt]{book}
 
 \\usepackage[UTF8]{ctex}
-\\usepackage[UTF8]{fontspec}
+\\usepackage{tipa}
+\\usepackage{color}
 
 \\setmainfont{Times New Roman}
 
 \\begin{document}
+
+\\title{Vocabulary}
+\\author{author}
+\\maketitle
+
+\\pagenumbering{roman}
+\\tableofcontents
+\\newpage
+\\pagenumbering{arabic}
 """
 
 tail = """\\end{document}"""
@@ -29,56 +42,152 @@ header = {
 
 file = open("test.tex", "w+")
 
+stdin = open("word.in", "r")
+
 file.write(head)
 
-cnt = 1
+# book = input("请输入书本:")
 
-# cnt = int(input("输入次数:"))
-
-# page = input("请输入页数:")
+cntbook = int(stdin.readline())
 
 
-for j in range(cnt):
-	word = input()
-
-	response = requests.get(
-	    "https://dictionary.cambridge.org/dictionary/english-chinese-simplified/"
-	    + word,
-	    headers=header,
+def solve(word):
+	# templine.set_description("Processing "+nowpage)
+	session = requests.Session()
+	retry = Retry(total=114514, backoff_factor=5)
+	adapter = HTTPAdapter(max_retries=retry)
+	session.mount('http://', adapter)
+	session.mount('https://', adapter)
+	response = session.get(
+		"https://dictionary.cambridge.org/dictionary/english-chinese-simplified/"
+		+ word,
+		headers=header,
 	)
 	content = BeautifulSoup(response.text, "lxml")
 	# tempfile = open("test.out","r")
 	# temptext = tempfile.read()
 	# tempfile.close()
 	# content = BeautifulSoup(temptext ,"lxml")
-	for content1 in content.find_all("div",class_="pr entry-body__el"):
-		temp = content1.find_all("div", class_="pr dsense")
-		pronoun = content1.find_all("span", class_="pron dpron")[0]
-		if len(temp) != 0:
-			for content in temp:
-				chinese = content.find_all("span",class_="trans dtrans dtrans-se break-cj")[0].text
-				part_of_speech = content.find_all("span", class_="pos dsense_pos")[0].text
-				attri = ""
-				attri = content.find_all("span", class_="dgram")[0].text
-				describe = content.find_all("span",class_="guideword dsense_gw")
-				example_ENG = content.find_all("span",class_="eg deg")
-				example_CHI = content.find_all("span",class_="trans dtrans dtrans-se hdb break-cj")
-				sentence = content.find_all("li",class_="eg dexamp hax")
-		else:
-			# content = temp[0]
-			chinese = content.find_all("span",class_="trans dtrans dtrans-se break-cj")[0].text
-			part_of_speech = ""
+	# print(content)
+	try:
+		for content1 in content.find_all("div", class_="pr entry-body__el"):
+			temp = content1.find_all("div", class_="pr dsense")
+			pronoun=""
 			try:
-				part_of_speech = content.find_all("span", class_="pos dpos")[0].text
-			except IndexError:
-				part_of_speech = content.find_all("span",class_="pos dsense_pos")[0].text
-			attri = ""
-			attri = content.find_all("span", class_="dgram")[0].text
-			describe = content.find_all("span",class_="guideword dsense_gw")
-			example_ENG = content.find_all("span",class_="eg deg")
-			example_CHI = content.find_all("span",class_="trans dtrans dtrans-se hdb break-cj")
-			sentence = content.find_all("li",class_="eg dexamp hax")
-	file.write("\n\n\n")
+				pronoun = content1.find_all("span", class_="pron dpron")[0].text
+			except:
+				pass
+			if len(temp) != 0:
+				for content in temp:
+					chinese = content.find_all(
+						"span", class_="trans dtrans dtrans-se break-cj"
+					)[0].text
+					part_of_speech = content.find_all("span", class_="pos dsense_pos")[
+						0
+					].text
+					attri = ""
+					try:
+						attri = content.find_all("span", class_="dgram")[0].text
+					except:
+						pass
+					describe = content.find_all("span", class_="guideword dsense_gw")
+					example_ENG = content.find_all("span", class_="eg deg")
+					example_CHI = content.find_all(
+						"span", class_="trans dtrans dtrans-se hdb break-cj"
+					)
+					sentence = content.find_all("li", class_="eg dexamp hax")
+					write(
+						file,
+						word,
+						pronoun,
+						chinese,
+						part_of_speech,
+						attri,
+						example_CHI,
+						example_ENG,
+						sentence,
+					)
+			else:
+				# content = temp[0]
+				chinese = content.find_all(
+					"span", class_="trans dtrans dtrans-se break-cj"
+				)[0].text
+				part_of_speech = ""
+				try:
+					part_of_speech = content.find_all("span", class_="pos dpos")[0].text
+				except IndexError:
+					part_of_speech = content.find_all("span", class_="pos dsense_pos")[
+						0
+					].text
+				attri = ""
+				try:
+					attri = content.find_all("span", class_="dgram")[0].text
+				except:
+					pass
+				describe = content.find_all("span", class_="guideword dsense_gw")
+				example_ENG = content.find_all("span", class_="eg deg")
+				example_CHI = content.find_all(
+					"span", class_="trans dtrans dtrans-se hdb break-cj"
+				)
+				sentence = content.find_all("li", class_="eg dexamp hax")
+				write(
+					file,
+					word,
+					pronoun,
+					chinese,
+					part_of_speech,
+					attri,
+					example_CHI,
+					example_ENG,
+					sentence,
+				)
+	except:
+		print("Error occured on word "+word+", please check the code or spelling.")
+	# file.write("\n\n\n")
+
+
+for nowbook in range(cntbook):
+	book = stdin.readline().replace("\n","")
+
+	page = int(stdin.readline())
+
+	file.write("\\chapter{" + book + "}\n")
+
+	for i in range(page):
+		# temp = stdin.readline().split()
+		nowpage = stdin.readline().replace("\n", "")
+		# print("processing "+nowpage)
+		file.write(
+			"\\textcolor[RGB]{128,0,255}{\\section{"
+			+ book
+			+ " "
+			+ nowpage
+			+ " "
+			+ stdin.readline().replace("\n", "")
+			+ "}}\n"
+		)
+		# file.write("\\begin{enumerate}\n")
+		# cnt = int(stdin.readline())
+		cnt=int(stdin.readline())
+		words=[]
+		for i in range(cnt):
+			words.append(stdin.readline().replace("\n",""))
+		# words = stdin.readline()
+		threadings = []
+		for word in words:
+			threadings.append(
+				threading.Thread(
+					target=solve,
+					args=[
+						word,
+					],
+				)
+			)
+		for t in threadings:
+			t.start()
+		for t in threadings:
+			t.join()
+
 
 file.write(tail)
 file.close()
