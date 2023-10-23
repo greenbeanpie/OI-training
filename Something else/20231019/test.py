@@ -11,19 +11,20 @@ from requests.packages.urllib3.util.retry import Retry
 os.chdir(os.getcwd() + "/Something else/20231019/")
 
 
+
 head = """
-\\documentclass[a4paper,12pt]{book}
+\\documentclass[a4paper,top=2.5cm,buttom=2.5cm10.5pt]{book}
 
 \\usepackage[UTF8]{ctex}
 \\usepackage{tipa}
 \\usepackage{color}
+\\usepackage{geometry}
 
 \\setmainfont{Times New Roman}
 
 \\begin{document}
 
 \\title{Vocabulary}
-\\author{author}
 \\maketitle
 
 \\pagenumbering{roman}
@@ -50,9 +51,12 @@ file.write(head)
 
 cntbook = int(stdin.readline())
 
+lock=threading.Lock()
 
 def solve(word):
 	# templine.set_description("Processing "+nowpage)
+	word = word.replace(" ","-")
+	word = word.replace("/","-")
 	session = requests.Session()
 	retry = Retry(total=114514, backoff_factor=5)
 	adapter = HTTPAdapter(max_retries=retry)
@@ -63,63 +67,39 @@ def solve(word):
 		+ word,
 		headers=header,
 	)
-	content = BeautifulSoup(response.text, "lxml")
+	contentori = BeautifulSoup(response.text, "lxml")
+	try:
+		word = contentori.find_all("span",class_="hw dhw")[0].text
+	except:
+		print("Error occured on word "+word+", please check the code or spelling.")
 	# tempfile = open("test.out","r")
 	# temptext = tempfile.read()
 	# tempfile.close()
 	# content = BeautifulSoup(temptext ,"lxml")
 	# print(content)
 	try:
-		for content1 in content.find_all("div", class_="pr entry-body__el"):
+		lock.acquire()
+		for content1 in contentori.find_all("div", class_="pr entry-body__el"):
 			temp = content1.find_all("div", class_="pr dsense")
 			pronoun=""
 			try:
 				pronoun = content1.find_all("span", class_="pron dpron")[0].text
 			except:
 				pass
-			if len(temp) != 0:
-				for content in temp:
-					chinese = content.find_all(
-						"span", class_="trans dtrans dtrans-se break-cj"
-					)[0].text
-					part_of_speech = content.find_all("span", class_="pos dsense_pos")[
-						0
-					].text
-					attri = ""
-					try:
-						attri = content.find_all("span", class_="dgram")[0].text
-					except:
-						pass
-					describe = content.find_all("span", class_="guideword dsense_gw")
-					example_ENG = content.find_all("span", class_="eg deg")
-					example_CHI = content.find_all(
-						"span", class_="trans dtrans dtrans-se hdb break-cj"
-					)
-					sentence = content.find_all("li", class_="eg dexamp hax")
-					write(
-						file,
-						word,
-						pronoun,
-						chinese,
-						part_of_speech,
-						attri,
-						example_CHI,
-						example_ENG,
-						sentence,
-					)
-			else:
-				# content = temp[0]
+			try:
+				part_of_speech = content1.find_all("span", class_="pos dsense_pos")[0].text
+			except:
+				part_of_speech = content1.find_all("span",class_="pos dpos")[0].text
+			attri=""
+			try:
+				attri = content1.find_all("span", class_="dgram")[0].text
+			except:
+				pass
+			temp2 = content1.find_all("div",class_="def-block ddef_block")
+			for content in temp2:
 				chinese = content.find_all(
 					"span", class_="trans dtrans dtrans-se break-cj"
 				)[0].text
-				part_of_speech = ""
-				try:
-					part_of_speech = content.find_all("span", class_="pos dpos")[0].text
-				except IndexError:
-					part_of_speech = content.find_all("span", class_="pos dsense_pos")[
-						0
-					].text
-				attri = ""
 				try:
 					attri = content.find_all("span", class_="dgram")[0].text
 				except:
@@ -141,8 +121,44 @@ def solve(word):
 					example_ENG,
 					sentence,
 				)
+		lock.release()
+			# else:
+			# 	# content = temp[0]
+			# 	chinese = contentori.find_all(
+			# 		"span", class_="trans dtrans dtrans-se break-cj"
+			# 	)[0].text
+			# 	part_of_speech = ""
+			# 	try:
+			# 		part_of_speech = contentori.find_all("span", class_="pos dpos")[0].text
+			# 	except IndexError:
+			# 		part_of_speech = contentori.find_all("span", class_="pos dsense_pos")[
+			# 			0
+			# 		].text
+			# 	attri = ""
+			# 	try:
+			# 		attri = contentori.find_all("span", class_="dgram")[0].text
+			# 	except:
+			# 		pass
+			# 	describe = contentori.find_all("span", class_="guideword dsense_gw")
+			# 	example_ENG = contentori.find_all("span", class_="eg deg")
+			# 	example_CHI = contentori.find_all(
+			# 		"span", class_="trans dtrans dtrans-se hdb break-cj"
+			# 	)
+			# 	sentence = contentori.find_all("li", class_="eg dexamp hax")
+			# 	write(
+			# 		file,
+			# 		word,
+			# 		pronoun,
+			# 		chinese,
+			# 		part_of_speech,
+			# 		attri,
+			# 		example_CHI,
+			# 		example_ENG,
+			# 		sentence,
+			# 	)
 	except:
 		print("Error occured on word "+word+", please check the code or spelling.")
+		lock.release()
 	# file.write("\n\n\n")
 
 
@@ -187,6 +203,7 @@ for nowbook in range(cntbook):
 			t.start()
 		for t in threadings:
 			t.join()
+			
 
 
 file.write(tail)
