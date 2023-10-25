@@ -4,7 +4,7 @@
 import requests, os, sys
 from bs4 import BeautifulSoup
 from write import *
-from tqdm import tqdm
+# from tqdm import tqdm
 from requests.adapters import HTTPAdapter
 from requests.packages.urllib3.util.retry import Retry
 
@@ -13,14 +13,26 @@ os.chdir(os.getcwd() + "/Something else/20231019/")
 
 
 head = """
-\\documentclass[a4paper,top=2.5cm,buttom=2.5cm10.5pt]{book}
+\\documentclass[a4paper,margin=1.0cm,10.5pt]{book}
 
 \\usepackage[UTF8]{ctex}
 \\usepackage{tipa}
 \\usepackage{color}
 \\usepackage{geometry}
+\\usepackage{fontspec}
+\\usepackage{xcolor}
+\\usepackage{titlesec}
+\\defaultfontfeatures{Ligatures=TeX}
 
 \\setmainfont{Times New Roman}
+
+\\renewcommand{\\large}{\\fontsize{14pt}{\\baselineskip}\\selectfont}
+
+\\definecolor{Purple}{rgb}{.256,.0,.511}
+
+\\newfontfamily\\sectionfont[Color=Purple]{Times New Roman}
+
+\\titleformat*{\\section}{\\large\\bfseries\\sffamily\\color{Purple}}
 
 \\begin{document}
 
@@ -201,7 +213,7 @@ for nowbook in range(cntbook):
 			)
 		for t in threadings:
 			t.start()
-		for t in threadings:
+		# for t in threadings:
 			t.join()
 			
 

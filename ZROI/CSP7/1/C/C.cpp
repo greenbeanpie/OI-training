@@ -14,7 +14,7 @@ using namespace std;
 namespace Main
 {
 
-	cc_hash_table<int, int> dp;
+	cc_hash_table<int, int> cnt;
 	int s[15];
 
 	int main()
@@ -30,14 +30,14 @@ namespace Main
 		{
 			cin >> s[i];
 		}
-		dp[0] = 1;
+		cnt[0] = 1;
 
 		for (int i = 0; i < 20; i++)
 		{
-			dp[i] %= 2027;
+			cnt[i] %= 2027;
 			for (int j = 1; j <= m; j++)
 			{
-				dp[i + s[j]] += dp[i] * (i + 1);
+				cnt[i + s[j]] += cnt[i] * (i + 1);
 			}
 		}
 		if(n>10000000){
@@ -45,15 +45,15 @@ namespace Main
 		}
 		for (int i = 20; i < n; i++)
 		{
-			dp.erase(i - 20);
-			dp[i] %= 2027;
+			cnt.erase(i - 20);
+			cnt[i] %= 2027;
 			for (int j = 1; j <= m; j++)
 			{
-				dp[i + s[j]] += dp[i] * (i + 1);
+				cnt[i + s[j]] += cnt[i] * (i + 1);
 			}
 		}
-		dp[n] %= 2027;
-		cout << dp[n];
+		cnt[n] %= 2027;
+		cout << cnt[n];
 		return 0;
 	}
 };
