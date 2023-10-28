@@ -118,6 +118,11 @@
 		"C_Cpp.inlayHints.autoDeclarationTypes.showOnLeft": true,
 		"C_Cpp.inlayHints.autoDeclarationTypes.enabled": true,
 		"C_Cpp.default.cppStandard": "c++14",
-		"files.eol": "\n"
+		"files.eol": "\n",
+		"C_Cpp.autocompleteAddParentheses": true,
+		"C_Cpp.default.cStandard": "c23",
+		"C_Cpp.errorSquiggles": "enabled",
+		"C_Cpp.workspaceParsingPriority": "medium",
+		"editor.bracketPairColorization.independentColorPoolPerBracketType": true
 	}
 }

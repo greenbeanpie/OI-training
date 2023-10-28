@@ -136,7 +136,12 @@ namespace Main
 		}
 		int find(char *s)
 		{
-			return find(s, 1, root);
+			// return find(s, 1, root);
+			auto cur = root;
+			int now = 1;
+			while(s[now]&&cur->son[s[now+1]]){
+				
+			}
 		}
 		int find(char *s, int now, node *p)
 		{
