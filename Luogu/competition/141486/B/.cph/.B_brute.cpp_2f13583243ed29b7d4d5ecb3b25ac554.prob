@@ -1,0 +1,1 @@
+{"name":"Local: B_brute","url":"/home/hmz/Data/OI-training/Luogu/competition/141486/B/B_brute.cpp","tests":[{"id":1698564379782,"input":"2 1 114514\n1 2\n1 0\n5 2","output":"26"}],"interactive":false,"memoryLimit":1024,"timeLimit":3000,"srcPath":"/home/hmz/Data/OI-training/Luogu/competition/141486/B/B_brute.cpp","group":"local","local":true}

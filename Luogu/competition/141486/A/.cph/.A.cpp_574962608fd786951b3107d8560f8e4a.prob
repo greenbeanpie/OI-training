@@ -1,0 +1,1 @@
+{"name":"Local: A","url":"/home/hmz/Data/OI-training/Luogu/competition/141486/A/A.cpp","tests":[{"id":1698560323392,"input":"3\n1\n1 1\n3\n0 1\n1 1\n1 0\n3\n0 1\n2 3\n4 5","output":"0\n4\n0"}],"interactive":false,"memoryLimit":1024,"timeLimit":3000,"srcPath":"/home/hmz/Data/OI-training/Luogu/competition/141486/A/A.cpp","group":"local","local":true}
