@@ -123,6 +123,9 @@
 		"C_Cpp.default.cStandard": "c23",
 		"C_Cpp.errorSquiggles": "enabled",
 		"C_Cpp.workspaceParsingPriority": "medium",
-		"editor.bracketPairColorization.independentColorPoolPerBracketType": true
+		"editor.bracketPairColorization.independentColorPoolPerBracketType": true,
+		"git.alwaysShowStagedChangesResourceGroup": false,
+		"git.autoStash": true,
+		"git.fetchOnPull": true
 	}
 }
