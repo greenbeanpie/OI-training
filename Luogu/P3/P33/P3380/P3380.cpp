@@ -491,7 +491,7 @@ namespace Main
 			int cl = -1, cr = 1e8 + 1, mid;
 			while (cl < cr)
 			{
-				mid = (cl + cr+1) >> 1;
+				mid = (cl + cr + 1) >> 1;
 				if (rnk(l, r, mid) <= val)
 				{
 					cl = mid;

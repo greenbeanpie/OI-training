@@ -105,7 +105,7 @@
 			"editor.defaultFormatter": "ms-python.black-formatter"
 		},
 		"winopacity.opacity": 220,
-		"python.formatting.provider": "none",
+		"python.formatting.provider": "black",
 		"editor.cursorBlinking": "smooth",
 		"terminal.integrated.defaultProfile.windows": "PowerShell",
 		"editor.cursorSmoothCaretAnimation": "on",
@@ -126,6 +126,12 @@
 		"editor.bracketPairColorization.independentColorPoolPerBracketType": true,
 		"git.alwaysShowStagedChangesResourceGroup": false,
 		"git.autoStash": true,
-		"git.fetchOnPull": true
+		"git.fetchOnPull": true,
+		"git.closeDiffOnOperation": false,
+		"git.decorations.enabled": true,
+		"git.enableCommitSigning": true,
+		"git.mergeEditor": true,
+		"git.countBadge": "all",
+		"github.gitProtocol": "ssh"
 	}
 }

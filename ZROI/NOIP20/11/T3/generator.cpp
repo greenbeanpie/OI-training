@@ -102,7 +102,7 @@ namespace FastIO
 
 namespace Main
 {
-	int l = 0, r = 1e9, nmax = 500;
+	int l = 0, r = 0, nmax = 500;
 	random_device rd;
 	sfmt19937_64 myrand(rd());
 	uniform_int_distribution<long long> randomval(l, r), randomm(1, 1000), randomn(1, nmax - 1);
@@ -130,12 +130,12 @@ namespace Main
 		for (int i = 1; i <= m; i++)
 		{
 			int l = randomn(myrand), r = l + myrand() % 11 + 1;
-			if (r > n)
-			{
-				r = l;
-			}
-			FastIO::writesp(l, r, randomval(myrand));
-			// FastIO::writesp(randomn(myrand), randomn(myrand), randomval(myrand));
+			// if (r > n)
+			// {
+			// 	r = l;
+			// }
+			// FastIO::writesp(l, r, randomval(myrand));
+			FastIO::writesp(randomn(myrand), randomn(myrand), randomval(myrand));
 			FastIO::pc('\n');
 		}
 		return 0;
@@ -145,7 +145,7 @@ namespace Main
 signed main()
 {
 #ifndef ONLINE_JUDGE
-	freopen(problemname "14.in", "w", stdout);
+	freopen(problemname "20.in", "w", stdout);
 #endif
 	ios::sync_with_stdio(false);
 	cin.tie(0), cout.tie(0);
