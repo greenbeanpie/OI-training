@@ -16,8 +16,6 @@ namespace Main
 {
 	struct Splay
 	{
-		int tot = 0;
-
 		struct node
 		{
 			int val = 0, cnt = 0, size = 1;
