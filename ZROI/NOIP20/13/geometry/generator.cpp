@@ -105,33 +105,19 @@ namespace Main
 	int l = 0, r = INT_MAX;
 	random_device rd;
 	sfmt19937_64 myrand(rd());
-	uniform_int_distribution<long long> distlen(1, 50), distcnt(1, 1e3);
+	uniform_int_distribution<long long> distlen(5,50), distcnt(1,1000);
 	uniform_int_distribution<char> cdist('a', 'd');
 	// uniform_int_distribution<int> distcnt(1, 1000);
 	int main()
 	{
-		int T = 10;
-		int maxs = myrand() % 1000 + 1;
+		int T = myrand()%5;
+		int maxs = 4.98e5, sigmas = 4.98e5;
 		FastIO::writeln(T);
 
 		for (int i = 1; i <= T; i++)
 		{
-
+			string a, b;
 			int lena = distlen(myrand), lenb = distlen(myrand);
-
-			int maxlen = 5e5 / T;
-			bool ans = myrand() % 2;
-			int cnta = distcnt(myrand), cntb;
-			if (ans)
-			{
-				cntb = cnta;
-			}
-			else
-			{
-				cntb = distcnt(myrand);
-			}
-			string a, b, temp;
-
 			for (int i = 1; i <= lena; i++)
 			{
 				a += cdist(myrand);
@@ -140,26 +126,79 @@ namespace Main
 			{
 				b += cdist(myrand);
 			}
-			for (int i = 1; i <= maxlen; i++)
+			bool ans = myrand() % 2;
+			if (ans)
 			{
-				if (cnta)
+				int cnta, cntb;
+				cnta = cntb = min(maxs, sigmas / T) / (lena + lenb);
+				int ap = 0, bp = 0;
+				for (;;)
 				{
-					temp += a;
-					--cnta;
-					i += lena - 1;
+					if (cnta && cntb)
+					{
+						if (myrand() % 2)
+						{
+							FastIO::write(a[ap++]);
+							if (ap == a.size())
+							{
+								--cnta;
+								ap = 0;
+							}
+						}
+						else
+						{
+							FastIO::write(b[bp++]);
+							if (bp == b.size())
+							{
+								--cntb;
+								bp = 0;
+							}
+						}
+					}
+					else
+					{
+						if (cnta)
+						{
+							FastIO::write(a[ap++]);
+							if (ap == a.size())
+							{
+								--cnta;
+								ap = 0;
+							}
+						}
+						else if (cntb)
+						{
+							FastIO::write(b[bp++]);
+							if (bp == b.size())
+							{
+								--cntb;
+								bp = 0;
+							}
+						}
+						else
+						{
+							break;
+						}
+					}
 				}
-				else if (cntb)
-				{
-					temp += b;
-					--cntb;
-					i += lenb - 1;
-				}
-				while (myrand() % 3 == 0)
-				{
-					temp += cdist(myrand);
-				}
+				FastIO::pc('\n');
 			}
-			FastIO::writeln(temp, a, b);
+			else
+			{
+				int cnt = 0;
+				for (int i = 1; i <= min(maxs, sigmas / T); i++)
+				{
+					FastIO::write(cdist(myrand));
+					++cnt;
+				}
+				while (cnt % (lena + lenb))
+				{
+					FastIO::write(cdist(myrand));
+					++cnt;
+				}
+				FastIO::pc('\n');
+			}
+			FastIO::writeln(a, b);
 		}
 		return 0;
 	}

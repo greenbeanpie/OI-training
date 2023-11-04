@@ -3,7 +3,7 @@
 
 import os
 
-filename = "analysis"
+filename = "geometry"
 
 for i in range(1,26):
 	os.system("./"+filename+"_TJ < "+filename+str(i)+".in > "+filename+str(i)+".ans")
