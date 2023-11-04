@@ -12,46 +12,19 @@ string c[80];
 
 bitset<N> vis1, vis2;
 
-bitset<N> ask[N];
+__int128_t ask[N];
 
 int n, m;
 
-bool check(int l, int r)
-{
-
-	vis1.set(), vis2.set();
-	bool flag1 = 0, flag2 = 0;
-	for (int i = 1; i <= m; i++)
-	{
-		if (ask[i][l])
-		{
-			flag1 = 1;
-			vis1 &= ask[i];
-		}
-		if (ask[i][r])
-		{
-			flag2 = 1;
-			vis2 &= ask[i];
-		}
-	}
-	if (!flag1 || !flag2)
-	{
-		return 0;
-	}
-	if (((vis1.count() == 2 && vis1[r]) || vis1.count() == 1) && ((vis2.count() == 2 && vis2[l]) || vis2.count() == 1))
-	{
-		return 1;
-	}
-	else
-	{
-		return 0;
-	}
-}
-
 signed main(signed argc, char *argv[])
 {
+#ifdef CODESPACE
+	char *temp[] = {"checker", "permutation.in", "permutation.out", "permutation.ans"};
+	registerTestlibCmd(4, temp);
+#endif
+#ifndef CODESPACE
 	registerTestlibCmd(argc, argv);
-
+#endif
 	n = inf.readLong(), m = ouf.readLong();
 	int pts;
 	if (m > 75)
@@ -78,36 +51,35 @@ signed main(signed argc, char *argv[])
 	{
 		pts = 100;
 	}
-	// ouf.readEoln();
 	for (int i = 1; i <= m; i++)
 	{
 		// ouf.readEoln();
 		ouf.nextLine();
 		for (int j = 1; j <= n; j++)
 		{
-			ask[i][j] = ouf.readChar() - '0';
+			int ch = ouf.readChar() - '0';
+			if (ch)
+				ask[j] |= ((__int128_t)1 << (i - 1));
 		}
 	}
 	ouf.close();
+
+	set<__int128_t> s;
 	for (int i = 1; i <= n; i++)
 	{
-		int cnt = 0;
 		for (int j = i; j <= n; j++)
 		{
-			if (!check(i, j))
+			if (s.count(ask[i] | ask[j]))
 			{
-				++cnt;
+				quitf(_wa, "Your asks can't get proper positions. Do you play Genshin Impact?");
 			}
-		}
-		if (cnt > 1)
-		{
-			quitf(_wa, "Your asks can't get proper positions. Do you play Genshin Impact?");
-			return 0;
+
+			s.insert(ask[i] | ask[j]);
 		}
 	}
 	if (pts == 100)
 	{
-		quitf(_ok, "You get an accepted result in this case. Let's play Genshin Impact!");
+		quitf(_ok, "You code has accepted. Let's play Genshin Impact!");
 	}
 	else
 	{

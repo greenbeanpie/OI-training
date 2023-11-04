@@ -3,7 +3,7 @@
 using namespace __gnu_cxx;
 using namespace __gnu_pbds;
 using namespace std;
-#pragma GCC optimize(2)
+// #pragma GCC optimize(2)
 // #define int long long
 
 constexpr int N = 7505, M = 55;
@@ -26,10 +26,13 @@ signed main()
 			cin >> tmp;
 			e[i].emplace_back(tmp);
 			sum[i][tmp] = 1;
+			// ++temp[j];
 		}
+		sort(e[i].begin(), e[i].end());
 		for (int j = 1; j <= m; j++)
 		{
 			sum[i][j] += sum[i][j - 1];
+			// sum[i][j] = sum[i][j - 1] + temp[j];
 		}
 	}
 	int ans = 0;

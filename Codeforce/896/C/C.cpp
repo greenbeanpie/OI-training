@@ -98,23 +98,38 @@ namespace FastIO
 	inline void writeln(_Tp x, Args... args) { writeln(x), writeln(args...); }
 	inline void flush() { fwrite(obuf, p3 - obuf, 1, stdout); }
 }
-#define const constexpr
+// #define const constexpr
 
 namespace Main
 {
 	const int N = 1e5 + 5;
 
-	int n, m, seed, vmax;
+	int n, m, seed, vmax, x, y;
+
+	int quickpower(int a, int b, int p = y)
+	{
+		int ans = 1, base = a;
+		while (b)
+		{
+			if (b & 1)
+			{
+				ans *= base;
+				ans %= p;
+			}
+			base *= base;
+			base %= p;
+			b >>= 1;
+		}
+		return ans;
+	}
 
 	struct ODT
 	{
 		struct node
 		{
-			int l, r, val;
-			bool operator<(node b)
-			{
-				return l < b.l;
-			}
+			int l, r;
+			mutable int val;
+
 			node()
 			{
 				l = 0, r = 0, val = 0;
@@ -127,25 +142,95 @@ namespace Main
 			{
 				l = a, r = b, val = c;
 			}
+			friend bool operator<(const node &a, const node &b)
+			{
+				return a.l < b.l;
+			}
 		};
+
 		set<node> s;
 		auto split(int pos)
 		{
-			auto temp = s.lower_bound(pos);
+			auto temp = s.lower_bound(node(pos));
 			if (temp != s.end() && pos == temp->l)
 			{
 				return temp;
 			}
 			--temp;
-			s.insert((node){temp->l, pos - 1, temp->val});
-			auto res = s.insert((node){pos, temp->r, temp->val});
+			if (temp->r < pos)
+			{
+				return s.end();
+			}
+
+			s.emplace(temp->l, pos - 1, temp->val);
+			assert(temp->l <= pos - 1);
+			auto res = s.emplace(pos, temp->r, temp->val);
+			assert(pos <= temp->r);
 			s.erase(temp);
 			return res.first;
 		}
 		void add(int l, int r, int x)
 		{
+			auto pr = split(r + 1), pl = split(l);
+			for (auto i = pl; i != pr; i++)
+			{
+				i->val += x;
+			}
+			assert(l <= r);
 		}
-	};
+		void assign(int l, int r, int x)
+		{
+			auto pr = split(r + 1), pl = split(l);
+			s.erase(pl, pr);
+			s.emplace(l, r, x);
+			assert(l <= r);
+		}
+		struct __rnk
+		{
+			int num, cnt;
+			bool operator<(__rnk b)
+			{
+				return num < b.num;
+			}
+			__rnk(int a, int b)
+			{
+				num = a, cnt = b;
+			}
+		};
+		int rnk(int l, int r, int x)
+		{
+			auto pr = split(r + 1), pl = split(l);
+			vector<__rnk> v;
+			for (auto i = pl; i != pr; i++)
+			{
+				v.emplace_back(i->val, i->r - i->l + 1);
+			}
+			sort(v.begin(), v.end());
+			for (auto i : v)
+			{
+				if (i.cnt < x)
+				{
+					--x;
+				}
+				else
+				{
+					return i.num;
+				}
+			}
+			assert(0);
+		}
+		int calc(int l, int r, int x, int y)
+		{
+			int ans = 0;
+			auto pr = split(r + 1), pl = split(l);
+			for (auto i = pl; i != pr; i++)
+			{
+				ans += quickpower(i->val, x) * (i->r - i->l + 1) % y;
+				ans %= y;
+			}
+			return ans;
+		}
+	} Tree;
 
 	int num[N];
 
@@ -154,7 +239,7 @@ namespace Main
 		int op, l, r;
 	} prb[N];
 
-	int rnd(int seed = seed)
+	int rnd()
 	{
 		int ret = seed;
 		seed = (seed * 7 + 13) % 1000000007;
@@ -163,11 +248,11 @@ namespace Main
 
 	int main()
 	{
-		int x, y;
 		FastIO::read(n, m, seed, vmax);
 		for (int i = 1; i <= n; i++)
 		{
 			num[i] = rnd() % vmax + 1;
+			Tree.s.emplace(i, i, num[i]);
 		}
 		for (int i = 1; i <= m; i++)
 		{
@@ -177,8 +262,7 @@ namespace Main
 			{
 				swap(l, r);
 			}
-			prb[i] = {op, l, r};
-			if (prb[i].op == 3)
+			if (op == 3)
 			{
 				x = rnd() % (r - l + 1) + 1;
 			}
@@ -189,6 +273,20 @@ namespace Main
 			if (op == 4)
 			{
 				y = rnd() % vmax + 1;
+			}
+			switch (op)
+			{
+			case 1:
+				Tree.add(l, r, x);
+				break;
+			case 2:
+				Tree.assign(l, r, x);
+				break;
+			case 3:
+				FastIO::writeln(Tree.rnk(l, r, x));
+				break;
+			case 4:
+				FastIO::writeln(Tree.calc(l, r, x, y));
 			}
 		}
 		return 0;
