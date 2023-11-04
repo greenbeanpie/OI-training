@@ -105,13 +105,13 @@ namespace Main
 	int l = 0, r = INT_MAX;
 	random_device rd;
 	sfmt19937_64 myrand(rd());
-	uniform_int_distribution<long long> distlen(5,50), distcnt(1,1000);
+	uniform_int_distribution<long long> distlen(2, 10), distcnt(1, 200);
 	uniform_int_distribution<char> cdist('a', 'd');
 	// uniform_int_distribution<int> distcnt(1, 1000);
 	int main()
 	{
-		int T = myrand()%5;
-		int maxs = 4.98e5, sigmas = 4.98e5;
+		int T = 10;
+		int maxs = 980, sigmas = 4.98e5;
 		FastIO::writeln(T);
 
 		for (int i = 1; i <= T; i++)
@@ -207,7 +207,7 @@ namespace Main
 signed main()
 {
 #ifndef ONLINE_JUDGE
-	freopen(problemname ".in", "w", stdout);
+	freopen(problemname "7.in", "w", stdout);
 #endif
 	ios::sync_with_stdio(false);
 	cin.tie(0), cout.tie(0);

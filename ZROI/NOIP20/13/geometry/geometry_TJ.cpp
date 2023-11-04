@@ -6,10 +6,10 @@ long long f[N][55], pos, tmp;
 char s[N], a[N], b[N];
 signed main()
 {
-	#ifndef ONLINE_JUDGE
-		freopen("geometry.in", "r", stdin);
-		freopen("geometry_TJ.out", "w", stdout);
-	#endif
+	// #ifndef ONLINE_JUDGE
+	// 	freopen("geometry.in", "r", stdin);
+	// 	freopen("geometry_TJ.out", "w", stdout);
+	// #endif
 	scanf("%d", &t);
 	while (t--)
 	{

@@ -13,6 +13,7 @@
 				"--std=c++14",
 				"-Wall",
 				"-Wextra",
+				"-fno-ms-extensions",
 				"-lm",
 				"-DCODESPACE"
 			],
