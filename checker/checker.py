@@ -107,6 +107,8 @@ def findfile(problem_name):
 				problem_name = problem_name[9:]
 		elif problem_name[0:2] == "SP":
 			os.chdir(work_dir + "SPOJ/" + problem_name)
+		elif problem_name[0:3] == "UVA":
+			os.chdir(work_dir+"UVA/"+problem_name)
 		elif problem_name == "test":
 			os.chdir(work_dir + "/test/")
 		else:
@@ -125,21 +127,7 @@ def findfile(problem_name):
 
 
 def compile(problem, OJ, sanitizer=enable_sanitizer):
-	if OJ:
-		return subprocess.Popen(
-			[
-				"g++",
-				problem + ".cpp",
-				"-O2",
-				"-Wall",
-				"-Wextra",
-				"--std=c++14",
-				"-o" + problem,
-				"-DONLINE_JUDGE",
-			]
-		)
-	return subprocess.Popen(
-		[
+	option=[
 			"g++",
 			problem + ".cpp",
 			"-O2",
@@ -148,7 +136,13 @@ def compile(problem, OJ, sanitizer=enable_sanitizer):
 			"--std=c++14",
 			"-o" + problem,
 		]
-	)
+	if OJ:
+		option.append("-DONLINE_JUDGE")
+	if sanitizer:
+		option.append("-static-libasan")
+		option.append("-static-libubsan")
+		option.append("-fsanitize=undefined,address")
+	return subprocess.Popen(option)
 
 tot=0
 
@@ -312,7 +306,9 @@ def run(name="", stdin="", timeout=generator_timeout):
 	output = b""
 	try:
 		output = prc.communicate(input=stdin.encode(), timeout=timeout)
-		output = output[0]
+		output,stderr = output
+		if stderr!=None:
+			return (output.decode(), 6, time.perf_counter() - start)
 		code = prc.returncode
 	except subprocess.TimeoutExpired:
 		prc.kill()

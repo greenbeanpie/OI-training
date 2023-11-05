@@ -161,12 +161,12 @@ namespace Main
 			{
 				return s.end();
 			}
-
-			s.emplace(temp->l, pos - 1, temp->val);
-			assert(temp->l <= pos - 1);
-			auto res = s.emplace(pos, temp->r, temp->val);
-			assert(pos <= temp->r);
+			int l = temp->l, r = temp->r, val = temp->val;
 			s.erase(temp);
+			s.emplace(l, pos - 1, val);
+			assert(l <= pos - 1);
+			auto res = s.emplace(pos, r, val);
+			assert(pos <= r);
 			return res.first;
 		}
 		void add(int l, int r, int x)
@@ -210,7 +210,7 @@ namespace Main
 			{
 				if (i.cnt < x)
 				{
-					--x;
+					x -= i.cnt;
 				}
 				else
 				{
