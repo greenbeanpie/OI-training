@@ -7,7 +7,7 @@ using namespace std;
 #define int __int128
 #define double long double
 #define endl "\n"
-#define problemname ""
+#define problemname "P3835"
 #define gc() (p1 == p2 && (p2 = (p1 = ibuf) + fread(ibuf, 1, SIZE, stdin), p1 == p2) ? EOF : *p1++)
 
 namespace FastIO
@@ -108,19 +108,13 @@ namespace Main
 
 	struct ask
 	{
-		int op, x, id;
-	};
-
-	struct trans
-	{
 		int v, op, x;
 	};
 
 	struct node
 	{
 		int v;
-		trans op;
-		vector<ask> prb;
+		ask op;
 		vector<int> son;
 	} e[N];
 
@@ -238,13 +232,22 @@ namespace Main
 			int now = 0;
 			while (1)
 			{
-				if (cur->son[0] && k < cur->val)
+				if (k < cur->val)
 				{
-					cur = cur->son[0];
+					if (cur->son[0])
+					{
+						cur = cur->son[0];
+					}
+					else
+					{
+						splay(cur);
+						return now+1;
+					}
 				}
 				else if (cur->son[1])
 				{
 					now += (cur->son[0] ? cur->son[0]->size : 0);
+
 					if (k == cur->val)
 					{
 						splay(cur);
@@ -257,6 +260,10 @@ namespace Main
 				{
 					now += (cur->son[0] ? cur->son[0]->size : 0);
 					splay(cur);
+					if (k > cur->val)
+					{
+						now += cur->cnt;
+					}
 					return now + 1;
 				}
 			}
@@ -303,8 +310,16 @@ namespace Main
 		}
 		node *pre(int x)
 		{
-			rk(x);
-			return pre(root);
+			insert(x);
+			auto res = pre(root);
+			del(x);
+			return res;
+			// rk(x);
+			// if (root->val == x)
+			// {
+			// 	return pre(root);
+			// }
+			// return root;
 		}
 		node *nxt(node *x)
 		{
@@ -322,29 +337,37 @@ namespace Main
 		}
 		node *nxt(int x)
 		{
-			rk(x);
-			return nxt(root);
+			insert(x);
+			auto res = nxt(root);
+			del(x);
+			return res;
+			// rk(x);
+			// return nxt(root);
 		}
-		void del(int x)
+		bool del(int x)
 		{
 			rk(x);
 			auto cur = root;
+			if (cur->val != x)
+			{
+				return 1;
+			}
 			if (cur->cnt > 1)
 			{
 				--cur->cnt;
 				maintain(cur);
-				return;
+				return 0;
 			}
 			if (!cur->son[0] && !cur->son[1])
 			{
 				root = nullptr;
-				return;
+				return 0;
 			}
 			if (!cur->son[0])
 			{
 				root = cur->son[1];
 				root->father = nullptr;
-				return;
+				return 0;
 			}
 			auto oldroot = root;
 			node *x1 = pre(root);
@@ -355,50 +378,42 @@ namespace Main
 			x1->son[1] = cur->son[1];
 			delete oldroot;
 			maintain(root);
+			return 0;
 		}
 	} tree;
 
-	void insert(int ver, ask prob)
+	void insert(int ver, ask op)
 	{
-		e[ver].prb.emplace_back(prob);
-	}
-
-	void insert(int ver, trans op)
-	{
-		e[++tot].op = op;
-		e[ver].son.emplace_back(tot);
+		e[op.v].op = op;
+		e[ver].son.emplace_back(op.v);
 	}
 
 	void dfs(int pos)
 	{
+		bool flag = 0;
 		if (pos != 0)
 		{
-			if (e[pos].op.op == 1)
+			int temp = e[pos].op.x;
+			switch (e[pos].op.op)
 			{
-				tree.insert(e[pos].op.x);
-			}
-			else
-			{
-				tree.del(e[pos].op.x);
-			}
-		}
-		for (auto i : e[pos].prb)
-		{
-			if (i.op == 3)
-			{
-				ans[i.id] = tree.rk(i.x);
-			}
-			else if (i.op == 4)
-			{
-				ans[i.id] = tree.kth(i.x);
-			}
-			else if (i.op == 5)
-			{
-				ans[i.id] = tree.pre(i.x)->val;
-			}
-			else
-			{
-				ans[i.id] = tree.nxt(i.x)->val;
+			case 1:
+				tree.insert(temp);
+				break;
+			case 2:
+				flag = tree.del(temp);
+				break;
+			case 3:
+				ans[pos] = tree.rk(temp) - 1;
+				break;
+			case 4:
+				ans[pos] = tree.kth(temp + 1);
+				break;
+			case 5:
+				ans[pos] = tree.pre(temp)->val;
+				break;
+			case 6:
+				ans[pos] = tree.nxt(temp)->val;
+				break;
 			}
 		}
 		for (auto i : e[pos].son)
@@ -411,7 +426,7 @@ namespace Main
 			{
 				tree.del(e[pos].op.x);
 			}
-			else
+			else if (e[pos].op.op == 2 && !flag)
 			{
 				tree.insert(e[pos].op.x);
 			}
@@ -420,21 +435,14 @@ namespace Main
 
 	int main()
 	{
-		tree.insert(-(1 << 31) + 1);
-		tree.insert((1 << 31) - 1);
+		tree.insert(-(1ll << 31) + 1);
+		tree.insert((1ll << 31) - 1);
 		int n;
 		FastIO::read(n);
 		for (int i = 1, v, op, x; i <= n; i++)
 		{
 			FastIO::read(v, op, x);
-			if (op <= 2)
-			{
-				insert(v, (trans){v, op, x});
-			}
-			else
-			{
-				insert(v, (ask){op, x, i});
-			}
+			insert(v, {i, op, x});
 		}
 		dfs(0);
 		for (int i = 1; i <= n; i++)
