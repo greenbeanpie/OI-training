@@ -117,12 +117,11 @@
 		"C_Cpp.inlayHints.parameterNames.enabled": true,
 		"C_Cpp.inlayHints.autoDeclarationTypes.showOnLeft": true,
 		"C_Cpp.inlayHints.autoDeclarationTypes.enabled": true,
-		"C_Cpp.default.cppStandard": "c++14",
+		"C_Cpp.default.cppStandard": "c++23",
 		"files.eol": "\n",
 		"C_Cpp.autocompleteAddParentheses": true,
 		"C_Cpp.default.cStandard": "c23",
 		"C_Cpp.errorSquiggles": "enabled",
-		"C_Cpp.workspaceParsingPriority": "medium",
 		"editor.bracketPairColorization.independentColorPoolPerBracketType": true,
 		"git.alwaysShowStagedChangesResourceGroup": false,
 		"git.autoStash": true,
@@ -132,6 +131,8 @@
 		"git.enableCommitSigning": true,
 		"git.mergeEditor": true,
 		"git.countBadge": "all",
-		"github.gitProtocol": "ssh"
+		"github.gitProtocol": "ssh",
+		"C_Cpp.loggingLevel": "Information",
+		"C_Cpp.default.intelliSenseMode": "linux-gcc-x64"
 	}
 }

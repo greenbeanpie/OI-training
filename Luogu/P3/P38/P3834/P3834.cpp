@@ -69,31 +69,31 @@ struct SegTree
 			return tree[lp].lr;
 		}
 		int lval = tree[tree[rp].ls].val - tree[tree[lp].ls].val;
-		if (cl + lval-1 >= rank)
+		if (cl + lval - 1 >= rank)
 		{
-			return query(cl, cl + lval-1, rank, tree[lp].ls, tree[rp].ls);
+			return query(cl, cl + lval - 1, rank, tree[lp].ls, tree[rp].ls);
 		}
 		else
 		{
 			return query(cl + lval, cr, rank, tree[lp].rs, tree[rp].rs);
 		}
 	}
+	void build()
+	{
+		his.push_back(build(1, tot));
+		for (auto i : *arr)
+		{
+			his.emplace_back(point_add(1, i, *his.rbegin()));
+		}
+	}
+	int query(int l, int r, int pos)
+	{
+		return query(1, tree[his[r]].val - tree[his[l - 1]].val, pos, his[l - 1], his[r]);
+	}
 };
 
-template <typename T>
-inline void build(SegTree<T> *st)
-{
-	st->his.push_back(st->build(1, tot));
-	for (auto i = st->arr->begin(); i != st->arr->end(); i++)
-	{
-		st->his.push_back(st->point_add(1, *i, *(st->his.rbegin())));
-	}
-}
-template <typename T>
-inline int query(SegTree<T> *st, int l, int r, int pos)
-{
-	return st->query(1, st->tree[st->his[r]].val - st->tree[st->his[l - 1]].val, pos, st->his[l-1], st->his[r]);
-}
+SegTree<int> st(&num);
+
 signed main()
 {
 #ifndef ONLINE_JUDGE
@@ -104,7 +104,7 @@ signed main()
 	cc_hash_table<int, int> ht;
 	int n, m;
 	cin >> n >> m;
-	tree<int,null_type,std::less<int>,rb_tree_tag,tree_order_statistics_node_update> s;
+	tree<int, null_type, std::less<int>, rb_tree_tag, tree_order_statistics_node_update> s;
 	int t;
 	for (int i = 0; i < n; i++)
 	{
@@ -120,13 +120,13 @@ signed main()
 	{
 		(*i) = ht[*i];
 	}
-	SegTree<int> st(&num);
-	build(&st);
+
+	st.build();
 	int l, r, k;
 	for (int i = 0; i < m; i++)
 	{
 		cin >> l >> r >> k;
-		cout << *s.find_by_order(query(&st,l,r,k)-1) << std::endl;
+		cout << *s.find_by_order(st.query(l, r, k) - 1) << std::endl;
 	}
 	return 0;
 }

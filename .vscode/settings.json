@@ -204,9 +204,6 @@
 	"python.analysis.typeCheckingMode": "basic",
 	"python.analysis.autoImportCompletions": true,
 	"files.eol": "\n",
-	"python.testing.pytestArgs": [
-		"checker"
-	],
 	"python.testing.unittestEnabled": false,
 	"python.testing.pytestEnabled": true,
 	"C_Cpp.codeAnalysis.clangTidy.checks.disabled": [
