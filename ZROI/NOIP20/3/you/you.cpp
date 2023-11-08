@@ -100,7 +100,7 @@ namespace FastIO
 }
 #define const constexpr
 
-namespace Main
+namespace you
 {
 	const int mod = 998244353;
 	int quickpower(int a, int b, int p = mod)
@@ -202,7 +202,7 @@ signed main()
 #endif
 	ios::sync_with_stdio(false);
 	cin.tie(0), cout.tie(0);
-	Main::main();
+	you::main();
 	FastIO::flush();
 	return 0;
 }

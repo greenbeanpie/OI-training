@@ -1,0 +1,1 @@
+{"name":"Local: P3381","url":"/mnt/Data/OI-training/Luogu/P3/P33/P3381/P3381.cpp","tests":[{"id":1699450545971,"input":"4 5 4 3\n4 2 30 2\n4 3 20 3\n2 3 20 1\n2 1 30 9\n1 3 40 5","output":"50 280"}],"interactive":false,"memoryLimit":1024,"timeLimit":3000,"srcPath":"/mnt/Data/OI-training/Luogu/P3/P33/P3381/P3381.cpp","group":"local","local":true}

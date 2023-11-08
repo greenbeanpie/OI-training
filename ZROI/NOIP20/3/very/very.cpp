@@ -100,7 +100,7 @@ namespace FastIO
 }
 #define const constexpr
 
-namespace Main
+namespace very
 {
 
 	const int N = 55;
@@ -258,7 +258,7 @@ signed main()
 #endif
 	ios::sync_with_stdio(false);
 	cin.tie(0), cout.tie(0);
-	Main::main();
+	very::main();
 	FastIO::flush();
 	return 0;
 }

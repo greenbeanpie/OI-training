@@ -1,0 +1,1 @@
+{"name":"Local: P3386","url":"/mnt/Data/OI-training/Luogu/P3/P33/P3386/P3386.cpp","tests":[{"id":1699443074662,"input":"1 1 1\n1 1","output":"1"},{"id":1699443112273,"input":"4 2 7\n3 1\n1 2\n3 2\n1 1\n4 2\n4 1\n1 1","output":"2"}],"interactive":false,"memoryLimit":1024,"timeLimit":3000,"srcPath":"/mnt/Data/OI-training/Luogu/P3/P33/P3386/P3386.cpp","group":"local","local":true}

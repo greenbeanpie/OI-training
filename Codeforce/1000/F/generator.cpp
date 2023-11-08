@@ -10,36 +10,39 @@ using namespace std;
 #define problemname "F"
 #define const constexpr
 
-namespace Main{
-	
-	
-	
-	int main(){
+namespace CF1000F
+{
+	int gen()
+	{
 		random_device rd;
 		sfmt216091_64 random(rd());
 		int n = 5e5, q = 5e5;
 		cout << n << endl;
-		for (int i = 1;i<=n;i++){
-			cout << random() % n+1 << " ";
+		for (int i = 1; i <= n; i++)
+		{
+			cout << random() % n + 1 << " ";
 		}
 		cout << q << endl;
-		for (int i = 1; i <= n;i++){
+		for (int i = 1; i <= n; i++)
+		{
 			int l = random() % n, r = random() % n;
-			if(l>r){
+			if (l > r)
+			{
 				swap(l, r);
 			}
 			cout << l << " " << r << endl;
 		}
-			return 0;
+		return 0;
 	}
 };
 
-signed main(){
+signed main()
+{
 #ifndef ONLINE_JUDGE
-	freopen(problemname".in","w",stdout);
+	freopen(problemname ".in", "w", stdout);
 #endif
 	ios::sync_with_stdio(false);
-	cin.tie(0),cout.tie(0);
-	Main::main();
+	cin.tie(0), cout.tie(0);
+	CF1000F::gen();
 	return 0;
 }

@@ -106,7 +106,7 @@ namespace FastIO
 
 #define const constexpr
 
-namespace Main
+namespace P4718
 {
 	random_device rd;
 	sfmt19937_64 myrand(rd());
@@ -277,6 +277,6 @@ signed main()
 #endif
 	ios::sync_with_stdio(false);
 	cin.tie(0), cout.tie(0);
-	Main::main();
+	P4718::main();
 	return 0;
 }

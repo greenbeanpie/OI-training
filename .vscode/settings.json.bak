@@ -1,0 +1,212 @@
+{
+	"latex-workshop.latex.autoBuild.run": "never",
+	"latex-workshop.showContextMenu": true,
+	"latex-workshop.intellisense.package.enabled": true,
+	"latex-workshop.message.error.show": false,
+	"latex-workshop.message.warning.show": false,
+	"latex-workshop.latex.tools": [
+		{
+			"name": "xelatex",
+			"command": "xelatex",
+			"args": [
+				"-synctex=1",
+				"-interaction=nonstopmode",
+				"-file-line-error",
+				"%DOCFILE%"
+			]
+		},
+		{
+			"name": "pdflatex",
+			"command": "pdflatex",
+			"args": [
+				"-synctex=1",
+				"-interaction=nonstopmode",
+				"-file-line-error",
+				"%DOCFILE%"
+			]
+		},
+		{
+			"name": "latexmk",
+			"command": "latexmk",
+			"args": [
+				"-synctex=1",
+				"-interaction=nonstopmode",
+				"-file-line-error",
+				"-pdf",
+				"-outdir=%OUTDIR%",
+				"%DOCFILE%"
+			]
+		},
+		{
+			"name": "bibtex",
+			"command": "bibtex",
+			"args": [
+				"%DOCFILE%"
+			]
+		}
+	],
+	"latex-workshop.latex.recipes": [
+		{
+			"name": "XeLaTeX",
+			"tools": [
+				"xelatex"
+			]
+		},
+		{
+			"name": "PDFLaTeX",
+			"tools": [
+				"pdflatex"
+			]
+		},
+		{
+			"name": "BibTeX",
+			"tools": [
+				"bibtex"
+			]
+		},
+		{
+			"name": "LaTeXmk",
+			"tools": [
+				"latexmk"
+			]
+		},
+		{
+			"name": "xelatex -> bibtex -> xelatex*2",
+			"tools": [
+				"xelatex",
+				"bibtex",
+				"xelatex",
+				"xelatex"
+			]
+		},
+		{
+			"name": "pdflatex -> bibtex -> pdflatex*2",
+			"tools": [
+				"pdflatex",
+				"bibtex",
+				"pdflatex",
+				"pdflatex"
+			]
+		},
+	],
+	"latex-workshop.latex.clean.fileTypes": [
+		"*.aux",
+		"*.bbl",
+		"*.blg",
+		"*.idx",
+		"*.ind",
+		"*.lof",
+		"*.lot",
+		"*.out",
+		"*.toc",
+		"*.acn",
+		"*.acr",
+		"*.alg",
+		"*.glg",
+		"*.glo",
+		"*.gls",
+		"*.ist",
+		"*.fls",
+		"*.log",
+		"*.fdb_latexmk"
+	],
+	"latex-workshop.latex.autoClean.run": "onFailed",
+	"latex-workshop.latex.recipe.default": "lastUsed",
+	"latex-workshop.view.pdf.internal.synctex.keybinding": "double-click",
+	"C_Cpp.errorSquiggles": "enabledIfIncludesResolve",
+	"files.associations": {
+		"array": "cpp",
+		"atomic": "cpp",
+		"*.tcc": "cpp",
+		"bitset": "cpp",
+		"cctype": "cpp",
+		"cfenv": "cpp",
+		"chrono": "cpp",
+		"cinttypes": "cpp",
+		"clocale": "cpp",
+		"cmath": "cpp",
+		"complex": "cpp",
+		"condition_variable": "cpp",
+		"csetjmp": "cpp",
+		"csignal": "cpp",
+		"cstdarg": "cpp",
+		"cstddef": "cpp",
+		"cstdint": "cpp",
+		"cstdio": "cpp",
+		"cstdlib": "cpp",
+		"cstring": "cpp",
+		"ctime": "cpp",
+		"cwchar": "cpp",
+		"cwctype": "cpp",
+		"deque": "cpp",
+		"forward_list": "cpp",
+		"list": "cpp",
+		"unordered_map": "cpp",
+		"unordered_set": "cpp",
+		"vector": "cpp",
+		"exception": "cpp",
+		"fstream": "cpp",
+		"functional": "cpp",
+		"future": "cpp",
+		"initializer_list": "cpp",
+		"iomanip": "cpp",
+		"iosfwd": "cpp",
+		"iostream": "cpp",
+		"istream": "cpp",
+		"limits": "cpp",
+		"mutex": "cpp",
+		"new": "cpp",
+		"ostream": "cpp",
+		"numeric": "cpp",
+		"ratio": "cpp",
+		"scoped_allocator": "cpp",
+		"sstream": "cpp",
+		"stdexcept": "cpp",
+		"streambuf": "cpp",
+		"system_error": "cpp",
+		"thread": "cpp",
+		"regex": "cpp",
+		"tuple": "cpp",
+		"type_traits": "cpp",
+		"utility": "cpp",
+		"typeindex": "cpp",
+		"typeinfo": "cpp",
+		"valarray": "cpp"
+	},
+	"cmake.configureOnOpen": true,
+	"editor.cursorBlinking": "smooth",
+	"editor.detectIndentation": false,
+	"editor.insertSpaces": false,
+	"editor.formatOnPaste": true,
+	"editor.formatOnSave": true,
+	"editor.formatOnSaveMode": "modificationsIfAvailable",
+	"editor.formatOnType": true,
+	"diffEditor.codeLens": true,
+	"editor.wordWrap": "on",
+	"editor.bracketPairColorization.independentColorPoolPerBracketType": true,
+	"diffEditor.experimental.showMoves": true,
+	"diffEditor.experimental.useVersion2": true,
+	"editor.acceptSuggestionOnEnter": "smart",
+	"editor.inlineSuggest.suppressSuggestions": false,
+	"editor.suggest.preview": true,
+	"editor.suggest.shareSuggestSelections": false,
+	"files.autoGuessEncoding": true,
+	"C_Cpp.autocompleteAddParentheses": true,
+	"C_Cpp.inlayHints.autoDeclarationTypes.enabled": true,
+	"C_Cpp.inlayHints.referenceOperator.enabled": true,
+	"C_Cpp.inlayHints.referenceOperator.showSpace": true,
+	"C_Cpp.intelliSenseEngineFallback": "disabled",
+	"C_Cpp.legacyCompilerArgsBehavior": false,
+	"C_Cpp.inlayHints.autoDeclarationTypes.showOnLeft": true,
+	"C_Cpp.inlayHints.parameterNames.enabled": true,
+	"C_Cpp.vcFormat.indent.caseContentsWhenBlock": true,
+	"C_Cpp.default.cppStandard": "c++14",
+	"python.analysis.typeCheckingMode": "basic",
+	"python.analysis.autoImportCompletions": true,
+	"files.eol": "\n",
+	"python.testing.unittestEnabled": false,
+	"python.testing.pytestEnabled": true,
+	"C_Cpp.codeAnalysis.clangTidy.checks.disabled": [
+		"clang-diagnostic-error"
+	]
+}

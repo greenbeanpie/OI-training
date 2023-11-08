@@ -22,7 +22,7 @@ long long read()
 	return a * x;
 }
 const int N = 4e6 + 5;
-int n, m, a, b, x, y, tim, top, edge_sum, scc_sum;
+int n, m, a, b, x, y, tim, top, tot, scc_sum;
 int dfn[N], low[N], st[N], vis[N], scc[N], head[N];
 struct node
 {
@@ -30,10 +30,10 @@ struct node
 } A[N];
 void add(int from, int to)
 {
-	edge_sum++;
-	A[edge_sum].next = head[from];
-	A[edge_sum].to = to;
-	head[from] = edge_sum;
+	tot++;
+	A[tot].next = head[from];
+	A[tot].to = to;
+	head[from] = tot;
 }
 void tarjan(int u)
 {

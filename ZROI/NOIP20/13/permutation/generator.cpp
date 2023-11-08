@@ -100,14 +100,14 @@ namespace FastIO
 
 #define const constexpr
 
-namespace Main
+namespace permutation
 {
 	int l = 1, r = 1000;
 	random_device rd;
 	sfmt19937_64 myrand(rd());
 	uniform_int_distribution<> dist(l, r);
 
-	int main()
+	int gen()
 	{
 		FastIO::write(dist(myrand));
 		return 0;
@@ -121,7 +121,7 @@ signed main()
 	// #endif
 	ios::sync_with_stdio(false);
 	cin.tie(0), cout.tie(0);
-	Main::main();
+	permutation::gen();
 	FastIO::flush();
 	return 0;
 }

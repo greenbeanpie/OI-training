@@ -58,7 +58,7 @@ using namespace std;
 #define problemname "F"
 // #define const constexpr
 
-namespace Main
+namespace CF1000F
 {
 	inline char gc()
 	{
@@ -189,6 +189,6 @@ signed main()
 	freopen(problemname ".in", "r", stdin);
 	freopen(problemname ".out", "w", stdout);
 #endif
-	Main::main();
+	CF1000F::main();
 	return 0;
 }

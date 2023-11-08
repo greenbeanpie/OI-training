@@ -7,7 +7,7 @@ using namespace std;
 #endif
 const int N = 1e5 + 5;
 
-namespace Main
+namespace goldenrod
 {
 	struct scanline
 	{
@@ -27,6 +27,6 @@ signed main()
 	freopen("goldenrod.in", "r", stdin);
 	freopen("goldenrod.out", "w", stdout);
 	ios::sync_with_stdio(false), cin.tie(nullptr), cout.tie(nullptr);
-	Main::main();
+	goldenrod::main();
 	return 0;
 }

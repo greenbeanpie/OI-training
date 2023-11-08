@@ -10,13 +10,13 @@ using namespace std;
 #define problemname "SP1043"
 #define const constexpr
 
-namespace Main{
+namespace SP1043{
 	int l=-15007,r=15007,n=10;
 	random_device rd;
 	sfmt19937_64 myrand(rd());
 	uniform_int_distribution<> dist(l,r),dist2(1,n);
 	
-	int main(){
+	int gen(){
 		int m=10;
 		cout << n << endl;
 		for (int i = 1; i <= n;i++){
@@ -41,6 +41,6 @@ signed main(){
 #endif
 	ios::sync_with_stdio(false);
 	cin.tie(0),cout.tie(0);
-	Main::main();
+	SP1043::gen();
 	return 0;
 }
