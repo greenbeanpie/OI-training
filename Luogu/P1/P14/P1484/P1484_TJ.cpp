@@ -25,7 +25,7 @@ int n,m,f[2][2],g[2][2],a[500005],ans,cnt,t;
 void sol(int x)
 {
 	f[0][0]=f[0][1]=g[0][1]=g[0][0]=0;
-	for(rg int i=1;i<=n;i++)
+	for(int i=1;i<=n;i++)
 	{
 		int t=i&1;
 		if(f[t^1][0]>f[t^1][1]||(f[t^1][0]==f[t^1][1]&&g[t^1][0]<g[t^1][1]))

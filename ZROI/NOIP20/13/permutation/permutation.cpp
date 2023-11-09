@@ -25,32 +25,32 @@ signed main()
 	freopen("permutation.in", "r", stdin);
 	freopen("permutation.out", "w", stdout);
 	std::cin >> n;
-	for (reg int j = 0; j <= 9; j++)
+	for (int j = 0; j <= 9; j++)
 	{
-		for (reg int i = 1; i <= n; i++)
+		for (int i = 1; i <= n; i++)
 			if (i >> j & 1)
 				vc[j].push_back(i);
 			else
 				tmp.push_back(i);
 		mp[vc[j]] = 1, mp[tmp] = 1, tmp.clear();
 	}
-	for (reg int j = 0; j <= 9; j++)
-		for (reg int k = 0; k <= 9; k++)
+	for (int j = 0; j <= 9; j++)
+		for (int k = 0; k <= 9; k++)
 			if (j ^ k)
 			{
 				tmp.clear();
-				for (reg int i = 1; i <= n; i++)
+				for (int i = 1; i <= n; i++)
 					if ((i >> j & 1) && (i >> k & 1))
 						tmp.push_back(i);
 				mp[tmp] = 1;
 			}
 	printf("%lu\n", mp.size());
-	for (reg auto vec : mp)
+	for (auto vec : mp)
 	{
 		memset(vis, 0, n + 1 << 2);
-		for (reg auto it : vec.first)
+		for (auto it : vec.first)
 			vis[it] = 1;
-		for (reg int i = 1; i <= n; i++)
+		for (int i = 1; i <= n; i++)
 			printf("%d", vis[i]);
 		puts("");
 	}

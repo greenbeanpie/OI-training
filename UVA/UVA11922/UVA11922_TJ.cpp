@@ -5,8 +5,8 @@ int n, m;
 
 inline int read()
 {
-	register int x = 0, v = 1;
-	register char ch = getchar();
+	int x = 0, v = 1;
+	char ch = getchar();
 	while (!isdigit(ch))
 	{
 		if (ch == '-')

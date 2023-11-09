@@ -16,10 +16,10 @@ int main()
     for (int i = 1; i <= n2; ++i)
         scanf("%d", &b[i]);
 
-    for (reg int i = 1; i <= n1; ++i)
+    for (int i = 1; i <= n1; ++i)
     {
     	int p = 0;
-    	for (reg int j = 1; j <= n2; ++j)
+    	for (int j = 1; j <= n2; ++j)
     	{
     		// 寻找[上升]的[更长]的序列 
     		if (a[i] > b[j])
@@ -32,7 +32,7 @@ int main()
     }
   
     // 寻找答案
-    for (reg int i = 1; i <= n2; ++i)
+    for (int i = 1; i <= n2; ++i)
     	ans = max(ans, dp[i]);
     printf("%d\n", ans);
     return 0;

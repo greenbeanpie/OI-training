@@ -1,0 +1,1 @@
+{"name":"Local: swap","url":"/mnt/Data/OI-training/WMSOJ/20231109/swap/swap.cpp","tests":[{"id":1699497965095,"input":"3\n3 2\n1 2 3\n3 2 1\n3 2\n1 2 3\n1 2 3\n3 1\n1 2 3\n3 2 1","output":"4\n4\n4"}],"interactive":false,"memoryLimit":1024,"timeLimit":3000,"srcPath":"/mnt/Data/OI-training/WMSOJ/20231109/swap/swap.cpp","group":"local","local":true}

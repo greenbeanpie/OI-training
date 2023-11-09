@@ -3,9 +3,9 @@ using namespace std;
 
 inline int read()
 {
-	register int x = 0;
-	register bool f = 0;
-	register char c = getchar();
+	int x = 0;
+	bool f = 0;
+	char c = getchar();
 	while (c < '0' || c > '9')
 	{
 		if (c == '-')

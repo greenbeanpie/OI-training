@@ -31,16 +31,16 @@ int main()
 	freopen("F.in", "r", stdin);
 	freopen("F_TJ.out", "w", stdout);
 #endif
-	reg int l, r;
+	int l, r;
 	read(n);
 	unit = sqrt(n);
-	for (reg int i = 1; i <= n; ++i)
+	for (int i = 1; i <= n; ++i)
 	{
 		read(a[i]);
 		be[i] = i / unit + 1;
 	}
 	read(m);
-	for (reg int i = 1; i <= m; ++i)
+	for (int i = 1; i <= m; ++i)
 	{
 		read(q[i].l), read(q[i].r);
 		q[i].id = i;
@@ -48,7 +48,7 @@ int main()
 	sort(q + 1, q + 1 + m, cmp);
 	l = r = 1;
 	add(a[1]);
-	for (reg int i = 1; i <= m; ++i)
+	for (int i = 1; i <= m; ++i)
 	{
 		while (r < q[i].r)
 			add(a[++r]);
@@ -60,7 +60,7 @@ int main()
 			add(a[--l]);
 		ans[q[i].id] = stk[top];
 	}
-	for (reg int i = 1; i <= m; ++i)
+	for (int i = 1; i <= m; ++i)
 	{
 		print(ans[i]);
 		putchar('\n');

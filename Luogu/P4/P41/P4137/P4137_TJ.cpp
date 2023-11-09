@@ -18,7 +18,7 @@ struct query
 template <typename T>
 inline void read(T &x)
 {
-	register T c = getchar();
+	T c = getchar();
 	for (; c < 48 || 57 < c;)
 		c = getchar();
 	for (; 48 <= c && c <= 57; c = getchar())

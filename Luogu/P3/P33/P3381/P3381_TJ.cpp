@@ -21,7 +21,7 @@ inline void addedge(int u, int v, int val, int w)
 	head[u] = tot;
 }
 bool spfa()
-{ // 关于SPFA，他诈尸了
+{
 	queue<int> q;
 	memset(dis, 0x3f, sizeof(dis));
 	memset(vis, 0, sizeof(vis));
@@ -82,7 +82,7 @@ signed main()
 	freopen("P3381_TJ.out", "w", stdout);
 #endif
 	scanf("%d%d%d%d", &n, &m, &s, &t);
-	for (register int u, v, w, x, i = 1; i <= m; ++i)
+	for (int u, v, w, x, i = 1; i <= m; ++i)
 	{
 		scanf("%d%d%d%d", &u, &v, &w, &x);
 		addedge(u, v, w, x);

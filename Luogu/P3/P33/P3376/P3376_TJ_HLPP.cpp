@@ -109,7 +109,7 @@ inline void relabel(int u)
 } // 把u的高度更改为与u相邻的最低的点的高度加1
 int hlpp()
 {
-	register int i;
+	int i;
 	bfs();
 	if (h[s] == 0x3f3f3f3f)
 		return 0; // s与t不连通
@@ -168,7 +168,7 @@ int main()
 	freopen("P4722_TJ.out", "w", stdout);
 #endif
 	n = Read(), m = Read(), s = Read(), t = Read();
-	register int i;
+	int i;
 	int u, v, val;
 	for (i = 1; i <= m; i++)
 		u = Read(), v = Read(), val = Read(), add(u, v, val);

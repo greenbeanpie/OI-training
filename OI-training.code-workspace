@@ -18,10 +18,21 @@
 		"editor.formatOnPaste": true,
 		"editor.formatOnSave": true,
 		"editor.formatOnType": true,
-		"C_Cpp.codeAnalysis.clangTidy.checks.enabled": [
-			"clang-analyzer-*"
-		],
 		"editor.insertSpaces": false,
-		"editor.detectIndentation": false
+		"editor.detectIndentation": false,
+		"C_Cpp.codeAnalysis.clangTidy.enabled": true,
+		"editor.cursorBlinking": "smooth",
+		"editor.cursorSmoothCaretAnimation": "on",
+		"C_Cpp.inlayHints.parameterNames.suppressWhenArgumentContainsName": true,
+		"files.associations": {
+			"string": "cpp",
+			"format": "cpp"
+		},
+		"C_Cpp.vcFormat.newLine.beforeOpenBrace.block": "newLine",
+		"C_Cpp.vcFormat.newLine.beforeOpenBrace.function": "newLine",
+		"C_Cpp.vcFormat.newLine.beforeOpenBrace.lambda": "newLine",
+		"C_Cpp.vcFormat.newLine.beforeOpenBrace.namespace": "newLine",
+		"C_Cpp.vcFormat.newLine.beforeOpenBrace.type": "newLine",
+		"editor.wordWrap": "on"
 	}
 }

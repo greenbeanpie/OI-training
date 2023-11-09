@@ -32,10 +32,10 @@ int main()
   
 	// start to do the dynamic programing
 	// no god please no i do not want to do this
-    for (reg int i = 1; i <= n1; ++i)
+    for (int i = 1; i <= n1; ++i)
     {
     	Node p; p.len = 0;
-    	for (reg int j = 1; j <= n2; ++j)
+    	for (int j = 1; j <= n2; ++j)
     	{
     		// what the f**king equaltion ahhhhhhhhhhhhhhhhhhhh
     		// it takes me two thousand years to remember this s**t one
@@ -66,7 +66,7 @@ int main()
   
     // 寻找答案
     Node ans = dp[1];
-    for (reg int i = 2; i <= n2; ++i)
+    for (int i = 2; i <= n2; ++i)
     {
     	if (dp[i].len > ans.len)
     		ans = dp[i];

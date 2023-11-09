@@ -24,23 +24,23 @@ int main()
 	cout.tie(0);
 	cin >> n >> m;
 	ans = n * m;
-	for (re int i = 1; i <= n; i++)
+	for (int i = 1; i <= n; i++)
 	{
 		cin >> st;
 		for (int j = 0; j < st.length(); j++)
 			zt[j + 1] = (zt[j + 1] << 1) + (st[j] - '0');
 	}
-	for (re int i = 1; i <= m; i++)
+	for (int i = 1; i <= m; i++)
 		dp[0][zt[i]]++;
-	for (re int i = 0; i < n; i++)
-		for (re int j = n; j >= 1; j--)
-			for (re int k = 0; k < (1 << n); k++)
+	for (int i = 0; i < n; i++)
+		for (int j = n; j >= 1; j--)
+			for (int k = 0; k < (1 << n); k++)
 				dp[j][k] += dp[j - 1][k ^ (1 << i)];
 
-	for (re int i = 0; i < (1 << n); i++)
+	for (int i = 0; i < (1 << n); i++)
 	{
 		int res = 0;
-		for (re int j = 0; j <= n; j++)
+		for (int j = 0; j <= n; j++)
 			res += dp[j][i] * min(j, n - j);
 		ans = min(ans, res);
 	}

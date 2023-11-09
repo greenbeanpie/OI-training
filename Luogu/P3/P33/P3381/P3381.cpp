@@ -1,7 +1,7 @@
 #include <bits/stdc++.h>
-#include <bits/extc++.h>
-using namespace __gnu_pbds;
-using namespace __gnu_cxx;
+// #include <bits/extc++.h>
+// using namespace __gnu_pbds;
+// using namespace __gnu_cxx;
 using namespace std;
 #pragma GCC target("sse,sse2,sse3,ssse3,sse4.1,sse4.2,avx,avx2,popcnt,lzcnt,abm,bmi,bmi2,fma,tune=native")
 #define int long long
@@ -117,7 +117,7 @@ namespace Main
 	bitset<N> vis;
 	void addedge(int u, int v, int val, int w)
 	{
-		static int tot;
+		static int tot=1;
 		e[++tot].nxt = head[u];
 		e[tot].to = v;
 		e[tot].weight = w;
@@ -133,7 +133,7 @@ namespace Main
 	bool spfa()
 	{
 		queue<int> q;
-		fill(dis, dis + N, INT_MAX);
+		fill(dis, dis + N-5, INT_MAX);
 		vis.reset();
 		q.push(s);
 		dis[s] = 0;
