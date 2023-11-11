@@ -157,6 +157,7 @@
 			"#define double long double",
 			"#define endl \"\\n\"",
 			"#define problemname \"\"",
+			"#define gc() (p1 == p2 && (p2 = (p1 = ibuf) + fread(ibuf, 1, SIZE, stdin), p1 == p2) ? EOF : *p1++)\n",
 			"namespace FastIO",
 			"{",
 			"	static constexpr int SIZE = 1 << 21;",

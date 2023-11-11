@@ -350,7 +350,13 @@ namespace P3580
 
 	ans move(pt from, pt to, bool last)
 	{
+
 		ans res;
+		if (to.x < 0 || to.x > 8 || to.y < 0 || to.y > 9)
+		{
+			res.valid = 0;
+			return res;
+		}
 		if (!(find(from).color ^ last))
 		{
 			res.valid = 0;
@@ -375,7 +381,7 @@ namespace P3580
 			res.warning = check(to);
 			break;
 		case 2:
-			if (abs(to.x - from.x) != 1 && abs(to.y - from.y) != 1)
+			if (abs(to.x - from.x) != 1 || abs(to.y - from.y) != 1)
 			{
 				res.valid = 0;
 				return res;
@@ -413,6 +419,10 @@ namespace P3580
 			break;
 		case 4:
 			xmove = to.x - from.x, ymove = to.y - from.y;
+			if(abs(xmove)>2||abs(ymove)>2||abs(xmove)+abs(ymove)>3){
+				res.valid = 0;
+				return res;
+			}
 			if (abs(xmove) > abs(ymove))
 			{
 				xmove /= abs(xmove), ymove /= abs(ymove);
@@ -436,7 +446,7 @@ namespace P3580
 				for (int j = -1; j <= 1; j += 2)
 				{
 					auto res1 = find((pt){to.x, to.y + j}), res2 = find((pt){to.x + i, to.y + 2 * j});
-					if (res1.typ == -1 && res2.typ == 4)
+					if (res1.typ == -1 && res2.typ == 1)
 					{
 						res.warning = 1;
 						break;
@@ -448,7 +458,7 @@ namespace P3580
 				for (int j = -1; j <= 1; j += 2)
 				{
 					auto res1 = find((pt){to.x + i, to.y}), res2 = find((pt){to.x + 2 * i, to.y + j});
-					if (res1.typ == -1 && res2.typ == 4)
+					if (res1.typ == -1 && res2.typ == 1)
 					{
 						res.warning = 1;
 						break;
@@ -555,7 +565,7 @@ namespace P3580
 								res.warning = 1;
 								break;
 							}
-							if (find(pt(to.x, to.y+j)).typ == -1 && find(pt(to.x + i, to.y + 2 * j)).typ == -1 && find(pt(to.x + 2 * i, to.y + 3 * j)).typ == 1)
+							if (find(pt(to.x, to.y + j)).typ == -1 && find(pt(to.x + i, to.y + 2 * j)).typ == -1 && find(pt(to.x + 2 * i, to.y + 3 * j)).typ == 1)
 							{
 								res.warning = 1;
 								break;
@@ -566,19 +576,19 @@ namespace P3580
 				else
 				{
 					res.valid = 0;
-					break;
+					return res;
 				}
 			}
 			else
 			{
 				xmove /= abs(xmove), ymove /= abs(ymove);
-				if (find((pt){from.x + xmove, from.y + ymove*2}).typ == -1 && find((pt){from.x , from.y+ymove}).typ == -1)
+				if (find((pt){from.x + xmove, from.y + ymove * 2}).typ == -1 && find((pt){from.x, from.y + ymove}).typ == -1)
 				{
 					for (int i = -1; i <= 1; i++)
 					{
 						for (int j = -1; j <= 1; j++)
 						{
-							if (find(pt(to.x , to.y+j)).typ == -1 && find(pt(to.x +  i, to.y + 2*j)).typ == -1 && find(pt(to.x + 2 * i, to.y + 3 * j)).typ == 1)
+							if (find(pt(to.x, to.y + j)).typ == -1 && find(pt(to.x + i, to.y + 2 * j)).typ == -1 && find(pt(to.x + 2 * i, to.y + 3 * j)).typ == 1)
 							{
 								res.warning = 1;
 								break;
@@ -594,7 +604,7 @@ namespace P3580
 				else
 				{
 					res.valid = 0;
-					break;
+					return res;
 				}
 			}
 			break;
@@ -619,6 +629,7 @@ namespace P3580
 			else
 			{
 				res.valid = 0;
+				return res;
 			}
 		}
 		mp.erase(from);
@@ -631,6 +642,7 @@ namespace P3580
 		{
 			res.end = end = 1;
 		}
+		mp[to] = res.chess;
 		return res;
 	}
 
@@ -666,7 +678,7 @@ namespace P3580
 					{
 						FastIO::write(name[res.moveout.typ], ";");
 					}
-					FastIO::write((res.warning ? "Yes" : "No"), ";", (res.end ? "Yes" : "No"));
+					FastIO::write((res.warning ? "yes" : "no"), ";", (res.end ? "yes" : "no"));
 					FastIO::pc('\n');
 					last ^= 1;
 				}
