@@ -4,7 +4,7 @@ using namespace __gnu_pbds;
 using namespace __gnu_cxx;
 using namespace std;
 #pragma GCC target("sse,sse2,sse3,ssse3,sse4.1,sse4.2,avx,avx2,popcnt,lzcnt,abm,bmi,bmi2,fma,tune=native")
-#define int __int128
+#define int long long
 #define double long double
 #define endl "\n"
 #define problemname "P5380"
@@ -102,18 +102,19 @@ namespace FastIO
 
 namespace Main
 {
-	int l = 0, r = 10;
+	int l = 0, r = 9;
 	random_device rd;
 	sfmt19937_64 myrand(rd());
-	uniform_int_distribution<> dist(l, r);
+	uniform_int_distribution<> dist(l, r),delta(-3,3);
 
 	int gen()
 	{
-		int T = 50;
+		int T = 500;
 		FastIO::writeln(T);
 		while (T--)
 		{
-			FastIO::writesp(dist(myrand), dist(myrand), dist(myrand), dist(myrand));
+			int x = dist(myrand), y = dist(myrand);
+			FastIO::writesp(x%10,y%9,abs(x+delta(myrand))%10,abs(y+delta(myrand))%9);
 			FastIO::pc('\n');
 		}
 		return 0;

@@ -135,11 +135,11 @@ namespace P3580
 	{
 		size_t operator()(const pt &a) const noexcept
 		{
-			return a.x * k1 + a.y * k2;
+			return 1ull * a.x * k1 + a.y * k2;
 		}
 		size_t operator()(const pair<int, int> &a) const noexcept
 		{
-			return a.first * k1 + a.second * k2;
+			return 1ull * a.first * k1 + a.second * k2;
 		}
 	};
 
@@ -154,6 +154,9 @@ namespace P3580
 	unordered_map<pt, node, myhash> mp;
 
 	unordered_map<int, string> name, color;
+
+	// unordered_map<pt, bool, myhash> warn[2];
+	pt king0(4,0), king1(4,9);
 
 	void init() // 初始化棋盘
 	{
@@ -197,7 +200,7 @@ namespace P3580
 		return find(pt(x, y));
 	}
 
-	bool check(pt pos)
+	bool check(pt pos, bool color)
 	{ // 检查是否出现将军情况
 		for (int i = -1; i <= 1; i++)
 		{
@@ -205,14 +208,17 @@ namespace P3580
 			{
 				for (int j = -1; j <= 1; j += 2)
 				{
-					auto res = find((pt){pos.x + i, pos.y + j});
-					if ((res.typ == 1 || res.typ == 7) && res.color != mp[pos].color)
+					auto res = find((pt){pos.x, pos.y + j});
+					if ((res.typ == 1 || res.typ == 7) && res.color != color)
 					{
 						return 1;
 					}
 				}
+			}
+			else
+			{
 				auto res = find((pt){pos.x + i, pos.y});
-				if ((res.typ == 1 || res.typ == 7) && res.color != mp[pos].color)
+				if ((res.typ == 1 || res.typ == 7) && res.color != color)
 				{
 					return 1;
 				}
@@ -223,7 +229,7 @@ namespace P3580
 			for (int j = -1; j <= 1; j += 2)
 			{
 				auto res = find((pt){pos.x + i, pos.y + j});
-				if ((res.typ == 7 || res.typ == 2) && res.color != mp[pos].color)
+				if ((res.typ == 7 || res.typ == 2) && res.color != color)
 				{
 					return 1;
 				}
@@ -233,7 +239,7 @@ namespace P3580
 		for (int i = pos.x - 1; i >= 0; i--)
 		{
 			auto res = find((pt){i, pos.y});
-			if (res.typ == 5 && res.color != mp[pos].color)
+			if (res.typ == 5 && res.color != color)
 			{
 				return 1;
 			}
@@ -245,7 +251,7 @@ namespace P3580
 		for (int i = pos.y - 1; i >= 0; i--)
 		{
 			auto res = find((pt){pos.x, i});
-			if (res.typ == 5 && res.color != mp[pos].color)
+			if (res.typ == 5 && res.color != color)
 			{
 				return 1;
 			}
@@ -257,7 +263,7 @@ namespace P3580
 		for (int i = pos.x + 1; i <= 8; i++)
 		{
 			auto res = find((pt){i, pos.y});
-			if (res.typ == 5 && res.color != mp[pos].color)
+			if (res.typ == 5 && res.color != color)
 			{
 				return 1;
 			}
@@ -269,7 +275,7 @@ namespace P3580
 		for (int i = pos.y + 1; i <= 9; i++)
 		{
 			auto res = find((pt){pos.x, i});
-			if (res.typ == 5 && res.color != mp[pos].color)
+			if (res.typ == 5 && res.color != color)
 			{
 				return 1;
 			}
@@ -283,7 +289,7 @@ namespace P3580
 			for (int j = -1; j <= 1; j += 2)
 			{
 				auto res1 = find((pt){pos.x - i, pos.y - j}), res2 = find((pt){pos.x - 2 * i, pos.y - 2 * j}), res = find((pt){pos.x - 3 * i, pos.y - 2 * j});
-				if (res1.typ == -1 && res2.typ == -1 && res.typ == 6 && res.color != mp[pos].color)
+				if (res1.typ == -1 && res2.typ == -1 && res.typ == 6 && res.color != color)
 				{
 					return 1;
 				}
@@ -294,7 +300,7 @@ namespace P3580
 			for (int j = -1; j <= 1; j += 2)
 			{
 				auto res1 = find((pt){pos.x - i, pos.y - j}), res2 = find((pt){pos.x - 2 * i, pos.y - 2 * j}), res = find((pt){pos.x - 2 * i, pos.y - 3 * j});
-				if (res1.typ == -1 && res2.typ == -1 && res.typ == 6 && res.color != mp[pos].color)
+				if (res1.typ == -1 && res2.typ == -1 && res.typ == 6 && res.color != color)
 				{
 					return 1;
 				}
@@ -305,7 +311,7 @@ namespace P3580
 			for (int j = -1; j <= 1; j += 2)
 			{
 				auto res1 = find((pt){pos.x - i, pos.y - j}), res = find((pt){pos.x - i, pos.y - 2 * j});
-				if (res1.typ == -1 && res.typ == 4 && res.color != mp[pos].color)
+				if (res1.typ == -1 && res.typ == 4 && res.color != color)
 				{
 					return 1;
 				}
@@ -316,7 +322,7 @@ namespace P3580
 			for (int j = -1; j <= 1; j += 2)
 			{
 				auto res1 = find((pt){pos.x - i, pos.y - j}), res = find((pt){pos.x - 2 * i, pos.y - j});
-				if (res1.typ == -1 && res.typ == 4 && res.color != mp[pos].color)
+				if (res1.typ == -1 && res.typ == 4 && res.color != color)
 				{
 					return 1;
 				}
@@ -327,7 +333,7 @@ namespace P3580
 			for (int j = -1; j <= 1; j += 2)
 			{
 				auto res1 = find((pt){pos.x - i, pos.y - j}), res = find((pt){pos.x - 2 * i, pos.y - 2 * j});
-				if (res1.typ == -1 && res.typ == 3 && res.color != mp[pos].color)
+				if (res1.typ == -1 && res.typ == 3 && res.color != color)
 				{
 					return 1;
 				}
@@ -367,7 +373,7 @@ namespace P3580
 			res.valid = 0;
 			return res;
 		}
-		auto chess = mp[from];
+		auto chess = find(from);
 		res.chess = chess;
 		int xmove, ymove;
 		switch (chess.typ)
@@ -378,24 +384,12 @@ namespace P3580
 				res.valid = 0;
 				return res;
 			}
-			res.warning = check(to);
 			break;
 		case 2:
 			if (abs(to.x - from.x) != 1 || abs(to.y - from.y) != 1)
 			{
 				res.valid = 0;
 				return res;
-			}
-			for (int i = -1; i <= 1; i += 2)
-			{
-				for (int j = -1; j <= 1; j += 2)
-				{
-					if (find((pt){to.x + i, to.y + j}).typ == 1)
-					{
-						res.warning = 1;
-						break;
-					}
-				}
 			}
 			break;
 		case 3:
@@ -405,28 +399,20 @@ namespace P3580
 				res.valid = 0;
 				return res;
 			}
-			for (int i = -1; i <= 1; i += 2)
-			{
-				for (int j = -1; j <= 1; j += 2)
-				{
-					if (find((pt){to.x + i, to.y + j}).typ == -1 && find((pt){to.x + 2 * i, to.y + 2 * j}).typ == 1)
-					{
-						res.warning = 1;
-						break;
-					}
-				}
-			}
 			break;
 		case 4:
 			xmove = to.x - from.x, ymove = to.y - from.y;
-			if(abs(xmove)>2||abs(ymove)>2||abs(xmove)+abs(ymove)>3){
+
+			if (abs(xmove) > 2 || abs(ymove) > 2 || abs(xmove) + abs(ymove) != 3)
+			{
 				res.valid = 0;
 				return res;
 			}
 			if (abs(xmove) > abs(ymove))
 			{
-				xmove /= abs(xmove), ymove /= abs(ymove);
-				if (find((pt){from.x + xmove, from.y}).typ != -1)
+				xmove /= abs(xmove);
+				auto temp = find((pt){from.x + xmove, from.y});
+				if (temp.typ != -1)
 				{
 					res.valid = 0;
 					return res;
@@ -434,111 +420,37 @@ namespace P3580
 			}
 			else
 			{
-				xmove /= abs(xmove), ymove /= abs(ymove);
-				if (find((pt){from.x, from.y + ymove}).typ != -1)
+				ymove /= abs(ymove);
+				auto temp = find((pt){from.x, from.y + ymove});
+				if (temp.typ != -1)
 				{
 					res.valid = 0;
 					return res;
-				}
-			}
-			for (int i = -1; i <= 1; i += 2)
-			{
-				for (int j = -1; j <= 1; j += 2)
-				{
-					auto res1 = find((pt){to.x, to.y + j}), res2 = find((pt){to.x + i, to.y + 2 * j});
-					if (res1.typ == -1 && res2.typ == 1)
-					{
-						res.warning = 1;
-						break;
-					}
-				}
-			}
-			for (int i = -1; i <= 1; i += 2)
-			{
-				for (int j = -1; j <= 1; j += 2)
-				{
-					auto res1 = find((pt){to.x + i, to.y}), res2 = find((pt){to.x + 2 * i, to.y + j});
-					if (res1.typ == -1 && res2.typ == 1)
-					{
-						res.warning = 1;
-						break;
-					}
 				}
 			}
 			break;
 		case 5:
 			if (from != to && (from.x == to.x || from.y == to.y))
 			{
-				if (from.x != to.x)
+				if (from.x != to.x && abs(from.x - to.x) > 1)
 				{
 					for (int i = min(from.x, to.x) + 1; i <= max(from.x, to.x) - 1; i++)
 					{
 						if (find((pt){i, from.y}).typ != -1)
 						{
 							res.valid = 0;
-							break;
+							return res;
 						}
 					}
 				}
-				else
+				else if (abs(from.y - to.y) > 1)
 				{
 					for (int i = min(from.y, to.y) + 1; i <= max(from.y, to.y) - 1; i++)
 					{
 						if (find((pt){from.x, i}).typ != -1)
 						{
 							res.valid = 0;
-							break;
-						}
-					}
-				}
-				if (res.valid)
-				{
-					for (int i = to.x - 1; i >= 0; i--)
-					{
-						auto res1 = find((pt){i, to.y});
-						if (res1.typ == 1)
-						{
-							res.warning = 1;
-						}
-						else if (res1.typ != -1)
-						{
-							break;
-						}
-					}
-					for (int i = to.y - 1; i >= 0; i--)
-					{
-						auto res1 = find((pt){to.x, i});
-						if (res1.typ == 1)
-						{
-							res.warning = 1;
-						}
-						else if (res1.typ != -1)
-						{
-							break;
-						}
-					}
-					for (int i = to.x + 1; i <= 8; i++)
-					{
-						auto res1 = find((pt){i, to.y});
-						if (res1.typ == 1)
-						{
-							res.warning = 1;
-						}
-						else if (res1.typ != -1)
-						{
-							break;
-						}
-					}
-					for (int i = to.y + 1; i <= 9; i++)
-					{
-						auto res1 = find((pt){i, to.y});
-						if (res1.typ == 1)
-						{
-							res.warning = 1;
-						}
-						else if (res1.typ != -1)
-						{
-							break;
+							return res;
 						}
 					}
 				}
@@ -546,32 +458,21 @@ namespace P3580
 			else
 			{
 				res.valid = 0;
-				break;
+				return res;
 			}
 			break;
 		case 6:
 			xmove = to.x - from.x, ymove = to.y - from.y;
+			if (!xmove || !ymove)
+			{
+				res.valid = 0;
+				return res;
+			}
 			if (abs(xmove) > abs(ymove))
 			{
 				xmove /= abs(xmove), ymove /= abs(ymove);
-				if (find((pt){from.x + xmove * 2, from.y + ymove}).typ == -1 && find((pt){from.x + xmove, from.y}).typ == -1)
+				if (find((pt){from.x + xmove * 2, from.y + ymove}).typ == -1 && find((pt){from.x + xmove, from.y}).typ == -1 && abs(from.x - to.x) + abs(from.y - to.y) == 5 && (abs(from.x - to.x) == 2 || abs(from.x - to.x) == 3))
 				{
-					for (int i = -1; i <= 1; i++)
-					{
-						for (int j = -1; j <= 1; j++)
-						{
-							if (find(pt(to.x + i, to.y)).typ == -1 && find(pt(to.x + 2 * i, to.y + j)).typ == -1 && find(pt(to.x + 3 * i, to.y + 2 * j)).typ == 1)
-							{
-								res.warning = 1;
-								break;
-							}
-							if (find(pt(to.x, to.y + j)).typ == -1 && find(pt(to.x + i, to.y + 2 * j)).typ == -1 && find(pt(to.x + 2 * i, to.y + 3 * j)).typ == 1)
-							{
-								res.warning = 1;
-								break;
-							}
-						}
-					}
 				}
 				else
 				{
@@ -582,24 +483,8 @@ namespace P3580
 			else
 			{
 				xmove /= abs(xmove), ymove /= abs(ymove);
-				if (find((pt){from.x + xmove, from.y + ymove * 2}).typ == -1 && find((pt){from.x, from.y + ymove}).typ == -1)
+				if (find((pt){from.x + xmove, from.y + ymove * 2}).typ == -1 && find((pt){from.x, from.y + ymove}).typ == -1 && abs(from.x - to.x) + abs(from.y - to.y) == 5 && (abs(from.x - to.x) == 2 || abs(from.x - to.x) == 3))
 				{
-					for (int i = -1; i <= 1; i++)
-					{
-						for (int j = -1; j <= 1; j++)
-						{
-							if (find(pt(to.x, to.y + j)).typ == -1 && find(pt(to.x + i, to.y + 2 * j)).typ == -1 && find(pt(to.x + 2 * i, to.y + 3 * j)).typ == 1)
-							{
-								res.warning = 1;
-								break;
-							}
-							if (find(pt(to.x, to.y + j)).typ == -1 && find(pt(to.x + i, to.y + 2 * j)).typ == -1 && find(pt(to.x + 2 * i, to.y + 3 * j)).typ == 1)
-							{
-								res.warning = 1;
-								break;
-							}
-						}
-					}
 				}
 				else
 				{
@@ -611,20 +496,6 @@ namespace P3580
 		case 7:
 			if (abs(to.x - from.x) < 2 && abs(to.y - from.y) < 2 && abs(to.x - from.x) + abs(to.y - from.y) <= 2)
 			{
-				for (int i = -1; i <= 1; i++)
-				{
-					for (int j = -1; j <= 1; j++)
-					{
-						if (j || i)
-						{
-							if (find(pt(to.x + i, to.y + j)).typ == 1)
-							{
-								res.warning = 1;
-								break;
-							}
-						}
-					}
-				}
 			}
 			else
 			{
@@ -642,7 +513,16 @@ namespace P3580
 		{
 			res.end = end = 1;
 		}
+		if(chess.typ==1){
+			if(chess.color){
+				king1 = to;
+			}
+			else{
+				king0 = to;
+			}
+		}
 		mp[to] = res.chess;
+		res.warning = (check(king0, 0) | check(king1, 1))&&(!res.end);
 		return res;
 	}
 
