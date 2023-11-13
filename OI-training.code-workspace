@@ -24,15 +24,13 @@
 		"editor.cursorBlinking": "smooth",
 		"editor.cursorSmoothCaretAnimation": "on",
 		"C_Cpp.inlayHints.parameterNames.suppressWhenArgumentContainsName": true,
-		"files.associations": {
-			"string": "cpp",
-			"format": "cpp"
-		},
 		"C_Cpp.vcFormat.newLine.beforeOpenBrace.block": "newLine",
 		"C_Cpp.vcFormat.newLine.beforeOpenBrace.function": "newLine",
 		"C_Cpp.vcFormat.newLine.beforeOpenBrace.lambda": "newLine",
 		"C_Cpp.vcFormat.newLine.beforeOpenBrace.namespace": "newLine",
 		"C_Cpp.vcFormat.newLine.beforeOpenBrace.type": "newLine",
-		"editor.wordWrap": "on"
+		"editor.wordWrap": "on",
+		"editor.fontFamily": "\"Cascadia Code\",\"Fira Code\"",
+		"editor.codeLensFontFamily": "\"Cascadia Code\",\"Fira Code\"",
 	}
 }
