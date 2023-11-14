@@ -156,7 +156,6 @@
 			"#define int __int128",
 			"#define double long double",
 			"#define endl \"\\n\"",
-			"#define problemname \"\"",
 			"#define gc() (p1 == p2 && (p2 = (p1 = ibuf) + fread(ibuf, 1, SIZE, stdin), p1 == p2) ? EOF : *p1++)\n",
 			"namespace FastIO",
 			"{",
@@ -248,7 +247,6 @@
 			"}",
 			"#define const constexpr",
 			"",
-			"#define Main ",
 			"namespace Main{",
 			"	int l=0,r=INT_MAX;"
 			"	random_device rd;",
@@ -260,9 +258,12 @@
 			"		return 0;"
 			"	}""};",
 			"",
+			"void FileIO(string s){",
+			"	freopen((s+\".in\").c_str(),\"w\",stdout);"
+			"}",
 			"signed main(){",
 			"#ifndef ONLINE_JUDGE",
-		"	freopen(problemname\".in\",\"w\",stdout);",
+		"	FileIO(\"\");",
 			"#endif",
 		"	ios::sync_with_stdio(false);",
 		"	cin.tie(0),cout.tie(0);",

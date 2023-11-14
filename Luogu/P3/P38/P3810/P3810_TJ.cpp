@@ -66,7 +66,7 @@ bool cmpy(stnd u, stnd v)
 }
 struct treearray
 {
-	int tre[maxk], kk;
+	int tre[maxk], n;
 	int lwbt(int x) { return x & (-x); }
 	int ask(int i)
 	{
@@ -77,7 +77,7 @@ struct treearray
 	}
 	void add(int i, int k)
 	{
-		for (; i <= kk; i += lwbt(i))
+		for (; i <= n; i += lwbt(i))
 			tre[i] += k;
 	}
 } t;
@@ -103,7 +103,7 @@ void cdq(int l, int r)
 int main()
 {
 	n_ = read(), k = read();
-	t.kk = k;
+	t.n = k;
 	for (int i = 1; i <= n_; i++)
 		b[i].x = read(), b[i].y = read(), b[i].z = read();
 	sort(b + 1, b + n_ + 1, cmpx);

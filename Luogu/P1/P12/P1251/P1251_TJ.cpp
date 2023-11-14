@@ -78,6 +78,10 @@ LL flow()
 }
 int main()
 {
+#ifndef ONLINE_JUDGE
+	freopen("P1251.in", "r", stdin);
+	freopen("P1251_TJ.out", "w", stdout);
+#endif
 	int x;
 	scanf("%d", &n);
 	st = 0, ed = 2 * n + 1;
