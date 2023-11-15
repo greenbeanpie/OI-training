@@ -1,62 +1,80 @@
-#include <bits/stdc++.h>
-using namespace std;
-#define int long long
-int dabiao(int num) { return num * pow(10, max((long long)0, num - 1)); }
-int count(int end, int num) {
-  if (end == 0) {
-    if (num == 0) {
-      return 1;
-    } else {
-      return 0;
-    }
-  }
-  if (end < 10) {
-    if (num <= end) {
-      return 1;
-    } else {
-      return 0;
-    }
-  }
-  int dp[15] = {0};
-  int current = 0;
-  int len = 0;
-  while (end) {
-    current += end % 10 * pow(10, len++);
-    dp[len] = dp[len - 1] + (end % 10) * dabiao(len - 1);
+#include <iostream>
+#include <cstring>
 
-    if (end % 10 > num) {
-      dp[len] += pow(10, len - 1);
-    } else if (end % 10 == num) {
-      dp[len] += current % (long long)pow(10, len - 1);
-      dp[len]++;
-    }
-    end /= 10;
-  }
-  if (num == 0) {
-    for (int i = 0; i < len; i++) {
-      dp[len] -= pow(10, i);
-    }
-    dp[len]++;
-  }
-  return dp[len];
+#define i64 long long
+#define endl '\n'
+#define qwq puts("fzy qwq ~");
+
+using namespace std;
+
+i64 a, b;
+i64 l[30], r[30];
+i64 f[30], B[30];
+
+inline void init()
+{
+	B[0] = 1;
+	for (int i = 1; i <= 15; ++i)
+	{
+		f[i] = f[i - 1] * 10 + B[i - 1];
+		B[i] = B[i - 1] * 10;
+	}
 }
 
-signed main() {
-  ios::sync_with_stdio(false);
-  cin.tie(0);
-  cout.tie(0);
-  int s, e;
-  while (cin >> s >> e) {
-    if (s == 0 && e == 0) {
-      break;
-    }
-    if (s > e) {
-      swap(s, e);
-    }
-    for (int i = 0; i <= 8; i++) {
-      printf("%lld ", count(e, i) - count(s - 1, i));
-    }
-    printf("%lld\n", count(e, 9) - count(s - 1, 9));
-  }
-  return 0;
+inline void DP(i64 n, i64 *res)
+{
+	int x[16];
+	i64 tmp = n;
+	i64 len = 0;
+	while (n)
+	{
+		x[++len] = n % 10;
+		n /= 10;
+	}
+	for (int i = len; i >= 1; --i)
+	{
+		for (int j = 0; j < 10; ++j)
+			res[j] += f[i - 1] * x[i];
+		for (int j = 0; j < x[i]; ++j)
+			res[j] += B[i - 1];
+
+		tmp -= B[i - 1] * x[i];
+		res[x[i]] += tmp + 1;
+		res[0] -= B[i - 1];
+	}
+}
+
+inline void solve()
+{
+	memset(l, 0, sizeof l);
+	memset(r, 0, sizeof r);
+	memset(f, 0, sizeof f);
+
+	if (a > b)
+		swap(a, b);
+	init();
+
+	DP(b, r), DP(a - 1, l);
+	for (int i = 0; i <= 8; ++i)
+		cout << r[i] - l[i] << ' ';
+	cout << r[9] - l[9] << endl;
+}
+
+int main()
+{
+#ifndef ONLINE_JUDGE
+	freopen("UVA1640.in", "r", stdin);
+	freopen("UVA1640.out", "w", stdout);
+	#endif
+	ios::sync_with_stdio(0);
+	cin.tie(0);
+	cout.tie(0);
+
+	bool f = 0;
+	while (cin >> a >> b and a and b)
+	{
+		solve();
+		f = 1;
+	}
+	return 0;
 }

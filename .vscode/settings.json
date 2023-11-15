@@ -1,1 +1,4 @@
-{"editor.fontLigatures": true,}
+{
+	"editor.fontLigatures": true,
+	"cmake.sourceDirectory": "/mnt/Data/OI-training/checker/Checker",
+}

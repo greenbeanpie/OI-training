@@ -1,0 +1,1 @@
+{"name":"Local: D","url":"/mnt/Data/OI-training/Codeforce/543/D/D.cpp","tests":[{"id":1700003175631,"input":"3\n1 1","output":"4 3 3"},{"id":1700003182856,"input":"5\n1 2 3 4","output":"5 8 9 8 5"}],"interactive":false,"memoryLimit":1024,"timeLimit":3000,"srcPath":"/mnt/Data/OI-training/Codeforce/543/D/D.cpp","group":"local","local":true}

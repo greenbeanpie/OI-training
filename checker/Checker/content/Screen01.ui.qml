@@ -7,7 +7,7 @@ Check out https://doc.qt.io/qtcreator/creator-quick-ui-forms.html for details on
 
 import QtQuick 6.5
 import QtQuick.Controls 6.5
-import Checker
+// import Checker
 
 Rectangle {
     width: Constants.width
@@ -87,7 +87,7 @@ Rectangle {
             y: 996
             width: 203
             height: 15
-            text: qsTr("Copyleft Õã½­Ê¡ÎÂÁëÖĞÑ§ ºì¶¹µ°»ÆÅÉ")
+            text: qsTr("Copyleft æµ™æ±Ÿçœæ¸©å²­ä¸­å­¦ çº¢è±†è›‹é»„æ´¾")
             scale: 1
         }
 
