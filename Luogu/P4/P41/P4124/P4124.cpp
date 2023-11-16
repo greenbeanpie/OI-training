@@ -109,7 +109,7 @@ void FileIO(string s)
 
 namespace P4124
 {
-	cc_hash_table<int, int> dp[2][2][10][4][2];
+	int dp[15][10][5][2][2][2];
 
 	inline int getlen(int x)
 	{
@@ -120,48 +120,49 @@ namespace P4124
 		return log10(x) + 1;
 	}
 
-	inline int gettrail(int x)
+	inline int gettrail(int x, int len)
 	{
-		int len = getlen(x);
 		return x % (int)pow(10, len - 1);
 	}
 
-	inline int gethead(int x)
+	inline int gethead(int x, int len)
 	{
-		int len = getlen(x);
 		return x / (int)pow(10, len - 1);
 	}
-	int dfs(int left, int len, int up, bool limit, bool head = 1, bool f8 = false, bool f4 = false, int last = 0, int cnt = 0, bool ok = false)
+
+	int dfs(int len, int last, int cnt, bool ok, bool f8, bool f4, int up, bool limit, bool head = 0)
 	{
-		if (f8 && f4)
+		if (f4 && f8)
 		{
 			return 0;
 		}
-		if (dp[f8][f4][last][cnt][ok].find(left) != dp[f8][f4][last][cnt][ok].end())
-		{
-			return dp[f8][f4][last][cnt][ok][left];
-		}
 		if (cnt >= 3)
 		{
-			cnt = 0;
 			ok = 1;
 		}
-		if (left <= 0)
+		if (len <= 0)
 		{
 			return ok;
 		}
-		int res = 0;
-		for (int i = head; i <= (limit ? up - 1 : 9); i++)
+		
+		if (!limit && dp[len][last][cnt][ok][f8][f4])
 		{
-			res += dfs(gettrail(left), -1, 0, 0, f8 || (i == 8), f4 || (i == 4), i, (i == last ? cnt + 1 : 1), ok);
+			return dp[len][last][cnt][ok][f8][f4];
+		}
+		assert(gethead(up, len) <= 10);
+		int res = 0;
+		for (int i = head; i <= (limit ? gethead(up, len) : 9); i++)
+		{
+			res += dfs(len - 1, i, (last == i ? cnt + 1 : 1), ok, f8 || (i == 8), f4 || (i == 4), -1, 0);
 		}
 		if (limit)
 		{
-			res += dfs(gettrail(left), gethead(gettrail(left)), 1, 0, f8 || (up == 8), f4 || (up == 4), up, (up == last ? cnt + 1 : 1), ok);
+			int temp = gethead(up, len);
+			res += dfs(len - 1, temp, (temp == last ? cnt + 1 : 1), ok, f8 || temp == 8, f4 || temp == 4, gettrail(up, len), 1);
 		}
-		if (!limit)
+		else
 		{
-			dp[f8][f4][last][cnt][ok][left] = res;
+			dp[len][last][cnt][ok][f8][f4] = res;
 		}
 		return res;
 	}
@@ -170,8 +171,10 @@ namespace P4124
 	{
 		int l, r;
 		FastIO::read(l, r);
-		dfs(1000, 1, 1);
-		FastIO::writeln(dfs(r, getlen(r), gethead(r), 1) - dfs(l - 1, getlen(l - 1), gethead(l - 1), 1));
+		// dfs(1000, 1, 1);
+		// FastIO::writeln(dfs(r, getlen(r), gethead(r), 1) - dfs(l - 1, getlen(l - 1), gethead(l - 1), 1));
+		// FastIO::writeln(dfs(r, getlen(r), gethead(r, getlen(r)), 1) - dfs(l - 1, getlen(l - 1), gethead(l - 1, getlen(l - 1)), 1));
+		FastIO::writeln(dfs(11, -1, 0, 0, 0, 0, r, 1, 1) - dfs(getlen(l - 1), -1, 0, 0, 0, 0, l - 1, 1, 1));
 		return 0;
 	}
 };

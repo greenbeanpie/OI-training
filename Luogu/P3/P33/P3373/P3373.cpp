@@ -1,145 +1,237 @@
 #include <bits/stdc++.h>
 using namespace std;
+#define endl '\n'
 #define int long long
-#ifndef ONLINE_JUDGE
-#pragma GCC optimize(2)
-#endif
-int n, m;
-vector<int> num;
-template <typename T>
-struct SegTree
-{
 
-	vector<T> tree, lazy;
+int P;
+
+template <typename T>
+struct Segtree
+{
+	struct node
+	{
+		int l, r;
+		T val, lazy_add, lazy_mul;
+		node *son[2];
+		node()
+		{
+			l = r = val = lazy_add = 0;
+			lazy_mul = 1;
+			son[0] = son[1] = nullptr;
+		}
+	};
+
+	node *root;
+
 	vector<T> *arr;
-	int n, root = 1, n4, end;
-	SegTree(vector<T> *a)
+
+	Segtree(vector<T> &a)
 	{
-		tree = vector<T>((*a).size() * 4, 0);
-		lazy = vector<T>((*a).size() * 4, 0);
-		arr = a;
+		arr = &a;
 	}
-	inline void maintain(int cl, int cr, int p)
-	{ // cl:current left(当前的左范围)
-		int cmid = (cl + cr) / 2;
-		if (cl <= cr && lazy[p])
-		{
-			lazy[p * 2] += lazy[p];					  // 更新下左节点的懒惰标记
-			lazy[p * 2 + 1] += lazy[p];				  // 更新下右节点的懒惰标记
-			tree[p * 2] += lazy[p] * (cmid - cl + 1); // 更新下左节点的和
-			tree[p * 2 + 1] += lazy[p] * (cr - cmid); // 更新下右节点的和
-			lazy[p] = 0;							  // 更新当前点懒惰标记
-		}
-	}
-	inline T range_sum(int l, int r, int cl, int cr, int p)
+
+	void build(int l, int r, node *p)
 	{
-		if (l <= cl && cr <= r)
-		{ // 如果当前范围在查询范围内可以直接返回不用去掉左边和右边
-			return tree[p];
-		}
-		int mid = (cl + cr) / 2;
-		T sum = 0;
-		maintain(cl, cr, p);
-		if (l <= mid)
-		{
-			sum += range_sum(l, r, cl, mid, p * 2);
-		}
-		if (r > mid)
-		{
-			sum += range_sum(l, r, mid + 1, cr, p * 2 + 1);
-		}
-		return sum;
-	}
-	inline void range_add(int l, int r, T val, int cl, int cr, int p)
-	{
-		if (l <= cl && cr <= r)
-		{
-			tree[p] += (cr - cl + 1) * val;
-			lazy[p] += val;
-			return;
-		}
-		int mid = (cl + cr) / 2;
-		maintain(cl, cr, p);
-		if (l <= mid)
-		{
-			range_add(l, r, val, cl, mid, p * 2);
-		}
-		if (r > mid)
-		{
-			range_add(l, r, val, mid + 1, cr, p * 2 + 1);
-		}
-		tree[p] = tree[p * 2] + tree[p * 2 + 1];
-	}
-	void build(int l, int r, int p)
-	{
+		p->l = l, p->r = r;
 		if (l == r)
 		{
-			tree[p] = (*arr)[l - 1];
+			p->val = arr->at(l);
 			return;
 		}
-		int mid = (r + l) / 2;
-		build(l, mid, p * 2);
-		build(mid + 1, r, p * 2 + 1);
+		int mid = (l + r) >> 1;
+		build(l, mid, p->son[0] = new node);
+		build(mid + 1, r, p->son[1] = new node);
+		p->val = p->son[0]->val + p->son[1]->val;
+		p->val %= P;
+	}
+	void build()
+	{
+		return build(1, arr->size() - 1, root = new node);
+	}
+	void maintain(node *p)
+	{
+		// if (p->son[0])
+		// {
+		if (p->lazy_mul)
+		{
+			p->son[0]->lazy_mul *= p->lazy_mul;
+			p->son[0]->lazy_mul %= P;
+			p->son[0]->lazy_add *= p->lazy_mul;
+			p->son[0]->lazy_add %= P;
+			p->son[0]->val *= p->lazy_mul;
+			p->son[0]->val %= P;
+			p->son[1]->lazy_mul *= p->lazy_mul;
+			p->son[1]->lazy_mul %= P;
+			p->son[1]->lazy_add *= p->lazy_mul;
+			p->son[1]->lazy_add %= P;
+			p->son[1]->val *= p->lazy_mul;
+			p->son[1]->val %= P;
+			// p->lazy_add *= p->lazy_mul;
+			p->lazy_mul = 1;
+		}
+		if (p->lazy_add)
+		{
+			p->son[0]->lazy_add += p->lazy_add;
+			p->son[0]->lazy_add %= P;
+			p->son[1]->lazy_add += p->lazy_add;
+			p->son[1]->lazy_add %= P;
+			p->son[0]->val += (p->son[0]->r - p->son[0]->l + 1) * p->lazy_add;
+			p->son[0]->val %= P;
+			p->son[1]->val += (p->son[1]->r - p->son[1]->l + 1) * p->lazy_add;
+			p->son[1]->val %= P;
+			p->lazy_add = 0;
+		}
+		// p->son[0]->lazy_mul *= p->lazy_mul;
+		// p->son[0]->lazy_mul %= P;
+		// p->son[1]->lazy_mul *= p->lazy_mul;
+		// p->son[1]->lazy_mul %= P;
+		// p->son[0]->lazy_add *= p->lazy_mul;
+		// p->son[0]->lazy_add += p->lazy_add;
+		// p->son[0]->lazy_add %= P;
 
-		tree[p] = tree[p * 2] + tree[p * 2 + 1];
-		end = max(end, p * 2 + 1);
+		// }
+	}
+	void update(node *p)
+	{
+		p->val = p->son[0]->val + p->son[1]->val;
+		p->val %= P;
+	}
+	void add(int l, int r, int val, node *p)
+	{
+		if (l <= p->l && p->r <= r)
+		{
+			p->lazy_add += val;
+			p->val += (p->r - p->l + 1) * val;
+			p->lazy_add %= P;
+			p->val %= P;
+			return;
+		}
+		maintain(p);
+		if (p->son[0]->r >= l)
+		{
+			add(l, r, val, p->son[0]);
+		}
+		if (p->son[1]->l <= r)
+		{
+			add(l, r, val, p->son[1]);
+		}
+		update(p);
+	}
+	void add(int l, int r, int val)
+	{
+		return add(l, r, val, root);
+	}
+	void mul(int l, int r, int val, node *p)
+	{
+		if (l <= p->l && p->r <= r)
+		{
+			p->lazy_mul *= val;
+			p->lazy_add *= val;
+			p->val *= val;
+			p->lazy_mul %= P;
+			p->lazy_add %= P;
+			p->val %= P;
+			return;
+		}
+		maintain(p);
+		if (p->son[0]->r >= l)
+		{
+			mul(l, r, val, p->son[0]);
+		}
+		if (p->son[1]->l <= r)
+		{
+			mul(l, r, val, p->son[1]);
+		}
+		update(p);
+	}
+	// inline void mul(int l, int r, T val, node *p)
+	// {
+	// 	int cl = p->l, cr = p->r;
+	// 	if (l <= cl && cr <= r)
+	// 	{
+	// 		p->val *= val;
+	// 		p->lazy_add *= val;
+	// 		p->lazy_mul *= val;
+	// 		return;
+	// 	}
+	// 	int mid = (cl + cr) / 2;
+	// 	// maintain(cl, cr, p);
+	// 	maintain(p);
+	// 	if (l <= mid)
+	// 	{
+	// 		mul(l, r, val, p->son[0]);
+	// 	}
+	// 	if (r > mid)
+	// 	{
+	// 		mul(l, r, val, p->son[1]);
+	// 	}
+	// 	update(p);
+	// }
+	void mul(int l, int r, T val)
+	{
+		return mul(l, r, val, root);
+	}
+	int query(int l, int r, node *p)
+	{
+		if (l <= p->l && p->r <= r)
+		{
+			return p->val;
+		}
+		maintain(p);
+		int res = 0;
+		if (p->son[0]->r >= l)
+		{
+			res += query(l, r, p->son[0]);
+		}
+		if (p->son[1]->l <= r)
+		{
+			res += query(l, r, p->son[1]);
+		}
+		return res % P;
+	}
+	int query(int l, int r)
+	{
+		return query(l, r, root);
 	}
 };
-inline int range_sum(SegTree<int> *st, int l, int r)
-{
-	return st->range_sum(l, r, 1, n, (*st).root);
-}
-inline void range_add(SegTree<int> *st, int l, int r, int val)
-{
-	st->range_add(l, r, val, 1, n, (*st).root);
-}
-/*public:
-		T range_sum(int l, int r)
-		{
-			return range_sum(l, r, 0, end, root);
-		}
-		void range_add(int l, int r, int val)
-		{
-			range_add(l, r, val, 0, end, root);
-		}
-};*/
+
+vector<int> num = vector<int>(1);
+
+Segtree<int> Tree(num);
 
 signed main()
 {
 #ifndef ONLINE_JUDGE
-	freopen("P3372_8.in", "r", stdin);
+	freopen("P3373.in", "r", stdin);
+	freopen("P3373.out", "w", stdout);
 #endif
-
-	// cin >> n >> m;
-	scanf("%lld %lld", &n, &m);
-
-	for (int i = 0; i < n; i++)
+	ios::sync_with_stdio(false);
+	cin.tie(0), cout.tie(0);
+	int n, m;
+	cin >> n >> m >> P;
+	for (int i = 1, tmp; i <= n; i++)
 	{
-		int t;
-		// cin >> t;
-		scanf("%lld", &t);
-		num.push_back(t);
+		cin >> tmp;
+		num.emplace_back(tmp);
 	}
-	SegTree<int> ST(&num);
-	ST.build(1, n, 1);
-	for (int i = 0; i < m; i++)
+	Tree.build();
+	for (int i = 1, op, x, y, z; i <= m; i++)
 	{
-		int op;
-		// cin >> op;
-		scanf("%lld", &op);
+		cin >> op;
 		if (op == 1)
 		{
-			int x, y, k;
-			// cin >> x >> y >> k;
-			scanf("%lld %lld %lld", &x, &y, &k);
-			range_add(&ST, x, y, k);
+			cin >> x >> y >> z;
+			Tree.mul(x, y, z);
+		}
+		else if (op == 2)
+		{
+			cin >> x >> y >> z;
+			Tree.add(x, y, z);
 		}
 		else
 		{
-			int x, y;
-			// cin >> x >> y;
-			scanf("%lld %lld", &x, &y);
-			printf("%lld\n", range_sum(&ST, x, y));
+			cin >> x >> y;
+			cout << Tree.query(x, y) << endl;
 		}
 	}
 	return 0;
