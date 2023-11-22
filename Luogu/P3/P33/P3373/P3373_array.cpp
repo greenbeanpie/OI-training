@@ -6,7 +6,7 @@ using namespace std;
 #pragma GCC optimize(2)
 #endif
 #endif
-int n, m, mod = 571313;
+int n, m, mod = 571373;
 vector<int> num;
 template <typename T>
 struct SegTree
@@ -140,7 +140,7 @@ inline void range_mul(SegTree<int> *st, int l, int r, int val)
 signed main()
 {
 #ifndef ONLINE_JUDGE
-	freopen("P3373_1.in", "r", stdin);
+	freopen("P3373.in", "r", stdin);
 #endif
 
 	// cin >> n >> m;
@@ -155,6 +155,7 @@ signed main()
 	}
 	SegTree<int> ST(&num);
 	ST.build(1, n, 1);
+	int tot = 0;
 	for (int i = 0; i < m; i++)
 	{
 		int op;
@@ -176,6 +177,7 @@ signed main()
 		}
 		else
 		{
+			++tot;
 			int x, y;
 			// cin >> x >> y;
 			scanf("%lld %lld", &x, &y);

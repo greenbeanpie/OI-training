@@ -40,12 +40,11 @@ void dijkstra(int u)
 	{
 		auto now = q.top();
 		q.pop();
-		cerr << now.to << " " << now.val << endl;
-		// if (vis[now.to])
-		// {
-		// 	continue;
-		// }
-		// vis[now.to] = 1;
+		if (vis[now.to])
+		{
+			continue;
+		}
+		vis[now.to] = 1;
 		dis[now.to] = min(dis[now.to], now.val);
 		for (auto i : e[now.to])
 		{
@@ -63,10 +62,6 @@ void dijkstra(int u)
 
 signed main()
 {
-#ifndef ONLINE_JUDGE
-	freopen("P4779.in", "r", stdin);
-	freopen("P4779.out", "w", stdout);
-#endif
 	ios::sync_with_stdio(false);
 	cin.tie(nullptr), cout.tie(nullptr);
 	int n, m, s;
@@ -78,7 +73,7 @@ signed main()
 		// e[v].emplace_back(u, val);
 	}
 	// memset(dis, 0x3f3f3f, sizeof(dis));
-	fill(dis + 1, dis + n + 1, LLONG_MAX >> 1);
+	fill(dis + 1, dis + n + 1, LLONG_MAX>>1);
 	dis[s] = 0;
 	dijkstra(s);
 	for (int i = 1; i <= n; i++)

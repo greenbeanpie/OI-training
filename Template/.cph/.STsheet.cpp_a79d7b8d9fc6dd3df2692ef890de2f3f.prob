@@ -1,0 +1,1 @@
+{"name":"Local: STsheet","url":"/mnt/Data/OI-training/Template/STsheet.cpp","tests":[{"id":1700178848585,"input":"8 8\n9 3 1 7 5 6 0 8\n1 6\n1 5\n2 7\n2 6\n1 8\n4 8\n3 7\n1 8","output":"9\n9\n7\n7\n9\n8\n7\n9"}],"interactive":false,"memoryLimit":1024,"timeLimit":3000,"srcPath":"/mnt/Data/OI-training/Template/STsheet.cpp","group":"local","local":true}

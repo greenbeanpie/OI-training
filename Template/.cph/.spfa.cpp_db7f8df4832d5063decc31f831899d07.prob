@@ -1,0 +1,1 @@
+{"name":"Local: spfa","url":"/mnt/Data/OI-training/Template/spfa.cpp","tests":[{"id":1700179857530,"input":"2\n3 4\n1 2 2\n1 3 4\n2 3 1\n3 1 -3\n3 3\n1 2 3\n2 3 4\n3 1 -8","output":""},{"id":1700180879997,"input":"1\n1 1\n1 1 -1","output":""}],"interactive":false,"memoryLimit":1024,"timeLimit":3000,"srcPath":"/mnt/Data/OI-training/Template/spfa.cpp","group":"local","local":true}
