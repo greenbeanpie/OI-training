@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE QtCreatorProject>
-<!-- Written by QtDesignStudio 4.3.1, 2023-11-15T19:01:41. -->
+<!-- Written by QtDesignStudio 4.3.1, 2023-11-22T14:58:03. -->
 <qtcreator>
  <data>
   <variable>EnvironmentId</variable>
-  <value type="QByteArray">{4f3bf919-48e4-4b33-ba6f-32676e4b1746}</value>
+  <value type="QByteArray">{85430f80-6725-439b-8bec-2409f7e8a3ba}</value>
  </data>
  <data>
   <variable>ProjectExplorer.Project.ActiveTarget</variable>
@@ -95,6 +95,7 @@
     <value type="bool" key="QmlProjectManager.QmlRunConfiguration.UseMultiLanguage">true</value>
     <value type="bool" key="RunConfiguration.UseCppDebuggerAuto">true</value>
     <value type="bool" key="RunConfiguration.UseQmlDebuggerAuto">true</value>
+    <value type="QString" key="RunConfiguration.X11Forwarding">:0</value>
    </valuemap>
    <value type="qlonglong" key="ProjectExplorer.Target.RunConfigurationCount">1</value>
   </valuemap>
