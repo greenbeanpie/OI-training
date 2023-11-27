@@ -104,7 +104,7 @@ void FileIO(string s)
 	freopen((s + ".out").c_str(), "w", stdout);
 }
 
-namespace Main
+namespace P3810
 {
 
 	constexpr int lowbit(const int &x)
@@ -138,15 +138,21 @@ namespace Main
 				i += lowbit(i);
 			}
 		}
-	};
+	} Tree;
+
+	const int N = 1e5 + 5;
 
 	struct node
 	{
-		int x, y, z;
-	};
+		int x, y, z, cnt, ans;
+	} dat[N], tmp[N];
 
-	void
-	cdq(int l, int r)
+	bool operator!=(node u, node v)
+	{
+		return u.x != v.x || u.y != v.y || u.z != v.z;
+	}
+
+	void cdq(int l, int r)
 	{
 		if (l == r)
 		{
@@ -155,12 +161,59 @@ namespace Main
 		int mid = (l + r) >> 1;
 		cdq(l, mid);
 		cdq(mid + 1, r);
-		sort(a + l, a + mid + 1, [1](node a, node b)
-			 { return u.y == v.y ? u.z < v.z : u.y < v.y; })
+		sort(dat + l, dat + mid + 1, [](node u, node v)
+			 { return u.y == v.y ? u.z < v.z : u.y < v.y; });
+		sort(dat + mid + 1, dat + r + 1, [](node u, node v)
+			 { return u.y == v.y ? u.z < v.z : u.y < v.y; });
+		int i = mid + 1, j = l;
+		while (i <= r)
+		{
+			while (j <= mid && dat[j].y <= dat[i].y)
+			{
+				Tree.add(dat[j].y, dat[j].cnt);
+				++j;
+			}
+			dat[i].ans += Tree.sum(dat[i].z);
+			++i;
+		}
+		for (int i = l; i < j; i++)
+		{
+			Tree.add(dat[i].z, -dat[i].cnt);
+		}
 	}
+
+	int ans[N];
 
 	int main()
 	{
+		int n, k;
+		FastIO::read(n, k);
+		for (int i = 1; i <= n; i++)
+		{
+			FastIO::read(tmp[i].x, tmp[i].y, tmp[i].z);
+		}
+		sort(tmp + 1, tmp + n + 1, [](node u, node v)
+			 { return u.x == v.x ? (u.y == v.y ? u.z < v.z : u.y < v.y) : u.x < v.x; });
+		int tot = 0 /* 记录不重复元素个数 */, cnt = 0 /* 记录重复元素个数 */;
+		for (int i = 1; i <= n; i++)
+		{
+			++cnt;
+			if (tmp[i] != tmp[i + 1])
+			{
+				dat[++tot] = tmp[i];
+				dat[tot].cnt = cnt;
+				cnt = 0;
+			}
+		}
+		cdq(1, tot);
+		for (int i = 1; i <= tot; i++)
+		{
+			ans[dat[i].ans + dat[i].cnt - 1] += dat[i].cnt;
+		}
+		for (int i = 0; i < n; i++)
+		{
+			FastIO::writeln(ans[i]);
+		}
 		return 0;
 	}
 };
@@ -172,7 +225,7 @@ signed main()
 #endif
 	ios::sync_with_stdio(false);
 	cin.tie(0), cout.tie(0);
-	Main::main();
+	P3810::main();
 	FastIO::flush();
 	return 0;
 }
