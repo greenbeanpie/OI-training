@@ -114,7 +114,7 @@ namespace P3810
 
 	struct tarray
 	{
-		static constexpr int N = 1e5 + 5;
+		static constexpr int N = 2e5 + 5;
 		int tree[N << 1];
 		int sum(int i)
 		{
@@ -132,7 +132,7 @@ namespace P3810
 		}
 		inline void add(int i, int val)
 		{
-			while (i <= val)
+			while (i <= N)
 			{
 				tree[i] += val;
 				i += lowbit(i);
@@ -159,8 +159,8 @@ namespace P3810
 			return;
 		}
 		int mid = (l + r) >> 1;
-		cdq(l, mid);
-		cdq(mid + 1, r);
+		cdq(l, mid);	 // 求 [l,mid] 内部的贡献
+		cdq(mid + 1, r); // 求 [mid+1,r] 内部的贡献
 		sort(dat + l, dat + mid + 1, [](node u, node v)
 			 { return u.y == v.y ? u.z < v.z : u.y < v.y; });
 		sort(dat + mid + 1, dat + r + 1, [](node u, node v)
@@ -170,13 +170,13 @@ namespace P3810
 		{
 			while (j <= mid && dat[j].y <= dat[i].y)
 			{
-				Tree.add(dat[j].y, dat[j].cnt);
+				Tree.add(dat[j].z, dat[j].cnt);
 				++j;
 			}
 			dat[i].ans += Tree.sum(dat[i].z);
 			++i;
-		}
-		for (int i = l; i < j; i++)
+		} //	求 [l,mid] 对 [mid+1,r] 的贡献
+		for (i = l; i < j; i++)
 		{
 			Tree.add(dat[i].z, -dat[i].cnt);
 		}

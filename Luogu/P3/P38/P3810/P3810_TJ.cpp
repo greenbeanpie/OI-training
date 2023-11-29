@@ -1,5 +1,6 @@
 #include <cstdio>
 #include <algorithm>
+#include <string>
 #define maxn 100010
 #define maxk 200010
 using namespace std;
@@ -77,8 +78,18 @@ void cdq(int l, int r)
 		t.add(a[i].z, -a[i].w);
 	}
 }
+
+void FileIO(string s)
+{
+	freopen((s + ".in").c_str(), "r", stdin);
+	freopen((s + "_TJ.out").c_str(), "w", stdout);
+}
+
 int main()
 {
+#ifndef ONLINE_JUDGE
+	FileIO("P3810");
+#endif
 	scanf("%d%d", &z, &k); // z是数量，k是最大属性值
 	t.kk = k;			   // 设定上限，t是维护的树状数组
 	for (int i = 1; i <= z; i++)

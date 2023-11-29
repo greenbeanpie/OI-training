@@ -127,5 +127,6 @@
 			"valarray": "cpp",
 			"variant": "cpp"
 		},
+		"C_Cpp.codeAnalysis.clangTidy.path": "/usr/bin/clang-tidy",
 	}
 }
