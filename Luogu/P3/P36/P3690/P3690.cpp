@@ -113,11 +113,12 @@ namespace P3690
 
 		struct node
 		{
-			int val = 0, cnt = 0, size = 1;
+			int val = 0, cnt = 1, size = 1, dat;
 			bool tag;
 			node *son[2] = {nullptr, nullptr}, *father = nullptr;
 			node()
 			{
+				cnt = 1;
 				return;
 			}
 			node(int a, int b, int c)
@@ -155,6 +156,7 @@ namespace P3690
 			{
 				x->son[1]->tag ^= x->tag;
 			}
+			x->tag = 0;
 		}
 		bool check(node *u)
 		{
@@ -170,15 +172,15 @@ namespace P3690
 			{
 				f2->son[f1 == f2->son[1]] = x;
 			}
+			x->father = f2;
+			f1->son[r1] = x->son[r1 ^ 1];
 			if (x->son[r1 ^ 1])
 			{
 				x->son[r1 ^ 1]->father = f1;
-				f1->son[r1] = x->son[r1 ^ 1];
 			}
-			f1->son[r1] = x->son[r1 ^ 1];
-			x->son[r1 ^ 1] = f1;
-			x->father = f2;
 			f1->father = x;
+			x->son[r1 ^ 1] = f1;
+
 			maintain(f1), maintain(x);
 		}
 		void splay(node *x)
@@ -373,16 +375,62 @@ namespace P3690
 
 		static constexpr int N = 3e5 + 5;
 
-		node *ptr[N];
+		node *ptr = new node[N << 1];
+
+		void reverse(node *u)
+		{
+			swap(u->son[0], u->son[1]);
+			u->tag ^= 1;
+		}
 
 		void pushup(node *u)
 		{
-			u->size = u->son[0]->size + u->son[1]->size + u->cnt;
-
+			u->size = u->cnt, u->dat = u->val;
+			if (u->son[0])
+			{
+				u->size += u->son[0]->size, u->dat ^= u->son[0]->dat;
+			}
+			if (u->son[1])
+			{
+				u->size += u->son[1]->size, u->dat ^= u->son[1]->dat;
+			}
+		}
+		void pushdown(node *x)
+		{
+			if (x->tag)
+			{
+				if (x->son[0])
+				{
+					reverse(x->son[0]);
+				}
+				if (x->son[1])
+				{
+					reverse(x->son[1]);
+				}
+				x->tag = 0;
+			}
 		}
 		bool isroot(node *x)
 		{
-			return x->father;
+			return x->father == nullptr;
+		}
+		node *findroot(node *x)
+		{
+			access(x);
+			splay(x);
+			while (x->son[0])
+			{
+				pushdown(x);
+				x = x->son[0];
+			}
+			splay(x);
+			return x;
+		}
+		void rotate(node *x)
+		{
+			auto fa = x->father;
+			Splay::rotate(x);
+			pushup(fa), pushup(x);
 		}
 		void update(node *x)
 		{
@@ -406,20 +454,21 @@ namespace P3690
 		}
 		node *access(node *x)
 		{
-			node *cur;
-			for (cur = nullptr; x; cur = x, x = x->father)
+			node *last;
+			for (last = nullptr; x; x = x->father)
 			{
 				splay(x);
-				x->son[1] = cur;
+				x->son[1] = last;
+				last = x;
 				pushup(x);
 			}
-			return cur;
+			return last;
 		}
 		void makeroot(node *p)
 		{
-			p = access(p);
-			swap(p->son[0], p->son[1]);
-			p->tag ^= 1;
+			access(p);
+			splay(p);
+			reverse(p);
 		}
 		void split(node *x, node *y)
 		{
@@ -427,18 +476,34 @@ namespace P3690
 			access(y);
 			splay(y);
 		}
-		void link(node *x, node *p)
+		void split(int x, int y)
+		{
+			return split(ptr + x, ptr + y);
+		}
+		void link(node *x, node *y)
 		{
 			makeroot(x);
-			splay(x);
-			x->father = p;
+			// splay(x);
+			if (findroot(y) != x)
+			{
+				x->father = y;
+			}
+		}
+		void link(int x, int y)
+		{
+			return link(ptr + x, ptr + y);
 		}
 		void cut(node *x, node *p)
 		{
-			makeroot(x);
-			access(p);
-			splay(p);
-			x->father = p->son[0] = nullptr;
+			split(x, p);
+			if (p->son[0] == x && !p->son[1])
+			{
+				x->father = p->son[0] = nullptr;
+			}
+		}
+		void cut(int x, int y)
+		{
+			return cut(ptr + x, ptr + y);
 		}
 		node *find(node *p)
 		{
@@ -453,11 +518,38 @@ namespace P3690
 			splay(p);
 			return p;
 		}
-	};
+	} Tree;
 
 	int main()
 	{
-
+		int n, m;
+		FastIO::read(n, m);
+		for (int i = 1; i <= n; i++)
+		{
+			FastIO::read(Tree.ptr[i].val);
+			Tree.ptr[i].dat = Tree.ptr[i].val;
+		}
+		for (int i = 1; i <= m; i++)
+		{
+			int op, x, y;
+			FastIO::read(op, x, y);
+			switch (op)
+			{
+			case 0:
+				Tree.split(x, y);
+				FastIO::writeln(Tree.ptr[y].val);
+				break;
+			case 1:
+				Tree.link(x, y);
+				break;
+			case 2:
+				Tree.cut(x, y);
+				break;
+			case 3:
+				Tree.splay(Tree.ptr + x);
+				Tree.ptr[x].val = y;
+			}
+		}
 		return 0;
 	}
 };

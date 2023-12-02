@@ -71,6 +71,7 @@ void rotate(int x)
 
 	son[y][fx] = son[x][fx ^ 1];
 	fa[son[x][fx ^ 1]] = y;
+	// assert(son[x][fx ^ 1] != 0);
 
 	son[x][fx ^ 1] = y;
 	fa[y] = x;
@@ -159,8 +160,17 @@ void cut(int x, int y)
 		ls(y) = fa[x] = 0;
 }
 
+void FileIO(string s)
+{
+	freopen((s + ".in").c_str(), "r", stdin);
+	freopen((s + ".out").c_str(), "w", stdout);
+}
+
 int main()
 {
+#ifndef ONLINE_JUDGE
+	FileIO("P3690");
+#endif
 
 	ios::sync_with_stdio(false);
 	cin.tie(nullptr);

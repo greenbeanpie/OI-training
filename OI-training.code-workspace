@@ -20,7 +20,7 @@
 		"editor.formatOnType": true,
 		"editor.insertSpaces": false,
 		"editor.detectIndentation": false,
-		"C_Cpp.codeAnalysis.clangTidy.enabled": true,
+		"C_Cpp.codeAnalysis.clangTidy.enabled": false,
 		"editor.cursorBlinking": "smooth",
 		"editor.cursorSmoothCaretAnimation": "on",
 		"C_Cpp.inlayHints.parameterNames.suppressWhenArgumentContainsName": true,
@@ -127,6 +127,6 @@
 			"valarray": "cpp",
 			"variant": "cpp"
 		},
-		"C_Cpp.codeAnalysis.clangTidy.path": "/usr/bin/clang-tidy",
+		"C_Cpp.codeAnalysis.clangTidy.path": "",
 	}
 }
