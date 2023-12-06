@@ -377,12 +377,6 @@ namespace P3690
 
 		node *ptr = new node[N << 1];
 
-		void reverse(node *u)
-		{
-			swap(u->son[0], u->son[1]);
-			u->tag ^= 1;
-		}
-
 		void pushup(node *u)
 		{
 			u->size = u->cnt, u->dat = u->val;
@@ -395,6 +389,13 @@ namespace P3690
 				u->size += u->son[1]->size, u->dat ^= u->son[1]->dat;
 			}
 		}
+
+		void reverse(node *u)
+		{
+			swap(u->son[0], u->son[1]);
+			u->tag ^= 1;
+		}
+
 		void pushdown(node *x)
 		{
 			if (x->tag)
@@ -412,19 +413,7 @@ namespace P3690
 		}
 		bool isroot(node *x)
 		{
-			return x->father == nullptr;
-		}
-		node *findroot(node *x)
-		{
-			access(x);
-			splay(x);
-			while (x->son[0])
-			{
-				pushdown(x);
-				x = x->son[0];
-			}
-			splay(x);
-			return x;
+			return (x != nullptr && x->father == nullptr) || (x->father != nullptr && x->father->son[0] != x && x->father->son[1] != x);
 		}
 		void rotate(node *x)
 		{
@@ -443,14 +432,27 @@ namespace P3690
 		void splay(node *x)
 		{
 			update(x);
-			for (auto father = x->father; father = x->father, father; rotate(x))
+			for (auto father = x->father; !isroot(x); rotate(x))
 			{
-				if (father->father)
+				father = x->father;
+				if (!isroot(father))
 				{
 					rotate(check(x) == check(father) ? father : x);
 				}
 			}
 			root = x;
+		}
+		node *findroot(node *x)
+		{
+			access(x);
+			splay(x);
+			while (x->son[0])
+			{
+				pushdown(x);
+				x = x->son[0];
+			}
+			splay(x);
+			return x;
 		}
 		node *access(node *x)
 		{
@@ -480,11 +482,31 @@ namespace P3690
 		{
 			return split(ptr + x, ptr + y);
 		}
+		node *find(node *p)
+		{
+			access(p);
+			splay(p);
+			while (p->son[0])
+			{
+				pushdown(p);
+				p = p->son[0];
+			}
+			splay(p);
+			return p;
+		}
 		void link(node *x, node *y)
 		{
 			makeroot(x);
 			// splay(x);
-			if (findroot(y) != x)
+			// if (findroot(y) != x)
+			// {
+			// 	x->father = y;
+			// }
+			if (findroot(y) == x)
+			{
+				return;
+			}
+			else
 			{
 				x->father = y;
 			}
@@ -504,19 +526,6 @@ namespace P3690
 		void cut(int x, int y)
 		{
 			return cut(ptr + x, ptr + y);
-		}
-		node *find(node *p)
-		{
-			access(p);
-			splay(p);
-			pushdown(p);
-			while (p->son[0])
-			{
-				p = p->son[0];
-				pushdown(p);
-			}
-			splay(p);
-			return p;
 		}
 	} Tree;
 
