@@ -546,7 +546,7 @@ namespace P3690
 			{
 			case 0:
 				Tree.split(x, y);
-				FastIO::writeln(Tree.ptr[y].val);
+				FastIO::writeln(Tree.ptr[y].dat);
 				break;
 			case 1:
 				Tree.link(x, y);
