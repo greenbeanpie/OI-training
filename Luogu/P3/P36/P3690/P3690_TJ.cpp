@@ -163,7 +163,7 @@ void cut(int x, int y)
 void FileIO(string s)
 {
 	freopen((s + ".in").c_str(), "r", stdin);
-	freopen((s + ".out").c_str(), "w", stdout);
+	freopen((s + ".ans").c_str(), "w", stdout);
 }
 
 int main()

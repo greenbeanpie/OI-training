@@ -106,8 +106,7 @@ void FileIO(string s)
 
 namespace P3690
 {
-
-	struct Splay
+	struct LCT
 	{
 		int tot = 0;
 
@@ -142,237 +141,10 @@ namespace P3690
 			}
 			u->size = (u->son[0] ? u->son[0]->size : 0) + (u->son[1] ? u->son[1]->size : 0) + u->cnt;
 		}
-		void pushup(node *u)
-		{
-			return maintain(u);
-		}
-		void pushdown(node *x)
-		{
-			if (x->son[0])
-			{
-				x->son[0]->tag ^= x->tag;
-			}
-			if (x->son[1])
-			{
-				x->son[1]->tag ^= x->tag;
-			}
-			x->tag = 0;
-		}
 		bool check(node *u)
 		{
-			return u->father && (u == (u->father->son[1]));
+			return u != nullptr && u->father && (u == (u->father->son[1]));
 		}
-
-		void rotate(node *x)
-		{
-			auto f1 = x->father, f2 = f1->father;
-			pushdown(x), pushdown(f1);
-			auto r1 = check(x);
-			if (f2)
-			{
-				f2->son[f1 == f2->son[1]] = x;
-			}
-			x->father = f2;
-			f1->son[r1] = x->son[r1 ^ 1];
-			if (x->son[r1 ^ 1])
-			{
-				x->son[r1 ^ 1]->father = f1;
-			}
-			f1->father = x;
-			x->son[r1 ^ 1] = f1;
-
-			maintain(f1), maintain(x);
-		}
-		void splay(node *x)
-		{
-			for (auto father = x->father; father = x->father, father; rotate(x))
-			{
-				if (father->father)
-				{
-					rotate(check(x) == check(father) ? father : x);
-				}
-			}
-			root = x;
-		}
-		void insert(int val)
-		{
-			if (root)
-			{
-				auto cur = root;
-				while (1)
-				{
-					pushdown(cur);
-					if (cur->val == val)
-					{
-						++cur->cnt;
-						maintain(cur);
-						maintain(cur->father);
-						splay(cur);
-						break;
-					}
-					// auto father = cur->father;
-					if (cur->son[cur->val < val])
-					{
-						cur = cur->son[cur->val < val];
-					}
-					else
-					{
-						cur->son[cur->val < val] = new node;
-						cur->son[cur->val < val]->val = val;
-						++cur->son[cur->val < val]->cnt;
-						cur->son[cur->val < val]->father = cur;
-						maintain(cur);
-						maintain(cur->son[cur->val < val]);
-						splay(cur->son[cur->val < val]);
-						break;
-					}
-				}
-			}
-			else
-			{
-				root = new node;
-				root->cnt = 1;
-				root->size = 1;
-				root->val = val;
-				maintain(root);
-			}
-		}
-		int rk(int k)
-		{
-			auto cur = root;
-			int now = 0;
-			while (1)
-			{
-				pushdown(cur);
-				if (k < cur->val)
-				{
-					if (cur->son[0])
-					{
-						cur = cur->son[0];
-					}
-					else
-					{
-						splay(cur);
-						return now + 1;
-					}
-				}
-				else if (k > cur->val)
-				{
-					now += (cur->son[0] ? cur->son[0]->size : 0);
-					now += cur->cnt;
-					if (cur->son[1])
-					{
-						cur = cur->son[1];
-					}
-					else
-					{
-						splay(cur);
-						return now + 1;
-					}
-				}
-				else
-				{
-					now += (cur->son[0] ? cur->son[0]->size : 0);
-					splay(cur);
-					return now + 1;
-				}
-			}
-		}
-		int kth(int k)
-		{
-			auto cur = root;
-			while (1)
-			{
-				pushdown(cur);
-				if (cur->son[0] && k <= cur->son[0]->size)
-				{
-					cur = cur->son[0];
-				}
-				else if (cur->son[1])
-				{
-					k -= cur->cnt + (cur->son[0] ? cur->son[0]->size : 0);
-					if (k <= 0)
-					{
-						splay(cur);
-						return cur->val;
-					}
-					cur = cur->son[1];
-				}
-				else
-				{
-					splay(cur);
-					return cur->val;
-				}
-			}
-		}
-		node *pre(node *x)
-		{
-			auto cur = x->son[0];
-			if (!cur)
-			{
-				return x;
-			}
-			while (cur->son[1])
-			{
-				pushdown(cur);
-				cur = cur->son[1];
-			}
-			splay(cur);
-			return cur;
-		}
-		node *nxt(node *x)
-		{
-			auto cur = x->son[1];
-			if (!cur)
-			{
-				return x;
-			}
-			while (cur->son[0])
-			{
-				pushdown(cur);
-				cur = cur->son[0];
-			}
-			splay(cur);
-			return cur;
-		}
-		void del(int x)
-		{
-			rk(x);
-			auto cur = root;
-			if (cur->cnt > 1)
-			{
-				--cur->cnt;
-				maintain(cur);
-				return;
-			}
-			if (!cur->son[0] && !cur->son[1])
-			{
-				root = nullptr;
-				return;
-			}
-			if (!cur->son[0])
-			{
-				pushdown(root);
-				root = cur->son[1];
-				root->father = nullptr;
-				return;
-			}
-			auto oldroot = root;
-			node *x1 = pre(root);
-			pushdown(cur), pushdown(root);
-			if (cur->son[1])
-			{
-				cur->son[1]->father = x1;
-			}
-			x1->son[1] = cur->son[1];
-			delete oldroot;
-			maintain(root);
-		}
-	};
-
-	struct LCT : Splay
-	{
-
 		static constexpr int N = 3e5 + 5;
 
 		node *ptr = new node[N << 1];
@@ -395,7 +167,6 @@ namespace P3690
 			swap(u->son[0], u->son[1]);
 			u->tag ^= 1;
 		}
-
 		void pushdown(node *x)
 		{
 			if (x->tag)
@@ -417,9 +188,35 @@ namespace P3690
 		}
 		void rotate(node *x)
 		{
-			auto fa = x->father;
-			Splay::rotate(x);
-			pushup(fa), pushup(x);
+			auto f1 = x->father, f2 = f1->father;
+			// pushdown(x), pushdown(f1);
+			auto r1 = check(x), r2 = check(f1);
+			// if (f2)
+			// {
+			// 	f2->son[f1 == f2->son[1]] = x;
+			// }
+			// x->father = f2;
+			// f1->son[r1] = x->son[r1 ^ 1];
+			// if (x->son[r1 ^ 1])
+			// {
+			// 	x->son[r1 ^ 1]->father = f1;
+			// }
+			if (!isroot(f1))
+			{
+				f2->son[r2] = x;
+			}
+			x->father = f2;
+			f1->son[r1] = x->son[r1 ^ 1];
+			if (x->son[r1 ^ 1])
+			{
+				x->son[r1 ^ 1]->father = f1;
+			}
+			// x->son[r1 ^ 1] = f1;
+			x->son[r1 ^ 1] = f1;
+			f1->father = x;
+			// maintain(f1), maintain(x);
+
+			pushup(f1), pushup(x);
 		}
 		void update(node *x)
 		{
