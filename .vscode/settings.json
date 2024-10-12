@@ -1,19 +1,7 @@
 {
 	"editor.fontLigatures": true,
-	"C_Cpp.files.exclude": {
-		"install/**": true,
-	},
-	"files.watcherExclude": {
-		"install/**": true,
-	},
-	"search.exclude": {
-		"install/**": true,
-	},
-	"files.exclude": {
-		"install/**": true,
-	},
-	"cmake.sourceDirectory": "/mnt/Data/OI-training/checker/Checker",
-	"C_Cpp.codeAnalysis.clangTidy.checks.disabled": [
-		"clang-diagnostic-error"
-	],
+	"cmake.configureOnOpen": false,
+	"python.analysis.autoImportCompletions": true,
+	"python.analysis.typeCheckingMode": "basic",
+	"C_Cpp.default.compilerPath": "c:\\Program Files\\winlibs-x86_64-posix-seh-gcc-13.2.0-llvm-17.0.6-mingw-w64ucrt-11.0.1-r5\\mingw64\\bin\\g++.exe"
 }

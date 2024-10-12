@@ -128,5 +128,6 @@
 			"variant": "cpp"
 		},
 		"C_Cpp.codeAnalysis.clangTidy.path": "",
+		"files.eol": "\n",
 	}
 }
