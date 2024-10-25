@@ -1,0 +1,1 @@
+{"name":"Local: A","url":"e:\\OI-training\\Luogu\\competition\\205829\\A\\A.cpp","tests":[{"id":1729318753263,"input":"5\n4 7\n3 4\n5 21\n4 7\n4 4","output":"Yes\nNo\nYes\nYes"}],"interactive":false,"memoryLimit":1024,"timeLimit":3000,"srcPath":"e:\\OI-training\\Luogu\\competition\\205829\\A\\A.cpp","group":"local","local":true}
